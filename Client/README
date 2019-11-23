@@ -1,3 +1,6 @@
 Mimo dodanych zależności w mavenie (tak było w moim przypadku) trzeba pobrać javaFx SDK  https://gluonhq.com/products/javafx/
 W intelliJ run > edit configuration > VM options  wpisać 
           --module-path twojaSciezkaZeSlashamiWPrawo/javafx-sdk-11.0.2/lib --add-modules=javafx.controls,javafx.fxml
+Pliki .fxml umieszczamy w resources i odwołujemy się tak jak w klasie Main
+W pliku .fxml najważniejsze jest fx:controller="controller", fx:id="jakiesid" po tym id nazywamy zmienne w kontrolerze(lub dajemy intellij je stworzyc)
+onAction="#jakasMetodaWKontrolerze" najprostsze przypisanie metody do akcji, można też to zdefiniować na zmiennel w javie
