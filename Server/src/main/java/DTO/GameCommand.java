@@ -7,7 +7,6 @@ public class GameCommand {
     private int y;
 
 
-
     public GameCommandType getCommandType() {
         return commandType;
     }

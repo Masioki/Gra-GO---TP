@@ -1,4 +1,3 @@
-package example;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +9,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class MainV2 extends Application {
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         Locale.setDefault(new Locale("pl"));
@@ -22,7 +22,8 @@ public class MainV2 extends Application {
         primaryStage.setResizable(false);
         primaryStage.show();
     }
+
     public static void main(String[] args) {
-       launch();
+        launch(args);
     }
 }

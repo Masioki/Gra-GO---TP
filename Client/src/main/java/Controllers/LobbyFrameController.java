@@ -1,7 +1,9 @@
-package example;
+package Controllers;
 
+import Services.Service;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -17,8 +19,15 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     public Button buttonRefresh;
 
     Service service = null;
-    void startGameWindow(ActionEvent e)
-    {
+
+    @FXML
+    public void initialize() {
+        buttonJoinGame.setOnAction(this);
+        buttonRefresh.setOnAction(this);
+        service = Service.getInstance();
+    }
+
+    void startGameWindow(ActionEvent e) {
         Parent root;
         try {
             root = FXMLLoader.load(getClass().getClassLoader().getResource("gameFrame.fxml"));
@@ -27,37 +36,27 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
             stage.setScene(new Scene(root));
             stage.show();
 
-            ((Node)(e.getSource())).getScene().getWindow().hide();
-        }
-        catch (IOException ex) {
+            ((Node) (e.getSource())).getScene().getWindow().hide();
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
-    void loadGames()
-    {
+    void loadGames() {
         service.loadGames();
     }
 
-    void joinGame(ActionEvent e)
-    {
+    void joinGame(ActionEvent e) {
         service.joinGame();
         startGameWindow(e);
     }
-    public void initialize()
-    {
-        buttonJoinGame.setOnAction(this);
-        buttonRefresh.setOnAction(this);
-        service = Service.getInstance();
-    }
+
     @Override
     public void handle(ActionEvent e) {
-        if(e.getSource().equals(buttonJoinGame))
-        {
+        if (e.getSource().equals(buttonJoinGame)) {
             joinGame(e);
         }
-        if(e.getSource().equals(buttonRefresh))
-        {
+        if (e.getSource().equals(buttonRefresh)) {
             loadGames();
         }
     }
