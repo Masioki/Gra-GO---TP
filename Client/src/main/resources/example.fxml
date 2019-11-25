@@ -7,6 +7,6 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="example.ExampleController">
    <children>
       <Label fx:id="text" layoutX="237.0" layoutY="177.0" text="Przykladowy tekst" />
-      <Button fx:id="button" onAction="#exampleMethod" layoutX="248.0" layoutY="279.0" mnemonicParsing="false" text="Button" />
+      <Button  fx:id="button" layoutX="248.0" layoutY="279.0" mnemonicParsing="false" onAction="#exampleMethod" text="Button" />
    </children>
 </AnchorPane>
