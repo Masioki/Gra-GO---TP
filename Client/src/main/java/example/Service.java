@@ -3,6 +3,25 @@ package example;
 public class Service {
     static Service service = null;
 
+    //lista metod - na razie zwracaja void a nie naszą klasę z body i enumem
+    void signUp(String login, String password)
+    {
+        System.out.println("Zalogowano pomyślnie podany login: " + login + " podane hasło: " + password);
+    }
+    void loadGames()
+    {
+
+    }
+    void gameMove()
+    {
+
+    }
+
+
+
+    /**
+     * Private Constructor
+     */
     private Service()
     {
 

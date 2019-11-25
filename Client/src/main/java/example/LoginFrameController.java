@@ -35,6 +35,24 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
     {
         return true;
     }
+
+    void startLobbyWindow(ActionEvent e)
+    {
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getClassLoader().getResource("lobbyFrame.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("My New Stage Title");
+            stage.setScene(new Scene(root, 450, 450));
+            stage.show();
+
+            ((Node)(e.getSource())).getScene().getWindow().hide();
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     @FXML
     void signUp(ActionEvent e)
     {
@@ -42,26 +60,8 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
         String password = textFieldPassword.getText();
         if(login != null && password != null)
         {
-            if(signUpToServer(login,password))
-            {
-                Parent root;
-                try {
-                    root = FXMLLoader.load(getClass().getClassLoader().getResource("lobbyFrame.fxml"));
-                    Stage stage = new Stage();
-                    stage.setTitle("My New Stage Title");
-                    stage.setScene(new Scene(root, 450, 450));
-                    stage.show();
-
-                    ((Node)(e.getSource())).getScene().getWindow().hide();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-            else
-            {
-
-            }
+            service.signUp(login, password);
+            startLobbyWindow(e);
         }
         else
         {
