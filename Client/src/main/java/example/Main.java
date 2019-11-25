@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class Main extends Application {
-
+//TESTOWY KOMENTARZ
 
     @Override
     public void start(Stage primaryStage) throws Exception {
