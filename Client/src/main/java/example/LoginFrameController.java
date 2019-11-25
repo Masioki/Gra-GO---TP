@@ -58,7 +58,7 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
     {
         String login = textFieldLogin.getText();
         String password = textFieldPassword.getText();
-        if(login != null && password != null)
+        if(!login.equals("") && !password.equals(""))
         {
             service.signUp(login, password);
             startLobbyWindow(e);
