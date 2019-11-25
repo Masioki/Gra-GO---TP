@@ -10,13 +10,16 @@ public class Service {
     }
     void loadGames()
     {
-
+        System.out.println("Games loaded");
     }
     void gameMove()
     {
 
     }
-
+    void joinGame()
+    {
+        System.out.println("You joined a game");
+    }
 
 
     /**
