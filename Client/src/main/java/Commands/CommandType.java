@@ -6,5 +6,6 @@ public enum CommandType {
     GAME,
     ERROR,
     SUCCESS,
+    JOIN
 }
 
