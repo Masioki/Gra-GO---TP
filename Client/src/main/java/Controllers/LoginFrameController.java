@@ -1,5 +1,6 @@
-package example;
+package Controllers;
 
+import Services.Service;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -25,19 +26,17 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
 
     private Service service;
 
-    public void initialize()
-    {
+    public void initialize() {
         buttonSignUp.setOnAction(this);
         service = Service.getInstance();
     }
+
     //for now its just an empty method
-    Boolean signUpToServer(String login, String password)
-    {
+    Boolean signUpToServer(String login, String password) {
         return true;
     }
 
-    void startLobbyWindow(ActionEvent e)
-    {
+    void startLobbyWindow(ActionEvent e) {
         Parent root;
         try {
             root = FXMLLoader.load(getClass().getClassLoader().getResource("lobbyFrame.fxml"));
@@ -46,35 +45,28 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
             stage.setScene(new Scene(root));
             stage.show();
 
-            ((Node)(e.getSource())).getScene().getWindow().hide();
-        }
-        catch (IOException ex) {
+            ((Node) (e.getSource())).getScene().getWindow().hide();
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
     @FXML
-    void signUp(ActionEvent e)
-    {
+    void signUp(ActionEvent e) {
         String login = textFieldLogin.getText();
         String password = textFieldPassword.getText();
-        if(!login.equals("") && !password.equals(""))
-        {
+        if (!login.equals("") && !password.equals("")) {
             service.signUp(login, password);
             startLobbyWindow(e);
-        }
-        else
-        {
+        } else {
 
         }
     }
 
 
-
     @Override
     public void handle(ActionEvent e) {
-        if(e.getSource().equals(buttonSignUp))
-        {
+        if (e.getSource().equals(buttonSignUp)) {
             signUp(e);
         }
     }
