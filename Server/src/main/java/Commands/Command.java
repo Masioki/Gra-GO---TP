@@ -1,4 +1,4 @@
-package DTO;
+package Commands;
 
 import java.io.Serializable;
 

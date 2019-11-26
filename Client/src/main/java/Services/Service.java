@@ -1,5 +1,9 @@
 package Services;
 
+import Commands.Builder.CommandBuilderProvider;
+import Commands.Command;
+import Commands.GameCommandType;
+
 //Class Service should be singleton
 public class Service {
     static Service service = null;
@@ -13,8 +17,23 @@ public class Service {
         System.out.println("Games loaded");
     }
 
-    void gameMove() {
 
+    /*
+
+    PRZYKLADOWE BUDOWANIE KOMENDY
+
+     */
+    void gameMove() {
+        Command c;
+        try{
+            c = CommandBuilderProvider.newGameCommandBuilder()
+                    .newCommand()
+                    .withHeader(GameCommandType.MOVE)
+                    .withPosition(0 ,0)
+                    .build();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     void joinGame() {

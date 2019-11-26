@@ -1,4 +1,4 @@
-package DTO;
+package Commands;
 
 public enum CommandType {
     LOGIN,
