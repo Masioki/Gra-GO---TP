@@ -4,3 +4,8 @@ W intelliJ run > edit configuration > VM options  wpisać
 Pliki .fxml umieszczamy w resources i odwołujemy się tak jak w klasie Main
 W pliku .fxml najważniejsze jest fx:controller="controller", fx:id="jakiesid" po tym id nazywamy zmienne w kontrolerze(lub dajemy intellij je stworzyc)
 onAction="#jakasMetodaWKontrolerze" najprostsze przypisanie metody do akcji, można też to zdefiniować na zmiennel w javie
+
+Na razie do pobierania zdjęć używam brutalnie ścieżki do pliku - gdybyś chciał przetestować u siebie gui-(a raczej jego bardzo wstępną wersję)
+to trzeba zmienić ścieżkę w GameFrameController
+Wydaje mi się że lobby list będzie wyglądało oki jako lista 10 labeli - wybraną przez użytkownika grę możey zaznaczać na zielono
+Obrazki pól gry jutro przemaluje - bardzo niepotrzebnie dodałem czarne krawędzie i plansza zlewa się w jedno
