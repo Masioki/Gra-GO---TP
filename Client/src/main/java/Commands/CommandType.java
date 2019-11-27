@@ -1,4 +1,4 @@
-package DTO;
+package Commands;
 
 public enum CommandType {
     LOGIN,
@@ -6,4 +6,6 @@ public enum CommandType {
     GAME,
     ERROR,
     SUCCESS,
+    JOIN
 }
+
