@@ -43,6 +43,8 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
             Stage stage = new Stage();
             stage.setTitle("Lobby");
             stage.setScene(new Scene(root));
+            stage.setWidth(600);
+            stage.setHeight(600);
             stage.show();
 
             ((Node) (e.getSource())).getScene().getWindow().hide();

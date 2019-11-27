@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="example.GameFrameController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane fx:id="gameBoardFrame" prefHeight="850.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GameFrameController">
+   <children>
+      <GridPane fx:id="gridPanelBoard" layoutX="179.0" prefHeight="850.0" prefWidth="571.0">
+          
+      </GridPane>
+      <Button fx:id="buttonPause" layoutX="14.0" layoutY="625.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="149.0" text="Pause" />
+      <Button fx:id="buttonSurrender" layoutX="14.0" layoutY="735.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="149.0" text="Surender" />
+      <Label fx:id="labelCapturedPawnsPlayer" layoutX="14.0" layoutY="409.0" prefHeight="53.0" prefWidth="155.0" text="Captured by enemy  pawns:" />
+      <Label layoutX="14.0" layoutY="43.0" prefHeight="53.0" prefWidth="155.0" text="Player" />
+      <Label layoutX="11.0" layoutY="117.0" prefHeight="53.0" prefWidth="155.0" text="PlayerNickName" />
+      <Label fx:id="labelCapturedPawnsEnemy" layoutX="17.0" layoutY="210.0" prefHeight="53.0" prefWidth="149.0" text="CapturedPawns:" />
+      <Label layoutX="17.0" layoutY="510.0" prefHeight="68.0" prefWidth="149.0" text="0" />
+      <Label layoutX="17.0" layoutY="290.0" prefHeight="68.0" prefWidth="149.0" text="0" />
+   </children>
 </AnchorPane>

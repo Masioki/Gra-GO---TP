@@ -10,14 +10,22 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
+
+import java.io.File;
 import java.io.IOException;
 
 
 public class LobbyFrameController implements EventHandler<ActionEvent> {
     public Button buttonJoinGame;
     public Button buttonRefresh;
-
+    public GridPane gridPanelLobby;
+    private Label[] lobbyList;
     Service service = null;
 
     @FXML
@@ -25,6 +33,19 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
         buttonJoinGame.setOnAction(this);
         buttonRefresh.setOnAction(this);
         service = Service.getInstance();
+        final int lobbyMaxNumber = 10;
+        for(int i = 0; i < lobbyMaxNumber; i++)
+        {
+            RowConstraints rowConst = new RowConstraints();
+            rowConst.setPercentHeight(100.0 / lobbyMaxNumber);
+            gridPanelLobby.getRowConstraints().add(rowConst);
+        }
+        lobbyList = new Label[lobbyMaxNumber];
+        for (int i = 0; i < lobbyMaxNumber; i++) {
+            Label l = new Label("Game is Dead...");
+            lobbyList[i] = l;
+            gridPanelLobby.add(lobbyList[i],0,i);
+        }
     }
 
     void startGameWindow(ActionEvent e) {
@@ -34,6 +55,8 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
             Stage stage = new Stage();
             stage.setTitle("Game Board");
             stage.setScene(new Scene(root));
+            stage.setWidth(850);
+            stage.setHeight(650);
             stage.show();
 
             ((Node) (e.getSource())).getScene().getWindow().hide();
@@ -43,11 +66,12 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     }
 
     void loadGames() {
-        service.loadGames();
+        service.loadActiveGames();
     }
 
     void joinGame(ActionEvent e) {
-        service.joinGame();
+        //service.joinGame();
+        //TODO - implement join game in Service
         startGameWindow(e);
     }
 

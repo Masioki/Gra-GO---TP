@@ -78,7 +78,7 @@ public class Service {
         LoginData loginData = new LoginData();
         loginData.setUsername(login);
         loginData.setPassword(password);
-
+/*
         Command c = CommandBuilderProvider
                 .newSimpleCommandBuilder()
                 .newCommand()
@@ -86,12 +86,13 @@ public class Service {
                 .withBody(loginData)
                 .build();
 
-        return sendBasicCommand(c);
+        return sendBasicCommand(c);*/
+    return true;
     }
 
     public boolean gameMove(int x, int y) {
         //TODO: basic check
-        Command c = CommandBuilderProvider
+        /*Command c = CommandBuilderProvider
                 .newGameCommandBuilder()
                 .newCommand()
                 .withHeader(GameCommandType.MOVE)
@@ -99,6 +100,8 @@ public class Service {
                 .build();
 
         return sendBasicCommand(c);
+         */
+        return true;
     }
 
     public boolean joinGame(GameData gameData) {
