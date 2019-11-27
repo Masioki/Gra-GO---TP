@@ -1,4 +1,5 @@
 package Controllers;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
 import java.io.File;
+
 
 public class GameFrameController {
 
@@ -32,23 +34,25 @@ public class GameFrameController {
         gridPanelBoard.setMaxWidth(boardHeight);
         gridPanelBoard.setMaxHeight(boardHeight);
 
-        for(int i = 0; i < gridsInRowNumber; i++)
-        {
+        for (int i = 0; i < gridsInRowNumber; i++) {
             ColumnConstraints colConst = new ColumnConstraints();
             colConst.setPercentWidth(100.0 / gridsInRowNumber);
             gridPanelBoard.getColumnConstraints().add(colConst);
         }
-        for(int i = 0; i < gridsInRowNumber; i++)
-        {
+        for (int i = 0; i < gridsInRowNumber; i++) {
             RowConstraints rowConst = new RowConstraints();
             rowConst.setPercentHeight(100.0 / gridsInRowNumber);
             gridPanelBoard.getRowConstraints().add(rowConst);
         }
         grids = new ImageView[gridsInRowNumber][gridsInRowNumber];
         for (int i = 0; i < gridsInRowNumber; i++) {
-            for(int b= 0; b< gridsInRowNumber; b++) {
+            for (int b = 0; b < gridsInRowNumber; b++) {
                 File file = new File("C:\\Users\\ciche\\IdeaProjects\\Gra-GO---TP\\Client\\src\\main\\resources\\images\\emptyGrid.jpg");
-                Image image = new Image(file.toURI().toString(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
+                Image image = new Image(file.toURI().toString(), boardWidth / gridsInRowNumber, boardHeight / gridsInRowNumber, false, false);
+
+                //Tak tez mozna, sam znajduje prawdziwa sciezke, kliknij z Ctrl i otworzy ci odrazu obrazek
+                //Image image = new Image(this.getClass().getResource("/images/emptyGrid.jpg").getFile(),
+                //      boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
                 ImageView led = new ImageView();
                 led.setImage(image);
 

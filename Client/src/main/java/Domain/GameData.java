@@ -8,6 +8,7 @@ public class GameData {
     private int gameID;
     private String username;
 
+
     public int getGameID() {
         return gameID;
     }
