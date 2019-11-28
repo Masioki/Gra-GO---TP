@@ -25,30 +25,45 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     public Button buttonJoinGame;
     public Button buttonRefresh;
     public GridPane gridPanelLobby;
-    private Label[] lobbyList;
-    Service service = null;
 
+
+    private MyLabel[] lobbyList;
+    private Service service = null;
+    final int lobbyMaxNumber = 10;
+    //numerek gry wybranej przez użytkownika
+    private int chosenGame;
     @FXML
     public void initialize() {
+        chosenGame = -1;
         buttonJoinGame.setOnAction(this);
         buttonRefresh.setOnAction(this);
         service = Service.getInstance();
-        final int lobbyMaxNumber = 10;
         for(int i = 0; i < lobbyMaxNumber; i++)
         {
             RowConstraints rowConst = new RowConstraints();
             rowConst.setPercentHeight(100.0 / lobbyMaxNumber);
             gridPanelLobby.getRowConstraints().add(rowConst);
         }
-        lobbyList = new Label[lobbyMaxNumber];
+        lobbyList = new MyLabel[lobbyMaxNumber];
         for (int i = 0; i < lobbyMaxNumber; i++) {
-            Label l = new Label("Game is Dead...");
+            MyLabel l = new MyLabel();
+            l.setText("Game is dead...");
+            l.setNumber(i);
+            l.setOnMouseClicked((event) -> {
+                int number = l.getNumber();
+                chooseGame(number);
+
+            });
             lobbyList[i] = l;
             gridPanelLobby.add(lobbyList[i],0,i);
         }
     }
-
-    void startGameWindow(ActionEvent e) {
+    private void  chooseGame(int number)
+    {
+        lobbyList[number].setText("Active Game");
+        chosenGame = number;
+    }
+    private void startGameWindow(ActionEvent e) {
         Parent root;
         try {
             root = FXMLLoader.load(getClass().getClassLoader().getResource("gameFrame.fxml"));
