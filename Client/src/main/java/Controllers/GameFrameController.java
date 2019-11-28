@@ -2,11 +2,13 @@ package Controllers;
 import Services.Service;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 import java.io.File;
 
@@ -18,8 +20,12 @@ public class GameFrameController implements EventHandler<ActionEvent> {
     public AnchorPane gameBoardFrame;
     public Button buttonPause;
     public Button buttonSurrender;
-    public Label labelCapturedPawnsPlayer;
+    public Label labelCapturedPawns;
     public Label labelCapturedPawnsEnemy;
+    public Label labelLogin;
+    public Label labelTurn;
+    public Label labelCapturedPawnsEnemyScore;
+    public Label labelCapturedPawnsScore;
     private MyImageView[][] grids;
 
     private Service service = null;
@@ -29,16 +35,41 @@ public class GameFrameController implements EventHandler<ActionEvent> {
     private Image imageEmptyGrid;
     private Image imagePlayerPawn;
     private Image imageEnemyPawn;
+
+    void customizeFrame()
+    {
+        Color blue = Color.BLUE;
+        BackgroundFill backgroundFillBlue = new BackgroundFill(blue, CornerRadii.EMPTY, Insets.EMPTY);
+        Background backgroundBlue = new Background(backgroundFillBlue);
+        Color red = Color.RED;
+        BackgroundFill backgroundFillRed = new BackgroundFill(red, CornerRadii.EMPTY, Insets.EMPTY);
+        Background backgroundRed = new Background(backgroundFillRed);
+        //customize labels
+        labelCapturedPawns.setBackground(backgroundBlue);
+        labelCapturedPawnsEnemy.setBackground(backgroundBlue);
+        labelLogin.setBackground(backgroundBlue);
+        labelTurn.setBackground(backgroundBlue);
+        labelCapturedPawnsEnemyScore.setBackground(backgroundBlue);
+        labelCapturedPawnsScore.setBackground(backgroundBlue);
+        //customize buttons
+        buttonPause.setBackground(backgroundRed);
+        buttonSurrender.setBackground(backgroundRed);
+    }
     //ustawiamy zdjęcia bezpośrednio ze ścieżek
     private void setUpImages()
     {
-        File file = new File("C:\\Users\\ciche\\IdeaProjects\\Gra-GO---TP\\Client\\src\\main\\resources\\images\\emptyGrid.jpg");
-        imageEmptyGrid = new Image(file.toURI().toString(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
-        file = new File("C:\\Users\\ciche\\IdeaProjects\\Gra-GO---TP\\Client\\src\\main\\resources\\images\\gridWhitePawn.jpg");
-        imagePlayerPawn = new Image(file.toURI().toString(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
-        file = new File("C:\\Users\\ciche\\IdeaProjects\\Gra-GO---TP\\Client\\src\\main\\resources\\images\\gridBlackPawn.jpg");
-        imageEnemyPawn = new Image(file.toURI().toString(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
+        //File file = new File("C:\\Users\\ciche\\IdeaProjects\\Gra-GO---TP\\Client\\src\\main\\resources\\images\\emptyGrid.jpg");
+        //System.out.println(this.getClass().getResource("/images/emptyGrid.jpg").getFile() + "\n" + file.toURI().toString());
+        imageEmptyGrid =  new Image("file:"+this.getClass().getResource("/images/emptyGrid.jpg").getFile(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
+        //new Image(file.toURI().toString(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
+        //file = new File("C:\\Users\\ciche\\IdeaProjects\\Gra-GO---TP\\Client\\src\\main\\resources\\images\\gridWhitePawn.jpg");
+        imagePlayerPawn = new Image("file:"+this.getClass().getResource("/images/gridWhitePawn.jpg").getFile(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
+        //        new Image(file.toURI().toString(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
+        //file = new File("C:\\Users\\ciche\\IdeaProjects\\Gra-GO---TP\\Client\\src\\main\\resources\\images\\gridBlackPawn.jpg");
+        imageEnemyPawn = new Image("file:"+this.getClass().getResource("/images/gridBlackPawn.jpg").getFile(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
+        //        new Image(file.toURI().toString(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
     }
+    @FXML
     public void initialize() {
         setUpImages();
         gridPanelBoard.setPrefWidth(boardWidth);
@@ -76,6 +107,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
             }
         }
         service = Service.getInstance();
+        customizeFrame();
     }
     private void placePawn(int colNumber, int rowNumber)
     {

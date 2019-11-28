@@ -12,11 +12,11 @@
       </GridPane>
       <Button fx:id="buttonPause" layoutX="14.0" layoutY="625.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="149.0" text="Pause" />
       <Button fx:id="buttonSurrender" layoutX="14.0" layoutY="735.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="149.0" text="Surender" />
-      <Label fx:id="labelCapturedPawnsPlayer" layoutX="14.0" layoutY="409.0" prefHeight="53.0" prefWidth="155.0" text="Captured by enemy  pawns:" />
-      <Label layoutX="14.0" layoutY="43.0" prefHeight="53.0" prefWidth="155.0" text="Player" />
-      <Label layoutX="11.0" layoutY="117.0" prefHeight="53.0" prefWidth="155.0" text="PlayerNickName" />
-      <Label fx:id="labelCapturedPawnsEnemy" layoutX="17.0" layoutY="210.0" prefHeight="53.0" prefWidth="149.0" text="CapturedPawns:" />
-      <Label layoutX="17.0" layoutY="510.0" prefHeight="68.0" prefWidth="149.0" text="0" />
-      <Label layoutX="17.0" layoutY="290.0" prefHeight="68.0" prefWidth="149.0" text="0" />
+      <Label fx:id="labelCapturedPawnsEnemy" alignment="CENTER" layoutX="14.0" layoutY="409.0" prefHeight="53.0" prefWidth="155.0" text="Captured by enemy  pawns:" />
+      <Label fx:id="labelTurn" alignment="CENTER" layoutX="14.0" layoutY="43.0" prefHeight="53.0" prefWidth="155.0" text="Player" />
+      <Label fx:id="labelLogin" alignment="CENTER" layoutX="11.0" layoutY="117.0" prefHeight="53.0" prefWidth="155.0" text="PlayerNickName" />
+      <Label fx:id="labelCapturedPawns" alignment="CENTER" layoutX="17.0" layoutY="210.0" prefHeight="53.0" prefWidth="149.0" text="CapturedPawns:" />
+      <Label fx:id="labelCapturedPawnsEnemyScore" alignment="CENTER" layoutX="17.0" layoutY="510.0" prefHeight="68.0" prefWidth="149.0" text="0" />
+      <Label fx:id="labelCapturedPawnsScore" alignment="CENTER" layoutX="17.0" layoutY="290.0" prefHeight="68.0" prefWidth="149.0" text="0" />
    </children>
 </AnchorPane>
