@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Class Service should be singleton
+//Wzorzec Facade
 public class Service implements ResponseListener {
 
     private static Service service;
@@ -25,6 +26,7 @@ public class Service implements ResponseListener {
         parser = new CommandParser();
         try {
             serverConnection = new ServerConnection();
+            serverConnection.addListener(this);
         } catch (Exception e) {
             //TODO: obsluga bledu polaczenia
         }
