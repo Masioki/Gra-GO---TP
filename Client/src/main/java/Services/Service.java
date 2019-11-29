@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Class Service should be singleton
-public class Service {
+public class Service implements ResponseListener {
 
     private static Service service;
     private ServerConnection serverConnection;
@@ -113,4 +113,8 @@ public class Service {
     }
 
 
+    @Override
+    public void recieve(Command command) {
+
+    }
 }
