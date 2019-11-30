@@ -1,5 +1,6 @@
 package DTO;
 
+//data transfer object
 public class LoginData {
 
     private String username;

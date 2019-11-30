@@ -4,8 +4,7 @@ import Commands.Command;
 
 /**
  * Interfejs do nasłuchiwania akcji
- * @see EventSource
  */
-public interface ResponseListener {
-    void recieve(Command command);
+public interface CommandListener {
+    void execute(Command command) throws Exception;
 }

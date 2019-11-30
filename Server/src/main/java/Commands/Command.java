@@ -1,6 +1,7 @@
 package Commands;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class Command implements Serializable {
 
@@ -11,9 +12,13 @@ public class Command implements Serializable {
     ERROR - wiadomosc bledu w body
     SUCCESS - zaleznie od zapytania
      */
+    private UUID uuid;
     private CommandType type;
     private String body;
 
+    public Command () {
+        uuid = UUID.randomUUID();
+    }
 
     public CommandType getType() {
         return type;
@@ -30,4 +35,14 @@ public class Command implements Serializable {
     public void setBody(String body) {
         this.body = body;
     }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+
 }

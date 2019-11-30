@@ -13,36 +13,20 @@ import java.util.List;
 
 //Class Service should be singleton
 //Wzorzec Facade
-public class Service implements ResponseListener {
+public class Service implements CommandListener {
 
     private static Service service;
-    private ServerConnection serverConnection;
+    private ServiceInvoker invoker;
     private CommandParser parser;
+    private Command commandInProgress;
 
     /**
      * Private Constructor
      */
     private Service() {
         parser = new CommandParser();
-        try {
-            serverConnection = new ServerConnection();
-            serverConnection.addListener(this);
-        } catch (Exception e) {
-            //TODO: obsluga bledu polaczenia
-        }
     }
 
-    private boolean sendBasicCommand(Command c) {
-        try {
-            Command response = serverConnection.sendCommand(c);
-            if (response.getType() == CommandType.ERROR) {
-                errorHandler(parser.parseErrorCommand(response.getBody()));
-            } else return response.getType() == CommandType.SUCCESS;
-        } catch (Exception e) {
-            errorHandler("Connection error");
-        }
-        return false;
-    }
 
     public static Service getInstance() {
         if (service == null) {
@@ -51,31 +35,53 @@ public class Service implements ResponseListener {
         return service;
     }
 
+    private void sendBasicCommand(Command c) {
+        try {
+            invoker.send(c);
+        } catch (Exception e) {
+            errorHandler("Connection error");
+        }
+    }
+
+    @Override
+    public void execute(Command command) {
+        /*if (command.getType() == CommandType.SUCCESS) {
+            executeCommand(command.getBody());
+        } else if (command.getType() == CommandType.ERROR) {
+            commandInProgress = null;
+            errorHandler(parser.parseErrorCommand(command.getBody()));
+        }*/
+    }
+
+    public void setServiceInvoker(ServiceInvoker invoker) {
+        this.invoker = invoker;
+    }
+
+
+    /*
+           LOGIKA
+     */
+
+    private void executeCommand(String responseBody) {
+        if (commandInProgress != null) {
+
+        }
+    }
 
     public void errorHandler(String errorMessage) {
         //TODO: error handling
     }
 
-    public List<GameData> loadActiveGames() {
+    public void loadActiveGames() {
         Command c = CommandBuilderProvider
                 .newSimpleCommandBuilder()
                 .newCommand()
                 .withHeader(CommandType.ACTIVE_GAMES)
                 .build();
-        try {
-            Command response = serverConnection.sendCommand(c);
-            if (response.getType() == CommandType.SUCCESS) {
-                return parser.parseActiveGamesCommand(response.getBody());
-            } else if (response.getType() == CommandType.ERROR) {
-                errorHandler(parser.parseErrorCommand(response.getBody()));
-            }
-        } catch (Exception e) {
-            errorHandler("Connection error");
-        }
-        return new ArrayList<>();
+
     }
 
-    public boolean signUp(String login, String password) {
+    public void signUp(String login, String password) {
         //TODO: basic check
         LoginData loginData = new LoginData();
         loginData.setUsername(login);
@@ -89,10 +95,13 @@ public class Service implements ResponseListener {
                 .build();
 
         return sendBasicCommand(c);*/
-    return true;
     }
 
-    public boolean gameMove(int x, int y) {
+    /*
+     Przyjmuje koordynaty przy komendzie MOVE.
+     Przy SURRENDER, PASS, CONTINUE koordynaty sa obojetne.
+     */
+    public void gameMove(int x, int y, GameCommandType type) {
         //TODO: basic check
         /*Command c = CommandBuilderProvider
                 .newGameCommandBuilder()
@@ -103,20 +112,15 @@ public class Service implements ResponseListener {
 
         return sendBasicCommand(c);
          */
-        return true;
     }
 
-    public boolean joinGame(GameData gameData) {
+    public void joinGame(GameData gameData) {
         Command c = CommandBuilderProvider
                 .newSimpleCommandBuilder()
                 .withHeader(CommandType.JOIN)
                 .build();
-        return sendBasicCommand(c);
+        sendBasicCommand(c);
     }
 
 
-    @Override
-    public void recieve(Command command) {
-
-    }
 }

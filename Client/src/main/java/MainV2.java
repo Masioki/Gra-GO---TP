@@ -1,10 +1,14 @@
 
+import Services.ServerConnection;
+import Services.Service;
+import Services.ServiceInvoker;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -26,6 +30,17 @@ public class MainV2 extends Application {
     }
 
     public static void main(String[] args) {
+        try {
+            ServiceInvoker invoker = new ServiceInvoker();
+            ServerConnection connection = new ServerConnection(invoker);
+            Service s = Service.getInstance();
+            s.setServiceInvoker(invoker);
+            invoker.addListener(connection);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
         launch(args);
     }
 }

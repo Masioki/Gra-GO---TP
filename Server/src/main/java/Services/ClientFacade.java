@@ -7,7 +7,7 @@ import Domain.Game;
 import DTO.GameData;
 import DTO.LoginData;
 
-
+// wzorzec Facade(a wlasciwie Mediator) i Chain of Responsibility
 public class ClientFacade {
 
     private Client client;

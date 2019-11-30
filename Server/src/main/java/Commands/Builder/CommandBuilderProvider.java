@@ -1,6 +1,6 @@
 package Commands.Builder;
 
-
+// wzorzec Builder i Command
 public class CommandBuilderProvider {
 
 
