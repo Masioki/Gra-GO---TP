@@ -1,0 +1,26 @@
+/*odwołanie z .button odnosi się do wszystkich buttonów*/
+.button{
+    -fx-font-size: 20px;
+    -fx-background-color: red;
+    -fx-text-fill: white;
+    -fx-background-radius: 50px;
+
+    -fx-border-radius: 50px;
+    -fx-border-width: 5px;
+    -fx-border-color: black;;
+}
+.label{
+    -fx-font-size: 20px;
+    -fx-background-color: black;
+    -fx-text-fill: white;
+
+    -fx-background-radius: 30px;
+
+    -fx-border-radius: 50px;
+    -fx-border-width: 5px;
+    -fx-border-color: red;
+}
+/*odwołujemy się do całego okienka*/
+.root{
+    -fx-background-color: rgb(240,202,95);
+}

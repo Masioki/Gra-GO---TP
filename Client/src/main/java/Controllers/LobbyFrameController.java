@@ -90,7 +90,7 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
             lobbyList[i] = l;
             gridPanelLobby.add(lobbyList[i],0,i);
         }
-        customizeFrame();
+        //customizeFrame();
     }
     private void  chooseGame(int number)
     {
@@ -100,6 +100,7 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
         BackgroundFill backgroundFillGreen = new BackgroundFill(green, CornerRadii.EMPTY, Insets.EMPTY);
         Background backgroundGreen = new Background(backgroundFillGreen);
         lobbyList[number].setBackground(backgroundGreen);
+        lobbyList[number].getStylesheets().add(getClass().getResource("/css/activeLabelStylesheet.css").toExternalForm());
     }
     private void startGameWindow(ActionEvent e) {
         Parent root;
@@ -107,7 +108,10 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
             root = FXMLLoader.load(getClass().getClassLoader().getResource("gameFrame.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Game Board");
-            stage.setScene(new Scene(root));
+            //dodajemy stylesheer
+            Scene s = new Scene(root);
+            s.getStylesheets().add(getClass().getResource("/css/basicStylesheet.css").toExternalForm());
+            stage.setScene(s);
             stage.setWidth(850);
             stage.setHeight(650);
             stage.show();

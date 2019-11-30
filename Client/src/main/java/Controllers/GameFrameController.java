@@ -59,16 +59,9 @@ public class GameFrameController implements EventHandler<ActionEvent> {
     //ustawiamy zdjęcia bezpośrednio ze ścieżek
     private void setUpImages()
     {
-        //File file = new File("C:\\Users\\ciche\\IdeaProjects\\Gra-GO---TP\\Client\\src\\main\\resources\\images\\emptyGrid.jpg");
-        //System.out.println(this.getClass().getResource("/images/emptyGrid.jpg").getFile() + "\n" + file.toURI().toString());
         imageEmptyGrid =  new Image("file:"+this.getClass().getResource("/images/emptyGrid.jpg").getFile(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
-        //new Image(file.toURI().toString(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
-        //file = new File("C:\\Users\\ciche\\IdeaProjects\\Gra-GO---TP\\Client\\src\\main\\resources\\images\\gridWhitePawn.jpg");
         imagePlayerPawn = new Image("file:"+this.getClass().getResource("/images/gridWhitePawn.jpg").getFile(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
-        //        new Image(file.toURI().toString(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
-        //file = new File("C:\\Users\\ciche\\IdeaProjects\\Gra-GO---TP\\Client\\src\\main\\resources\\images\\gridBlackPawn.jpg");
         imageEnemyPawn = new Image("file:"+this.getClass().getResource("/images/gridBlackPawn.jpg").getFile(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
-        //        new Image(file.toURI().toString(),boardWidth/gridsInRowNumber,boardHeight/gridsInRowNumber,false,false);
     }
     @FXML
     public void initialize() {
@@ -109,7 +102,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         }
         service = Service.getInstance();
         labelError.setVisible(false);
-        customizeFrame();
+        //customizeFrame();
     }
     public void showError()
     {

@@ -48,7 +48,7 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
     public void initialize() {
         buttonSignUp.setOnAction(this);
         service = Service.getInstance();
-        customizeFrame();
+        //customizeFrame();
     }
 
     //for now its just an empty method
@@ -62,7 +62,10 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
             root = FXMLLoader.load(getClass().getClassLoader().getResource("lobbyFrame.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Lobby");
-            stage.setScene(new Scene(root));
+            //dodajemy stylescheet
+            Scene s = new Scene(root);
+            s.getStylesheets().add(getClass().getResource("/css/basicStylesheet.css").toExternalForm());
+            stage.setScene(s);
             stage.setWidth(600);
             stage.setHeight(650);
             stage.show();

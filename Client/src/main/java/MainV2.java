@@ -18,6 +18,8 @@ public class MainV2 extends Application {
         root = loader.load();
         primaryStage.setTitle("Login");
         Scene s = new Scene(root);
+        //dodajemy plik css
+        s.getStylesheets().add(getClass().getResource("/css/basicStylesheet.css").toExternalForm());
         primaryStage.setScene(s);
         primaryStage.setResizable(false);
         primaryStage.show();
