@@ -1,3 +1,4 @@
+1:
 Mimo dodanych zależności w mavenie (tak było w moim przypadku) trzeba pobrać javaFx SDK  https://gluonhq.com/products/javafx/
 W intelliJ run > edit configuration > VM options  wpisać 
           --module-path twojaSciezkaZeSlashamiWPrawo/javafx-sdk-11.0.2/lib --add-modules=javafx.controls,javafx.fxml
@@ -5,7 +6,13 @@ Pliki .fxml umieszczamy w resources i odwołujemy się tak jak w klasie Main
 W pliku .fxml najważniejsze jest fx:controller="controller", fx:id="jakiesid" po tym id nazywamy zmienne w kontrolerze(lub dajemy intellij je stworzyc)
 onAction="#jakasMetodaWKontrolerze" najprostsze przypisanie metody do akcji, można też to zdefiniować na zmiennel w javie
 
+2:
 Na razie do pobierania zdjęć używam brutalnie ścieżki do pliku - gdybyś chciał przetestować u siebie gui-(a raczej jego bardzo wstępną wersję)
 to trzeba zmienić ścieżkę w GameFrameController
 Wydaje mi się że lobby list będzie wyglądało oki jako lista 10 labeli - wybraną przez użytkownika grę możey zaznaczać na zielono
 Obrazki pól gry jutro przemaluje - bardzo niepotrzebnie dodałem czarne krawędzie i plansza zlewa się w jedno
+
+3:
+W enumie GRIDSTATE - sprawdzamy czy pole jest puste, czy nie
+Naciśnięcie na lobby - wybiera aktywne lobby - to będzie to do którego gracz dołącza po naciśnięciu Join Game ( na razie zmieniamy tło na zielono)
+W metodach Pass, Surrender na razie wrzuciłem to do - tam możemy wysłać komunikat do servisu
