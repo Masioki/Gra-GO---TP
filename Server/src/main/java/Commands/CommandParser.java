@@ -1,6 +1,6 @@
 package Commands;
 
-import Domain.LoginData;
+import DTO.LoginData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

@@ -1,4 +1,4 @@
-package Domain;
+package DTO;
 
 public class LoginData {
 
