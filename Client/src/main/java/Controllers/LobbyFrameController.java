@@ -64,7 +64,7 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     }
     @FXML
     public void initialize() {
-        chosenGame = -1;
+        //chosenGame = -1;
         buttonJoinGame.setOnAction(this);
         buttonRefreshLobbies.setOnAction(this);
         service = Service.getInstance();

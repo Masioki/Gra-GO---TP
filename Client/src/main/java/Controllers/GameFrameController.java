@@ -26,6 +26,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
     public Label labelTurn;
     public Label labelCapturedPawnsEnemyScore;
     public Label labelCapturedPawnsScore;
+    public Label labelError;
     private MyImageView[][] grids;
 
     private Service service = null;
@@ -36,7 +37,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
     private Image imagePlayerPawn;
     private Image imageEnemyPawn;
 
-    void customizeFrame()
+    private void customizeFrame()
     {
         Color blue = Color.BLUE;
         BackgroundFill backgroundFillBlue = new BackgroundFill(blue, CornerRadii.EMPTY, Insets.EMPTY);
@@ -107,7 +108,12 @@ public class GameFrameController implements EventHandler<ActionEvent> {
             }
         }
         service = Service.getInstance();
+        labelError.setVisible(false);
         customizeFrame();
+    }
+    public void showError()
+    {
+        labelError.setVisible(true);
     }
     private void placePawn(int colNumber, int rowNumber)
     {

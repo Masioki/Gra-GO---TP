@@ -5,9 +5,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane  prefHeight="462.0" prefWidth="413.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.LoginFrameController">
+<AnchorPane prefHeight="462.0" prefWidth="413.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.LoginFrameController">
    <children>
-      <Label fx:id="labelLogin" alignment="CENTER" contentDisplay="CENTER" layoutX="69.0" layoutY="60.0" prefHeight="55.0" prefWidth="277.0" text="PODAJ LOGIN" textAlignment="CENTER" />
+      <Label fx:id="labelLogin" alignment="CENTER" contentDisplay="CENTER" layoutX="69.0" layoutY="41.0" prefHeight="55.0" prefWidth="277.0" text="PODAJ LOGIN" textAlignment="CENTER" />
       <TextField fx:id="textFieldLogin" alignment="CENTER" layoutX="69.0" layoutY="116.0" prefHeight="44.0" prefWidth="277.0" />
       <Label fx:id="labelPassword" alignment="CENTER" contentDisplay="CENTER" layoutX="69.0" layoutY="216.0" prefHeight="55.0" prefWidth="277.0" text="PODAJ HASŁO" textAlignment="CENTER" />
       <TextField fx:id="textFieldPassword" alignment="CENTER" layoutX="69.0" layoutY="287.0" prefHeight="44.0" prefWidth="277.0" />
