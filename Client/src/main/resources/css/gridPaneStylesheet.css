@@ -1,0 +1,8 @@
+#gridPanelBoard
+{
+    -fx-background-radius: 30px;
+    /*TODO-możemy dodać zaokrąglenia*/
+    /*-fx-border-radius: 50px;*/
+    -fx-border-width: 5px;
+    -fx-border-color: black;
+}

@@ -102,6 +102,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         }
         service = Service.getInstance();
         labelError.setVisible(false);
+        gridPanelBoard.getStylesheets().add(getClass().getResource("/css/gridPaneStylesheet.css").toExternalForm());
         //customizeFrame();
     }
     public void showError()
