@@ -21,6 +21,9 @@
     -fx-border-width: 5px;
     -fx-border-color: red;
 }
+.text-field{
+    -fx-font-size: 20px;
+}
 /*odwołujemy się do całego okienka*/
 .root{
     -fx-background-color: rgb(240,202,95);
