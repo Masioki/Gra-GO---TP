@@ -32,11 +32,11 @@ public class MainV2 extends Application {
     public static void main(String[] args) {
         try {
             ServiceInvoker invoker = new ServiceInvoker();
-            ServerConnection connection = new ServerConnection(invoker);
+            //ServerConnection connection = new ServerConnection(invoker);
             Service s = Service.getInstance();
             s.setServiceInvoker(invoker);
-            invoker.addListener(connection);
-        } catch (IOException e) {
+            //invoker.addListener(connection);
+        } catch (Exception e) {
             e.printStackTrace();
             return;
         }

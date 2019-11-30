@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -38,33 +39,9 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     //numerek gry wybranej przez użytkownika
     private int chosenGame;
 
-    void customizeFrame()
-    {
-        Color blue = Color.BLUE;
-        BackgroundFill backgroundFillBlue = new BackgroundFill(blue, CornerRadii.EMPTY, Insets.EMPTY);
-        Background backgroundBlue = new Background(backgroundFillBlue);
-        Color red = Color.RED;
-        BackgroundFill backgroundFillRed = new BackgroundFill(red, CornerRadii.EMPTY, Insets.EMPTY);
-        Background backgroundRed = new Background(backgroundFillRed);
-        //customize labels
-        labelLoggedAs.setBackground(backgroundBlue);
-        labelPlayerLogin.setBackground(backgroundBlue);
-        labelGameTurn.setBackground(backgroundBlue);
-
-        for(int i = 0; i < lobbyMaxNumber; i++)
-        {
-            lobbyList[i].setBackground(backgroundBlue);
-        }
-        //customize buttons
-        buttonJoinGame.setBackground(backgroundRed);
-        buttonRefreshLobbies.setBackground(backgroundRed);
-        buttonRefreshLobbies.setBackground(backgroundRed);
-        buttonCreateLobby.setBackground(backgroundRed);
-
-    }
     @FXML
     public void initialize() {
-        //chosenGame = -1;
+        chosenGame = -1;
         buttonJoinGame.setOnAction(this);
         buttonRefreshLobbies.setOnAction(this);
         service = Service.getInstance();
@@ -94,12 +71,16 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     }
     private void  chooseGame(int number)
     {
+        //resetujemy poprzednią grę
+        if(chosenGame != -1)
+        {
+            lobbyList[chosenGame].setText("Game is ded...");
+            lobbyList[chosenGame].getStylesheets().remove(getClass().getResource("/css/activeLabelStylesheet.css").toExternalForm());
+            lobbyList[chosenGame].getStylesheets().add(getClass().getResource("/css/basicStylesheet.css").toExternalForm());
+        }
         lobbyList[number].setText("Active Game");
         chosenGame = number;
-        Color green = Color.GREEN;
-        BackgroundFill backgroundFillGreen = new BackgroundFill(green, CornerRadii.EMPTY, Insets.EMPTY);
-        Background backgroundGreen = new Background(backgroundFillGreen);
-        lobbyList[number].setBackground(backgroundGreen);
+        lobbyList[chosenGame].getStylesheets().remove(getClass().getResource("/css/basicStylesheet.css").toExternalForm());
         lobbyList[number].getStylesheets().add(getClass().getResource("/css/activeLabelStylesheet.css").toExternalForm());
     }
     private void startGameWindow(ActionEvent e) {
@@ -113,7 +94,8 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
             s.getStylesheets().add(getClass().getResource("/css/basicStylesheet.css").toExternalForm());
             stage.setScene(s);
             stage.setWidth(850);
-            stage.setHeight(650);
+            stage.setHeight(700);
+            stage.setResizable(false);
             stage.show();
 
             ((Node) (e.getSource())).getScene().getWindow().hide();

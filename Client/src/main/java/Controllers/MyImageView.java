@@ -3,6 +3,7 @@ package Controllers;
 import javafx.scene.image.ImageView;
 
 public class MyImageView extends ImageView {
+    GRIDSTATE gridstate = GRIDSTATE.EMPTY;
     public int getRowNumber() {
         return rowNumber;
     }

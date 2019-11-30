@@ -3,14 +3,10 @@ import Services.Service;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-
-import java.io.File;
 
 import static java.lang.StrictMath.abs;
 
@@ -18,7 +14,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
 
     public GridPane gridPanelBoard;
     public AnchorPane gameBoardFrame;
-    public Button buttonPause;
+    public Button buttonPass;
     public Button buttonSurrender;
     public Label labelCapturedPawns;
     public Label labelCapturedPawnsEnemy;
@@ -31,31 +27,13 @@ public class GameFrameController implements EventHandler<ActionEvent> {
 
     private Service service = null;
     private final int gridsInRowNumber = 19;
-    private final int boardWidth = 650;
-    private final int boardHeight = 650;
+    private final int boardWidth = 620;
+    private final int boardHeight = 620;
     private Image imageEmptyGrid;
     private Image imagePlayerPawn;
     private Image imageEnemyPawn;
 
-    private void customizeFrame()
-    {
-        Color blue = Color.BLUE;
-        BackgroundFill backgroundFillBlue = new BackgroundFill(blue, CornerRadii.EMPTY, Insets.EMPTY);
-        Background backgroundBlue = new Background(backgroundFillBlue);
-        Color red = Color.RED;
-        BackgroundFill backgroundFillRed = new BackgroundFill(red, CornerRadii.EMPTY, Insets.EMPTY);
-        Background backgroundRed = new Background(backgroundFillRed);
-        //customize labels
-        labelCapturedPawns.setBackground(backgroundBlue);
-        labelCapturedPawnsEnemy.setBackground(backgroundBlue);
-        labelLogin.setBackground(backgroundBlue);
-        labelTurn.setBackground(backgroundBlue);
-        labelCapturedPawnsEnemyScore.setBackground(backgroundBlue);
-        labelCapturedPawnsScore.setBackground(backgroundBlue);
-        //customize buttons
-        buttonPause.setBackground(backgroundRed);
-        buttonSurrender.setBackground(backgroundRed);
-    }
+
     //ustawiamy zdjęcia bezpośrednio ze ścieżek
     private void setUpImages()
     {
@@ -70,19 +48,6 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         gridPanelBoard.setPrefHeight(boardWidth);
         gridPanelBoard.setMaxWidth(boardHeight);
         gridPanelBoard.setMaxHeight(boardHeight);
-        //ten fragment kodu powoduje że pojawiają się te brzydkie białe linie
-        /*for(int i = 0; i < gridsInRowNumber; i++)
-        {
-            ColumnConstraints colConst = new ColumnConstraints();
-            colConst.setPercentWidth(100.0 / gridsInRowNumber);
-            gridPanelBoard.getColumnConstraints().add(colConst);
-        }
-        for(int i = 0; i < gridsInRowNumber; i++)
-        {
-            RowConstraints rowConst = new RowConstraints();
-            rowConst.setPercentHeight(100.0 / gridsInRowNumber);
-            gridPanelBoard.getRowConstraints().add(rowConst);
-        }*/
         grids = new MyImageView[gridsInRowNumber][gridsInRowNumber];
         for (int i = 0; i < gridsInRowNumber; i++) {
             for(int b= 0; b< gridsInRowNumber; b++) {
@@ -93,7 +58,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
                 myImageView.setOnMouseClicked((event) -> {
                     int colNumber = myImageView.getColumnNumber();
                     int rowNumber = myImageView.getRowNumber();
-                    placePawn(colNumber, rowNumber);
+                    tryPlacePawn(colNumber, rowNumber);
 
                 });
                 grids[i][b] = myImageView;
@@ -103,18 +68,52 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         service = Service.getInstance();
         labelError.setVisible(false);
         gridPanelBoard.getStylesheets().add(getClass().getResource("/css/gridPaneStylesheet.css").toExternalForm());
-        //customizeFrame();
+        buttonPass.setOnAction(this);
+        buttonSurrender.setOnAction(this);
     }
     public void showError()
     {
         labelError.setVisible(true);
     }
+
+    /**
+     * Metoda sprawdza czy pole jest puste i jeśli tak wysyła zappytanie do serwisu
+     * @param colNumber
+     * @param rowNumber
+     */
+    private void tryPlacePawn(int colNumber, int rowNumber)
+    {
+        if(grids[colNumber][rowNumber].gridstate.equals(GRIDSTATE.FULL))
+        {
+            System.out.println("ZAJĘTE!");
+        }
+        else
+        {
+            //TODO-tutaj wysyłamy do serwisu zapytanie o postawienie pionka zamiast od razu go postawić
+            placePawn(colNumber, rowNumber);
+        }
+    }
+    /**
+     * Metoda stawia pionka, powinna być wywoływana przez serwis
+     * @param colNumber
+     * @param rowNumber
+     */
     private void placePawn(int colNumber, int rowNumber)
     {
+        grids[colNumber][rowNumber].gridstate = GRIDSTATE.FULL;
         grids[colNumber][rowNumber].setImage(imagePlayerPawn);
     }
     @Override
-    public void handle(ActionEvent actionEvent) {
-
+    public void handle(ActionEvent e) {
+        if(e.getSource().equals(buttonPass))
+        {
+            /*TODO-tutaj powinniśmy wywoływać metodę z servera*/
+            System.out.println("Pass");
+        }
+        if(e.getSource().equals(buttonSurrender))
+        {
+            /*TODO-tutaj powinniśmy wywoływać metodę z servera*/
+            System.out.println("Give up!");
+        }
     }
 }

@@ -5,19 +5,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
 
-<AnchorPane fx:id="gameBoardFrame" prefHeight="850.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GameFrameController">
+<AnchorPane fx:id="gameBoardFrame" prefHeight="650.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GameFrameController">
    <children>
-      <GridPane fx:id="gridPanelBoard" layoutX="179.0" prefHeight="850.0" prefWidth="571.0">
+      <GridPane fx:id="gridPanelBoard" layoutX="179.0" layoutY="12.0" prefHeight="620.0" prefWidth="620.0">
           
       </GridPane>
-      <Button fx:id="buttonPause" layoutX="14.0" layoutY="580.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="149.0" text="Pause" />
-      <Button fx:id="buttonSurrender" layoutX="14.0" layoutY="667.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="149.0" text="Surender" />
-      <Label fx:id="labelCapturedPawnsEnemy" alignment="CENTER" layoutX="14.0" layoutY="440.0" prefHeight="53.0" prefWidth="155.0" text="Captured by enemy  pawns:" />
-      <Label fx:id="labelTurn" alignment="CENTER" layoutX="14.0" layoutY="113.0" prefHeight="53.0" prefWidth="155.0" text="Player" />
-      <Label fx:id="labelLogin" alignment="CENTER" layoutX="11.0" layoutY="192.0" prefHeight="53.0" prefWidth="155.0" text="PlayerNickName" />
-      <Label fx:id="labelCapturedPawns" alignment="CENTER" layoutX="14.0" layoutY="266.0" prefHeight="53.0" prefWidth="149.0" text="CapturedPawns:" />
-      <Label fx:id="labelCapturedPawnsEnemyScore" alignment="CENTER" layoutX="14.0" layoutY="523.0" prefHeight="46.0" prefWidth="149.0" text="0" />
-      <Label fx:id="labelCapturedPawnsScore" alignment="CENTER" layoutX="14.0" layoutY="365.0" prefHeight="46.0" prefWidth="149.0" text="0" />
-      <Label fx:id="labelError" alignment="CENTER" layoutX="17.0" layoutY="29.0" prefHeight="68.0" prefWidth="155.0" text="ERROR OCCURED" />
+      <Button fx:id="buttonPass" layoutX="14.0" layoutY="477.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="149.0" text="Pause" />
+      <Button fx:id="buttonSurrender" layoutX="14.0" layoutY="571.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="149.0" text="Surender" />
+      <Label fx:id="labelCapturedPawnsEnemy" alignment="CENTER" layoutX="14.0" layoutY="341.0" prefHeight="53.0" prefWidth="155.0" text="Captured by enemy  pawns:" />
+      <Label fx:id="labelTurn" alignment="CENTER" layoutX="14.0" layoutY="90.0" prefHeight="53.0" prefWidth="155.0" text="Player" />
+      <Label fx:id="labelLogin" alignment="CENTER" layoutX="11.0" layoutY="159.0" prefHeight="53.0" prefWidth="155.0" text="PlayerNickName" />
+      <Label fx:id="labelCapturedPawns" alignment="CENTER" layoutX="14.0" layoutY="228.0" prefHeight="53.0" prefWidth="149.0" text="CapturedPawns:" />
+      <Label fx:id="labelCapturedPawnsEnemyScore" alignment="CENTER" layoutX="17.0" layoutY="417.0" prefHeight="46.0" prefWidth="149.0" text="0" />
+      <Label fx:id="labelCapturedPawnsScore" alignment="CENTER" layoutX="14.0" layoutY="291.0" prefHeight="46.0" prefWidth="149.0" text="0" />
+      <Label fx:id="labelError" alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="68.0" prefWidth="155.0" text="ERROR OCCURED" />
    </children>
 </AnchorPane>
