@@ -16,7 +16,7 @@ public class Command implements Serializable {
     private CommandType type;
     private String body;
 
-    public Command () {
+    public Command() {
         uuid = UUID.randomUUID();
     }
 

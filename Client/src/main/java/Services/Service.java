@@ -1,30 +1,25 @@
 package Services;
 
+import Commands.*;
 import Commands.Builder.CommandBuilderProvider;
-import Commands.Command;
-import Commands.CommandParser;
-import Commands.CommandType;
-import Commands.GameCommandType;
 import Domain.GameData;
 import Domain.LoginData;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 //Class Service should be singleton
-//Wzorzec Facade
 public class Service implements CommandListener {
 
     private static Service service;
     private ServiceInvoker invoker;
     private CommandParser parser;
-    private Command commandInProgress;
+    private LinkedList<Command> commandsInProgress; //TODO: ma byc tylko w invokerze
 
     /**
      * Private Constructor
      */
     private Service() {
         parser = new CommandParser();
+        commandsInProgress = new LinkedList<>();
     }
 
 
@@ -35,91 +30,141 @@ public class Service implements CommandListener {
         return service;
     }
 
-    private void sendBasicCommand(Command c) {
+    public void setServiceInvoker(ServiceInvoker invoker) {
+        this.invoker = invoker;
+    }
+
+    @Override
+    public void execute(Command command) {
+        if (command.getType() == CommandType.SUCCESS) {
+            Command c = commandsInProgress.pollFirst();
+            executeOwn(c, command);
+        } else if (command.getType() == CommandType.ERROR) {
+            try {
+                errorHandler(parser.parseErrorCommand(command.getBody()));
+            } catch (Exception e) {
+                errorHandler("Blad komendy oraz blad wewnetrzny");
+            }
+            commandsInProgress.pollFirst();
+        } else {
+            executeIncoming(command);
+        }
+    }
+
+    private void sendCommand(Command c) {
         try {
             invoker.send(c);
+            commandsInProgress.addLast(c);
         } catch (Exception e) {
             errorHandler("Connection error");
         }
     }
 
-    @Override
-    public void execute(Command command) {
-        /*if (command.getType() == CommandType.SUCCESS) {
-            executeCommand(command.getBody());
-        } else if (command.getType() == CommandType.ERROR) {
-            commandInProgress = null;
-            errorHandler(parser.parseErrorCommand(command.getBody()));
-        }*/
-    }
-
-    public void setServiceInvoker(ServiceInvoker invoker) {
-        this.invoker = invoker;
-    }
-
 
     /*
-           LOGIKA
+    KAZDY KONTROLER
      */
-
-    private void executeCommand(String responseBody) {
-        if (commandInProgress != null) {
-
-        }
-    }
-
-    public void errorHandler(String errorMessage) {
+    private void errorHandler(String errorMessage) {
         //TODO: error handling
     }
 
+    private void executeOwn(Command out, Command incoming) {
+        try {
+            switch (out.getType()) {
+                case ACTIVE_GAMES: {
+                    //TODO: wywolania zachowan w kontrolerze
+                }
+                case JOIN: {
+
+                }
+                case LOGIN: {
+
+                }
+                case GAME: {
+                    // GameCommand game = parser.parseGameCommand(out);
+
+                }
+            }
+        } catch (Exception e) {
+            errorHandler("Sprobuj ponownie");
+        }
+    }
+
+    private void executeIncoming(Command command) {
+
+    }
+
+    /*
+    KONTROLER LOGOWANIA
+     */
+    public void signUp(String login, String password) {
+        if (login == null || password == null || login.length() == 0 || password.length() == 0) {
+            errorHandler("Za malo danych");
+            return;
+        }
+
+        LoginData loginData = new LoginData();
+        loginData.setUsername(login);
+        loginData.setPassword(password);
+
+        try {
+            Command c = CommandBuilderProvider
+                    .newSimpleCommandBuilder()
+                    .newCommand()
+                    .withHeader(CommandType.LOGIN)
+                    .withBody(loginData)
+                    .build();
+            sendCommand(c);
+        } catch (Exception e) {
+            errorHandler("Blad wewnetrzny");
+        }
+    }
+
+    /*
+    LOBBY
+     */
     public void loadActiveGames() {
         Command c = CommandBuilderProvider
                 .newSimpleCommandBuilder()
                 .newCommand()
                 .withHeader(CommandType.ACTIVE_GAMES)
                 .build();
+        sendCommand(c);
+    }
+
+    public void joinGame(GameData gameData) {
+        try {
+            Command c = CommandBuilderProvider
+                    .newSimpleCommandBuilder()
+                    .withHeader(CommandType.JOIN)
+                    .withBody(gameData)
+                    .build();
+            sendCommand(c);
+        } catch (Exception e) {
+            errorHandler("Blad wewnetrzny");
+        }
 
     }
 
-    public void signUp(String login, String password) {
-        //TODO: basic check
-        LoginData loginData = new LoginData();
-        loginData.setUsername(login);
-        loginData.setPassword(password);
-/*
-        Command c = CommandBuilderProvider
-                .newSimpleCommandBuilder()
-                .newCommand()
-                .withHeader(CommandType.LOGIN)
-                .withBody(loginData)
-                .build();
-
-        return sendBasicCommand(c);*/
-    }
-
+    /*
+    GRA
+     */
     /*
      Przyjmuje koordynaty przy komendzie MOVE.
      Przy SURRENDER, PASS, CONTINUE koordynaty sa obojetne.
      */
     public void gameMove(int x, int y, GameCommandType type) {
-        //TODO: basic check
-        /*Command c = CommandBuilderProvider
-                .newGameCommandBuilder()
-                .newCommand()
-                .withHeader(GameCommandType.MOVE)
-                .withPosition(x, y)
-                .build();
-
-        return sendBasicCommand(c);
-         */
-    }
-
-    public void joinGame(GameData gameData) {
-        Command c = CommandBuilderProvider
-                .newSimpleCommandBuilder()
-                .withHeader(CommandType.JOIN)
-                .build();
-        sendBasicCommand(c);
+        try {
+            Command c = CommandBuilderProvider
+                    .newGameCommandBuilder()
+                    .newCommand()
+                    .withHeader(GameCommandType.MOVE)
+                    .withPosition(x, y)
+                    .build();
+            sendCommand(c);
+        } catch (Exception e) {
+            errorHandler("Blad wewnetrzny");
+        }
     }
 
 

@@ -28,4 +28,8 @@ public class CommandParser {
         return objectMapper.readValue(body, new TypeReference<List<GameData>>() {
         });
     }
+
+    public GameCommand parseGameCommand(String body) throws Exception {
+        return objectMapper.readValue(body, GameCommand.class);
+    }
 }

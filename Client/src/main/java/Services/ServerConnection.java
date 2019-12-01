@@ -16,7 +16,6 @@ public class ServerConnection implements CommandListener {
     private ObjectInputStream inStream;
     private boolean end;
     private Socket socket;
-    private ServiceInvoker serviceInvoker;
 
 
     public ServerConnection(ServiceInvoker serviceInvoker) throws IOException {
@@ -26,7 +25,6 @@ public class ServerConnection implements CommandListener {
         outStream.flush();
         inStream = new ObjectInputStream(socket.getInputStream());
         end = false;
-        this.serviceInvoker = serviceInvoker;
 
         Runnable listener = () -> {
             while (!end) {
@@ -42,7 +40,7 @@ public class ServerConnection implements CommandListener {
         listenerThread.start();
     }
 
-
+    @Override
     public synchronized void execute(Command command) throws Exception {
         outStream.writeObject(command);
     }

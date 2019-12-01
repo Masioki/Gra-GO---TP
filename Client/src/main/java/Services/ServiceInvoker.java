@@ -27,7 +27,7 @@ public class ServiceInvoker {
     }
 
     public void send(Command command) throws Exception {
-        for(CommandListener l : listeners) l.execute(command);
+        for (CommandListener l : listeners) l.execute(command);
         sended.add(command);
     }
 
