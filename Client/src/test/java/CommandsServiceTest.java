@@ -1,9 +1,9 @@
-import Domain.Commands.Builder.CommandBuilderProvider;
-import Domain.Commands.Builder.GameCommandBuilder;
-import Domain.Commands.Builder.SimpleCommandBuilder;
-import Domain.Commands.Command;
-import Domain.Commands.CommandParser;
-import Domain.Commands.CommandType;
+import Commands.Builder.CommandBuilderProvider;
+import Commands.Builder.GameCommandBuilder;
+import Commands.Builder.SimpleCommandBuilder;
+import Commands.Command;
+import Commands.CommandParser;
+import Commands.CommandType;
 import Domain.GameData;
 import Domain.LoginData;
 import org.junit.jupiter.api.BeforeEach;

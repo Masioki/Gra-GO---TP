@@ -1,6 +1,7 @@
 package Services;
 
-import Domain.Commands.Command;
+
+import Commands.Command;
 
 /**
  * Interfejs do nasłuchiwania akcji

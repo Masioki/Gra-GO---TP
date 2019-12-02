@@ -1,4 +1,4 @@
-package Domain.Commands;
+package Commands;
 
 import Domain.GameData;
 import com.fasterxml.jackson.core.type.TypeReference;

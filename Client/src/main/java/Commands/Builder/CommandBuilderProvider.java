@@ -1,4 +1,4 @@
-package Domain.Commands.Builder;
+package Commands.Builder;
 
 
 public class CommandBuilderProvider {
