@@ -1,4 +1,12 @@
 
 
 Rozmieszczenie pakietow i klas jest jeszcze do przemyslenia
-Narazie tylko Commands sa sensownie ulozone
+Narazie tylko DTO.Commands sa sensownie ulozone
+
+
+Zamysl polaczenia:
+in/outStream
+-> ClientConnection (obsluga samego  polaczenia)
+-> ConnectionService (przetwarzanie komendy i podjecie dzialan)
+-> ClientFacade (obsluga obiektu klienta)
+-> dalsza logika zwiazana z gra, logowanie itd.

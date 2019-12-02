@@ -1,8 +1,6 @@
-package Commands;
+package Domain.Commands;
 
 import Domain.GameData;
-import Domain.LoginData;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

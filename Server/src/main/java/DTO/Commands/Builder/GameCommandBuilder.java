@@ -1,9 +1,9 @@
-package Commands.Builder;
+package DTO.Commands.Builder;
 
-import Commands.Command;
-import Commands.CommandType;
-import Commands.GameCommand;
-import Commands.GameCommandType;
+import DTO.Commands.Command;
+import DTO.Commands.CommandType;
+import DTO.Commands.GameCommand;
+import DTO.Commands.GameCommandType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class GameCommandBuilder {

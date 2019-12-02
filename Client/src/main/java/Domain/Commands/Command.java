@@ -1,4 +1,4 @@
-package Commands;
+package Domain.Commands;
 
 import java.io.Serializable;
 import java.util.UUID;

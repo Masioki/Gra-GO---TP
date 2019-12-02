@@ -1,54 +1,53 @@
 package Services;
 
-import Commands.Command;
-import Connection.ClientConnection;
 import Domain.Client;
 import Domain.Game;
-import DTO.GameData;
 import DTO.LoginData;
+import Domain.WrongMoveException;
 
-// wzorzec Facade(a wlasciwie Mediator) i Chain of Responsibility
+// wzorzec Facade
+
+/**
+ * Obiekt pomocniczy do obslugi klienta
+ */
 public class ClientFacade {
 
     private Client client;
-    private GameService gameService;
-    private ClientConnection clientConnection;
+    private ConnectionService connectionService;
 
 
-    public ClientFacade(ClientConnection clientConnection) {
+    public ClientFacade(ConnectionService connectionService) {
         client = new Client();
-        gameService = GameService.getInstance();
-        this.clientConnection = clientConnection;
+        this.connectionService = connectionService;
     }
 
-    public Command executeCommand(Command command) {
-
+    public Client getClient() {
+        return client;
     }
 
-    public void end() {
-        client.surrender();
-        gameService.endGame(client.getGame(),client);
+    public Game getGame() {
+        return client.getGame();
     }
 
-    private void sendCommand(Command command) {
-        clientConnection.sendCommand(command);
+
+    public void surrender() {
+        // client.surrender();
     }
 
-    private boolean logIn(LoginData loginData) {
-        return Authenticator.authenticate(loginData);
+
+    public void logIn(LoginData loginData) {
+        client.setUsername(loginData.getUsername());
     }
 
-    private boolean move(int x, int y) {
-        return client.move(x, y);
+    public boolean move(int x, int y) throws WrongMoveException {
+        return false; // client.move(x, y);
     }
 
-    private boolean joinGame(GameData gameData) {
-        //TODO: poprawic dolaczenie do gry w fasadzie
-        Game g = gameService.joinGame(gameData, client);
-        return g != null;
+    public void joinGame(Game game) {
+        client.setGame(game);
     }
 
-    private void createGame() {
-
+    public void setGame(Game game) {
+        client.setGame(game);
     }
 }

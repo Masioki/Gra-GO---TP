@@ -1,14 +1,17 @@
 package Connection;
 
-import Commands.Command;
-import Services.ClientFacade;
+import DTO.Commands.Command;
+import Services.ConnectionService;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * Polaczenie z klientem
+ */
 public class ClientConnection extends Thread {
 
-    private ClientFacade clientFacade;
+    private ConnectionService connectionService;
     private ObjectInputStream inStream;
     private ObjectOutputStream outStream;
     private boolean end;
@@ -17,7 +20,7 @@ public class ClientConnection extends Thread {
         this.inStream = inStream;
         this.outStream = outStream;
         end = false;
-        clientFacade = new ClientFacade(this);
+        connectionService = new ConnectionService(this);
 
         /*
         Nowy watek do odczytywanie z inStreama, poniewaz jesli nie ma zadnych danych to sie blokuje
@@ -26,7 +29,7 @@ public class ClientConnection extends Thread {
         Runnable listener = () -> {
             while (!end) {
                 try {
-                    clientFacade.executeCommand((Command) inStream.readObject());
+                    sendCommand(connectionService.execute((Command) inStream.readObject()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -38,7 +41,6 @@ public class ClientConnection extends Thread {
     }
 
     public void end() {
-        clientFacade.end();
         end = true;
     }
 

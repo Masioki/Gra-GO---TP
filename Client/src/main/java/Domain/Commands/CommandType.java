@@ -1,4 +1,4 @@
-package Commands;
+package Domain.Commands;
 
 public enum CommandType {
     LOGIN,

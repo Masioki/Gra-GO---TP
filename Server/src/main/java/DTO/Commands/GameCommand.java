@@ -1,4 +1,4 @@
-package Commands;
+package DTO.Commands;
 
 public class GameCommand {
 

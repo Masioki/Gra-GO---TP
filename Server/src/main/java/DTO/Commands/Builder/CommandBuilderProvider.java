@@ -1,6 +1,6 @@
-package Commands.Builder;
+package DTO.Commands.Builder;
 
-
+// wzorzec Builder i Command
 public class CommandBuilderProvider {
 
 

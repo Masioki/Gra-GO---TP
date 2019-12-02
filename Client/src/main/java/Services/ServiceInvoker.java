@@ -1,6 +1,6 @@
 package Services;
 
-import Commands.Command;
+import Domain.Commands.Command;
 
 import java.util.ArrayList;
 import java.util.Iterator;

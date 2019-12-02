@@ -1,7 +1,7 @@
-package Commands.Builder;
+package Domain.Commands.Builder;
 
-import Commands.Command;
-import Commands.CommandType;
+import Domain.Commands.Command;
+import Domain.Commands.CommandType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SimpleCommandBuilder {

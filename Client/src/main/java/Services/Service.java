@@ -1,7 +1,7 @@
 package Services;
 
-import Commands.*;
-import Commands.Builder.CommandBuilderProvider;
+import Domain.Commands.*;
+import Domain.Commands.Builder.CommandBuilderProvider;
 import Domain.GameData;
 import Domain.LoginData;
 import java.util.LinkedList;
