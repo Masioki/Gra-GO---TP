@@ -105,12 +105,13 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     }
 
     void loadGames() {
-        service.loadActiveGames();
+        service.loadActiveGames();//returns GameData
+        //TODO: wyswietlic zwrocone List<GameData>
     }
 
     void joinGame(ActionEvent e) {
-        //service.joinGame();
-        //TODO - implement join game in Service
+        //service.joinGame(GameData);
+        //TODO: przekazac GameData gry do ktorej chcemy dolaczyc
         startGameWindow(e);
     }
 

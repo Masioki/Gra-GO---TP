@@ -68,6 +68,9 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
         String password = textFieldPassword.getText();
         if (!login.equals("") && !password.equals("")) {
             service.signUp(login, password);
+            //signUp wysyla request do serwera, kiedy dostaniemy odpowiedz serwis powinien wywolac metode w kontrolerze
+            // typu loginResult(boolean)
+            //TODO: poprawa logowania
             startLobbyWindow(e);
         } else {
 

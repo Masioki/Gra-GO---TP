@@ -31,9 +31,9 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         try {
-            ServiceInvoker invoker = new ServiceInvoker();
-            ServerConnection connection = new ServerConnection(invoker);
             Service s = Service.getInstance();
+            ServiceInvoker invoker = new ServiceInvoker(s);
+            ServerConnection connection = new ServerConnection(invoker);
             s.setServiceInvoker(invoker);
             invoker.addListener(connection);
         } catch (Exception e) {

@@ -89,6 +89,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         }
         else
         {
+            //service.gameMove(x,y, GameCommandType typ ruchu(MOVE,SURRENDER etc.))
             //TODO-tutaj wysyłamy do serwisu zapytanie o postawienie pionka zamiast od razu go postawić
             placePawn(colNumber, rowNumber);
         }
@@ -109,6 +110,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         {
             /*TODO-tutaj powinniśmy wywoływać metodę z servera*/
             System.out.println("Pass");
+            //service.gameMove(x,y, GameCommandType typ ruchu(MOVE,SURRENDER etc.))
         }
         if(e.getSource().equals(buttonSurrender))
         {

@@ -4,22 +4,19 @@ import Commands.*;
 import Commands.Builder.CommandBuilderProvider;
 import Domain.GameData;
 import Domain.LoginData;
-import java.util.LinkedList;
 
 //Class Service should be singleton
-public class Service implements CommandListener {
+public class Service implements BasicService {
 
     private static Service service;
     private ServiceInvoker invoker;
     private CommandParser parser;
-    private LinkedList<Command> commandsInProgress; //TODO: ma byc tylko w invokerze
 
     /**
      * Private Constructor
      */
     private Service() {
         parser = new CommandParser();
-        commandsInProgress = new LinkedList<>();
     }
 
 
@@ -35,26 +32,23 @@ public class Service implements CommandListener {
     }
 
     @Override
-    public void execute(Command command) {
-        if (command.getType() == CommandType.SUCCESS) {
-            Command c = commandsInProgress.pollFirst();
-            executeOwn(c, command);
-        } else if (command.getType() == CommandType.ERROR) {
+    public void execute(Command request, Command response) {
+        if (response.getType() == CommandType.SUCCESS) {
+            executeOwn(request, response);
+        } else if (response.getType() == CommandType.ERROR) {
             try {
-                errorHandler(parser.parseErrorCommand(command.getBody()));
+                errorHandler(parser.parseErrorCommand(response.getBody()));
             } catch (Exception e) {
                 errorHandler("Blad komendy oraz blad wewnetrzny");
             }
-            commandsInProgress.pollFirst();
         } else {
-            executeIncoming(command);
+            executeIncoming(response);
         }
     }
 
     private void sendCommand(Command c) {
         try {
             invoker.send(c);
-            commandsInProgress.addLast(c);
         } catch (Exception e) {
             errorHandler("Connection error");
         }
@@ -68,9 +62,9 @@ public class Service implements CommandListener {
         //TODO: error handling
     }
 
-    private void executeOwn(Command out, Command incoming) {
+    private void executeOwn(Command request, Command response) {
         try {
-            switch (out.getType()) {
+            switch (request.getType()) {
                 case ACTIVE_GAMES: {
                     //TODO: wywolania zachowan w kontrolerze
                 }
