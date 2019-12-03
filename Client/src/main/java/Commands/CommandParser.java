@@ -15,7 +15,6 @@ public class CommandParser {
         objectMapper = new ObjectMapper();
     }
 
-    //TODO: more parsers
 
     public String parseErrorCommand(String body) throws Exception {
         return objectMapper.readValue(body, String.class);

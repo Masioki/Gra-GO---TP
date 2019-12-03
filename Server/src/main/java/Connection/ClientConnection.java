@@ -3,8 +3,11 @@ package Connection;
 import DTO.Commands.Command;
 import Services.ConnectionService;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Polaczenie z klientem
@@ -14,11 +17,13 @@ public class ClientConnection extends Thread {
     private ConnectionService connectionService;
     private ObjectInputStream inStream;
     private ObjectOutputStream outStream;
+    private Socket socket;
     private boolean end;
 
-    public ClientConnection(ObjectInputStream inStream, ObjectOutputStream outStream) {
+    public ClientConnection(Socket socket, ObjectInputStream inStream, ObjectOutputStream outStream) {
         this.inStream = inStream;
         this.outStream = outStream;
+        this.socket = socket;
         end = false;
         connectionService = new ConnectionService(this);
 
@@ -29,8 +34,12 @@ public class ClientConnection extends Thread {
         Runnable listener = () -> {
             while (!end) {
                 try {
+                    if (!socket.getInetAddress().isReachable(2)) end = true;
                     sendCommand(connectionService.execute((Command) inStream.readObject()));
-                } catch (Exception e) {
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                    end = true;
+                } catch (Exception e){
                     e.printStackTrace();
                 }
                 if (Thread.interrupted()) return;
@@ -41,12 +50,18 @@ public class ClientConnection extends Thread {
     }
 
     public void end() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         end = true;
     }
 
     public void sendCommand(Command command) {
         try {
-            outStream.writeObject(command);
+            if (!socket.getInetAddress().isReachable(2)) end = true;
+            else outStream.writeObject(command);
         } catch (Exception e) {
             e.printStackTrace();
         }

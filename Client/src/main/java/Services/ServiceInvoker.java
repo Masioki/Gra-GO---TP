@@ -9,13 +9,12 @@ import java.util.List;
 
 public class ServiceInvoker {
 
-    private BasicService service;
-    private ServerConnection serverConnection;
+    private BasicInvokerService service;
     private List<Command> sended;
     private List<Command> received;
     private List<CommandListener> listeners;
 
-    public ServiceInvoker(BasicService service) {
+    public ServiceInvoker(BasicInvokerService service) {
         this.service = service;
         sended = new LinkedList<>();
         received = new LinkedList<>();
@@ -29,6 +28,10 @@ public class ServiceInvoker {
     public void send(Command command) throws Exception {
         for (CommandListener l : listeners) l.execute(command);
         sended.add(command);
+    }
+
+    public void signalEnd(){
+        for (CommandListener l : listeners) l.endListening();
     }
 
     public void execute(Command command) {

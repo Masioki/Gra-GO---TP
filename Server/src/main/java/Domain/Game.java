@@ -22,7 +22,9 @@ public class Game {
         this.ownerUsername = ownerUsername;
     }
 
-
+public boolean addPlayer(Client client){
+        return false;
+}
 
 
     /* Getters Setters */

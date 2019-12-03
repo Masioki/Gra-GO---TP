@@ -2,7 +2,7 @@ import Commands.Builder.CommandBuilderProvider;
 import Commands.Builder.SimpleCommandBuilder;
 import Commands.Command;
 import Commands.CommandType;
-import Services.BasicService;
+import Services.BasicInvokerService;
 import Services.ServiceInvoker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,13 +11,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ServiceInvokerTest {
     private ServiceInvoker serviceInvoker;
-    private BasicService service;
+    private BasicInvokerService service;
     private SimpleCommandBuilder simpleCommandBuilder;
 
     @BeforeEach
     public void inject() {
         simpleCommandBuilder = CommandBuilderProvider.newSimpleCommandBuilder();
-        service = new DummyService();
+        service = new DummyInvokerService();
         serviceInvoker = new ServiceInvoker(service);
     }
 
@@ -50,7 +50,7 @@ public class ServiceInvokerTest {
         //oczekujemy najpierw LOGIN ERROR a potem JOIN SUCCESS
     }
 
-    private class DummyService implements BasicService {
+    private class DummyInvokerService implements BasicInvokerService {
         private int i = 0;
         @Override
         public void execute(Command request, Command response) {

@@ -18,8 +18,9 @@ public class Main {
                     ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
                     outStream.flush();
                     ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
-                    ClientConnection clientConnection = new ClientConnection(inStream, outStream);
+                    ClientConnection clientConnection = new ClientConnection(socket,inStream, outStream);
                     clientConnection.start();
+                    System.out.println("Nowe polaczenie");
                 } catch (Exception e) {
                     e.printStackTrace();
                     return;

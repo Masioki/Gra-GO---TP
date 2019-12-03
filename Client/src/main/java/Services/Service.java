@@ -6,7 +6,7 @@ import Domain.GameData;
 import Domain.LoginData;
 
 //Class Service should be singleton
-public class Service implements BasicService {
+public class Service implements BasicInvokerService {
 
     private static Service service;
     private ServiceInvoker invoker;
@@ -30,6 +30,7 @@ public class Service implements BasicService {
     public void setServiceInvoker(ServiceInvoker invoker) {
         this.invoker = invoker;
     }
+
 
     @Override
     public void execute(Command request, Command response) {
@@ -86,6 +87,13 @@ public class Service implements BasicService {
 
     private void executeIncoming(Command command) {
 
+    }
+    
+    /*
+    KAZDY KONTROLER
+     */
+    public void end() {
+        invoker.signalEnd();
     }
 
     /*

@@ -8,4 +8,5 @@ import Commands.Command;
  */
 public interface CommandListener {
     void execute(Command command) throws Exception;
+    void endListening();
 }

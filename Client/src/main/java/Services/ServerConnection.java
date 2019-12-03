@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Klasa obsługująca połaczenie z serwerem
@@ -20,7 +21,6 @@ public class ServerConnection implements CommandListener {
 
     public ServerConnection(ServiceInvoker serviceInvoker) throws IOException {
         socket = new Socket("localhost", 10001);
-        socket.setSoTimeout(5000);
         outStream = new ObjectOutputStream(socket.getOutputStream());
         outStream.flush();
         inStream = new ObjectInputStream(socket.getInputStream());
@@ -29,8 +29,12 @@ public class ServerConnection implements CommandListener {
         Runnable listener = () -> {
             while (!end) {
                 try {
+                    if (!socket.getInetAddress().isReachable(2)) end = true;
                     serviceInvoker.execute((Command) inStream.readObject());
                     if (Thread.interrupted()) ServerConnection.this.end();
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                    end = true;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -42,16 +46,24 @@ public class ServerConnection implements CommandListener {
 
     @Override
     public synchronized void execute(Command command) throws Exception {
-        outStream.writeObject(command);
+        if (!socket.getInetAddress().isReachable(2)) end = true;
+        else outStream.writeObject(command);
+    }
+
+    @Override
+    public void endListening() {
+        end();
     }
 
     /**
      * Zakończ połączenie
-     *
-     * @throws IOException
      */
-    public void end() throws IOException {
+    public void end() {
         end = true;
-        socket.close();
+        try {
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
