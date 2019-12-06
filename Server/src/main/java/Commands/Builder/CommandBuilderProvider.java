@@ -1,4 +1,4 @@
-package DTO.Commands.Builder;
+package Commands.Builder;
 
 // wzorzec Builder i Command
 public class CommandBuilderProvider {

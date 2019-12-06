@@ -6,7 +6,7 @@ import Domain.GameData;
 import Domain.LoginData;
 
 //Class Service should be singleton
-public class Service implements BasicInvokerService {
+public class Service implements InvokableService {
 
     private static Service service;
     private ServiceInvoker invoker;
@@ -42,7 +42,7 @@ public class Service implements BasicInvokerService {
             } catch (Exception e) {
                 errorHandler("Blad komendy oraz blad wewnetrzny");
             }
-        } else {
+        } else if (request == null) {
             executeIncoming(response);
         }
     }
@@ -88,11 +88,19 @@ public class Service implements BasicInvokerService {
     private void executeIncoming(Command command) {
 
     }
-    
+
     /*
     KAZDY KONTROLER
      */
     public void end() {
+        Command c = CommandBuilderProvider
+                .newSimpleCommandBuilder()
+                .newCommand()
+                .withHeader(CommandType.END_CONNECTION)
+                .build();
+        sendCommand(c);
+
+
         invoker.signalEnd();
     }
 

@@ -9,12 +9,12 @@ import java.util.List;
 
 public class ServiceInvoker {
 
-    private BasicInvokerService service;
+    private InvokableService service;
     private List<Command> sended;
     private List<Command> received;
     private List<CommandListener> listeners;
 
-    public ServiceInvoker(BasicInvokerService service) {
+    public ServiceInvoker(InvokableService service) {
         this.service = service;
         sended = new LinkedList<>();
         received = new LinkedList<>();

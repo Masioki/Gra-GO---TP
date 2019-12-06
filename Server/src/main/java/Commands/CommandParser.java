@@ -1,4 +1,4 @@
-package DTO.Commands;
+package Commands;
 
 import DTO.LoginData;
 import com.fasterxml.jackson.core.JsonProcessingException;

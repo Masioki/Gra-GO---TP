@@ -1,4 +1,5 @@
 package Controllers;
+import Commands.GameCommandType;
 import Services.Service;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -103,6 +104,9 @@ public class GameFrameController implements EventHandler<ActionEvent> {
     {
         grids[colNumber][rowNumber].gridstate = GRIDSTATE.FULL;
         grids[colNumber][rowNumber].setImage(imagePlayerPawn);
+
+        //na potrzeby prezentacji dodaje to tutaj
+        //service.gameMove(colNumber,rowNumber, GameCommandType.MOVE);
     }
     @Override
     public void handle(ActionEvent e) {

@@ -1,4 +1,4 @@
-package DTO.Commands;
+package Commands;
 
 import java.io.Serializable;
 import java.util.UUID;

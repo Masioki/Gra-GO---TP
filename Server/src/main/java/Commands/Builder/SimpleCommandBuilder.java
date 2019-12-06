@@ -1,7 +1,7 @@
-package DTO.Commands.Builder;
+package Commands.Builder;
 
-import DTO.Commands.Command;
-import DTO.Commands.CommandType;
+import Commands.Command;
+import Commands.CommandType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SimpleCommandBuilder {
