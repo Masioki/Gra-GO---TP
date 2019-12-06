@@ -27,10 +27,26 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
     public void initialize() {
         buttonSignUp.setOnAction(this);
         service = Service.getInstance();
+
+        /* PRZYKLAD */
+        /*
+        FullController controller = new FullController() {
+            @Override
+            public void error(String message) {
+
+            }
+
+            @Override
+            public void logIn(boolean success){
+
+            }
+        };
+        service.setFullController(controller);
+         */
     }
 
     //for now its just an empty method
-    Boolean signUpToServer(String login, String password) {
+    boolean signUpToServer(String login, String password) {
         return true;
     }
 

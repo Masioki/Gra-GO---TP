@@ -2,6 +2,7 @@ package Services;
 
 import Commands.*;
 import Commands.Builder.CommandBuilderProvider;
+import Controllers.FullController;
 import Domain.GameData;
 import Domain.LoginData;
 
@@ -11,6 +12,7 @@ public class Service implements InvokableService {
     private static Service service;
     private ServiceInvoker invoker;
     private CommandParser parser;
+    private FullController fullController;
 
     /**
      * Private Constructor
@@ -31,6 +33,9 @@ public class Service implements InvokableService {
         this.invoker = invoker;
     }
 
+    public void setFullController(FullController controller) {
+        this.fullController = controller;
+    }
 
     @Override
     public void execute(Command request, Command response) {
