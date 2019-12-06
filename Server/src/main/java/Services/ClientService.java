@@ -1,28 +1,32 @@
 package Services;
 
-import DTO.Commands.Command;
-import Connection.ClientConnection;
+import Commands.Command;
 import DTO.LoginData;
 import Domain.Game;
 
 /**
  * Klasa obslugujaca otrzymane komendy
  */
-public class ConnectionService {
+public class ClientService implements InvokableService {
 
-    private ClientConnection connection;
+    private ClientServiceInvoker invoker;
     private GameService gameService;
     private ClientFacade clientFacade;
 
-    public ConnectionService(ClientConnection connection) {
+    public ClientService() {
         gameService = GameService.getInstance();
-        this.connection = connection;
         clientFacade = new ClientFacade(this);
     }
 
-    public Command execute(Command command) {
+    public void setClientServiceInvoker(ClientServiceInvoker invoker) {
+        this.invoker = invoker;
+    }
+
+    @Override
+    public Command execute(Command request) {
         //TODO:command executing
-        return null;
+        System.out.println("Otrzymano : " + request.getType());
+        return new Command();
     }
 
     private boolean logIn(LoginData data) {
@@ -30,7 +34,7 @@ public class ConnectionService {
         return false;
     }
 
-    private void createGame(){
+    private void createGame() {
         Game g = gameService.newGame();
         g.setOwnerUsername(clientFacade.getClient().getUsername());
         clientFacade.setGame(g);
@@ -38,6 +42,6 @@ public class ConnectionService {
 
     private void surrender() {
         gameService.endGame(clientFacade.getGame(), clientFacade.getClient());
-        connection.end();
+        invoker.signalEnd();
     }
 }

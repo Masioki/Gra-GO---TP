@@ -8,9 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.Locale;
-import java.util.Objects;
 
 public class Main extends Application {
 
@@ -31,9 +29,9 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         try {
-            ServiceInvoker invoker = new ServiceInvoker();
-            ServerConnection connection = new ServerConnection(invoker);
             Service s = Service.getInstance();
+            ServiceInvoker invoker = new ServiceInvoker(s);
+            ServerConnection connection = new ServerConnection(invoker);
             s.setServiceInvoker(invoker);
             invoker.addListener(connection);
         } catch (Exception e) {

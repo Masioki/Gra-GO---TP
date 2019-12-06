@@ -9,14 +9,13 @@ import java.util.List;
 
 public class ServiceInvoker {
 
-    private Service service;
-    private ServerConnection serverConnection;
+    private InvokableService service;
     private List<Command> sended;
     private List<Command> received;
     private List<CommandListener> listeners;
 
-    public ServiceInvoker() {
-        this.service = Service.getInstance();
+    public ServiceInvoker(InvokableService service) {
+        this.service = service;
         sended = new LinkedList<>();
         received = new LinkedList<>();
         listeners = new ArrayList<>();
@@ -31,6 +30,10 @@ public class ServiceInvoker {
         sended.add(command);
     }
 
+    public void signalEnd(){
+        for (CommandListener l : listeners) l.endListening();
+    }
+
     public void execute(Command command) {
         received.add(command);
         boolean repeat;
@@ -40,7 +43,7 @@ public class ServiceInvoker {
             while (i.hasNext()) {
                 Command c = i.next();
                 if (sended.size() != 0 && c.getUuid() == sended.get(0).getUuid()) {
-                    service.execute(c);
+                    service.execute(sended.get(0), c);
                     sended.remove(0);
                     i.remove();
                     repeat = true;

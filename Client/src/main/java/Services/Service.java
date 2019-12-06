@@ -2,24 +2,23 @@ package Services;
 
 import Commands.*;
 import Commands.Builder.CommandBuilderProvider;
+import Controllers.FullController;
 import Domain.GameData;
 import Domain.LoginData;
-import java.util.LinkedList;
 
 //Class Service should be singleton
-public class Service implements CommandListener {
+public class Service implements InvokableService {
 
     private static Service service;
     private ServiceInvoker invoker;
     private CommandParser parser;
-    private LinkedList<Command> commandsInProgress; //TODO: ma byc tylko w invokerze
+    private FullController fullController;
 
     /**
      * Private Constructor
      */
     private Service() {
         parser = new CommandParser();
-        commandsInProgress = new LinkedList<>();
     }
 
 
@@ -34,27 +33,28 @@ public class Service implements CommandListener {
         this.invoker = invoker;
     }
 
+    public void setFullController(FullController controller) {
+        this.fullController = controller;
+    }
+
     @Override
-    public void execute(Command command) {
-        if (command.getType() == CommandType.SUCCESS) {
-            Command c = commandsInProgress.pollFirst();
-            executeOwn(c, command);
-        } else if (command.getType() == CommandType.ERROR) {
+    public void execute(Command request, Command response) {
+        if (response.getType() == CommandType.SUCCESS) {
+            executeOwn(request, response);
+        } else if (response.getType() == CommandType.ERROR) {
             try {
-                errorHandler(parser.parseErrorCommand(command.getBody()));
+                errorHandler(parser.parseErrorCommand(response.getBody()));
             } catch (Exception e) {
                 errorHandler("Blad komendy oraz blad wewnetrzny");
             }
-            commandsInProgress.pollFirst();
-        } else {
-            executeIncoming(command);
+        } else if (request == null) {
+            executeIncoming(response);
         }
     }
 
     private void sendCommand(Command c) {
         try {
             invoker.send(c);
-            commandsInProgress.addLast(c);
         } catch (Exception e) {
             errorHandler("Connection error");
         }
@@ -68,9 +68,9 @@ public class Service implements CommandListener {
         //TODO: error handling
     }
 
-    private void executeOwn(Command out, Command incoming) {
+    private void executeOwn(Command request, Command response) {
         try {
-            switch (out.getType()) {
+            switch (request.getType()) {
                 case ACTIVE_GAMES: {
                     //TODO: wywolania zachowan w kontrolerze
                 }
@@ -92,6 +92,21 @@ public class Service implements CommandListener {
 
     private void executeIncoming(Command command) {
 
+    }
+
+    /*
+    KAZDY KONTROLER
+     */
+    public void end() {
+        Command c = CommandBuilderProvider
+                .newSimpleCommandBuilder()
+                .newCommand()
+                .withHeader(CommandType.END_CONNECTION)
+                .build();
+        sendCommand(c);
+
+
+        invoker.signalEnd();
     }
 
     /*

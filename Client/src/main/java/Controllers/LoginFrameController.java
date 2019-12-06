@@ -2,24 +2,17 @@ package Controllers;
 
 import Services.Service;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class LoginFrameController implements EventHandler<ActionEvent> {
@@ -34,10 +27,26 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
     public void initialize() {
         buttonSignUp.setOnAction(this);
         service = Service.getInstance();
+
+        /* PRZYKLAD */
+        /*
+        FullController controller = new FullController() {
+            @Override
+            public void error(String message) {
+
+            }
+
+            @Override
+            public void logIn(boolean success){
+
+            }
+        };
+        service.setFullController(controller);
+         */
     }
 
     //for now its just an empty method
-    Boolean signUpToServer(String login, String password) {
+    boolean signUpToServer(String login, String password) {
         return true;
     }
 
@@ -68,6 +77,9 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
         String password = textFieldPassword.getText();
         if (!login.equals("") && !password.equals("")) {
             service.signUp(login, password);
+            //signUp wysyla request do serwera, kiedy dostaniemy odpowiedz serwis powinien wywolac metode w kontrolerze
+            // typu loginResult(boolean)
+            //TODO: poprawa logowania
             startLobbyWindow(e);
         } else {
 

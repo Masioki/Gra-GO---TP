@@ -13,12 +13,12 @@ import Domain.WrongMoveException;
 public class ClientFacade {
 
     private Client client;
-    private ConnectionService connectionService;
+    private ClientService clientService;
 
 
-    public ClientFacade(ConnectionService connectionService) {
+    public ClientFacade(ClientService clientService) {
         client = new Client();
-        this.connectionService = connectionService;
+        this.clientService = clientService;
     }
 
     public Client getClient() {

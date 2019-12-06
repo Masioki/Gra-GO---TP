@@ -1,9 +1,9 @@
-import DTO.Commands.Builder.CommandBuilderProvider;
-import DTO.Commands.Builder.GameCommandBuilder;
-import DTO.Commands.Builder.SimpleCommandBuilder;
-import DTO.Commands.Command;
-import DTO.Commands.CommandParser;
-import DTO.Commands.CommandType;
+import Commands.Builder.CommandBuilderProvider;
+import Commands.Builder.GameCommandBuilder;
+import Commands.Builder.SimpleCommandBuilder;
+import Commands.Command;
+import Commands.CommandParser;
+import Commands.CommandType;
 import DTO.LoginData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

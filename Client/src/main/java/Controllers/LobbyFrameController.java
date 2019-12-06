@@ -5,21 +5,16 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 
 
@@ -105,12 +100,13 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     }
 
     void loadGames() {
-        service.loadActiveGames();
+        service.loadActiveGames();//returns GameData
+        //TODO: wyswietlic zwrocone List<GameData>
     }
 
     void joinGame(ActionEvent e) {
-        //service.joinGame();
-        //TODO - implement join game in Service
+        //service.joinGame(GameData);
+        //TODO: przekazac GameData gry do ktorej chcemy dolaczyc
         startGameWindow(e);
     }
 

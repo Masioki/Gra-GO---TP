@@ -1,4 +1,5 @@
 package Controllers;
+import Commands.GameCommandType;
 import Services.Service;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -89,6 +90,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         }
         else
         {
+            //service.gameMove(x,y, GameCommandType typ ruchu(MOVE,SURRENDER etc.))
             //TODO-tutaj wysyłamy do serwisu zapytanie o postawienie pionka zamiast od razu go postawić
             placePawn(colNumber, rowNumber);
         }
@@ -102,6 +104,9 @@ public class GameFrameController implements EventHandler<ActionEvent> {
     {
         grids[colNumber][rowNumber].gridstate = GRIDSTATE.FULL;
         grids[colNumber][rowNumber].setImage(imagePlayerPawn);
+
+        //na potrzeby prezentacji dodaje to tutaj
+        //service.gameMove(colNumber,rowNumber, GameCommandType.MOVE);
     }
     @Override
     public void handle(ActionEvent e) {
@@ -109,6 +114,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         {
             /*TODO-tutaj powinniśmy wywoływać metodę z servera*/
             System.out.println("Pass");
+            //service.gameMove(x,y, GameCommandType typ ruchu(MOVE,SURRENDER etc.))
         }
         if(e.getSource().equals(buttonSurrender))
         {

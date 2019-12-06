@@ -41,11 +41,12 @@ public class GameService {
 
     public synchronized Game joinGame(GameData gameData, Client client) {
         for (Game g : games) {
-            if (g.getOwnerUsername() == gameData.getUsername() && g.getGameID() == gameData.getGameID()) {
+            if (g.getOwnerUsername().equals(gameData.getUsername()) && g.getGameID() == gameData.getGameID()) {
                 if (g.addPlayer(client)) return g;
                 return null;
             }
         }
+        return null;
     }
 
     public void endGame(Game game, Client client) {
