@@ -7,6 +7,7 @@ public enum CommandType {
     ERROR,
     SUCCESS,
     JOIN,
-    END_CONNECTION
+    END_CONNECTION,
+    NEW
 }
 

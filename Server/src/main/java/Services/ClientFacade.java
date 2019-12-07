@@ -39,12 +39,16 @@ public class ClientFacade {
         client.setUsername(loginData.getUsername());
     }
 
-    public boolean move(int x, int y) throws WrongMoveException {
-        return false; // client.move(x, y);
+    public boolean move(int x, int y) {
+        return true; // client.move(x, y);
     }
 
-    public void joinGame(Game game) {
-        client.setGame(game);
+    public boolean continueGame() {
+        return true;
+    }
+
+    public boolean pass() {
+        return true;
     }
 
     public void setGame(Game game) {

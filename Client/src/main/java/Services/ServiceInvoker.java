@@ -61,6 +61,7 @@ public class ServiceInvoker {
                 if (s.getUuid().equals(c.getUuid())) {
                     service.execute(s, c);
                     sended.remove(s);
+                    rec.remove();
                     found = true;
                     break;
                 }

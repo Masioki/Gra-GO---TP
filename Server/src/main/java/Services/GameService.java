@@ -34,9 +34,9 @@ public class GameService {
     }
 
     public synchronized Game newGame() {
-      Game g = new Game();
-      games.add(g);
-      return g;
+        Game g = new Game();
+        games.add(g);
+        return g;
     }
 
     public synchronized Game joinGame(GameData gameData, Client client) {
@@ -47,6 +47,17 @@ public class GameService {
             }
         }
         return null;
+    }
+
+    public synchronized List<GameData> activeGames() {
+        List<GameData> list = new ArrayList<>();
+        for (Game g : games) {
+            GameData d = new GameData();
+            d.setGameID(g.getGameID());
+            d.setUsername(g.getOwnerUsername());
+            list.add(d);
+        }
+        return list;
     }
 
     public void endGame(Game game, Client client) {
