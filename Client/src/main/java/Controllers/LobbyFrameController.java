@@ -1,5 +1,6 @@
 package Controllers;
 
+import Domain.GameData;
 import Services.Service;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,6 +17,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 
 public class LobbyFrameController implements EventHandler<ActionEvent> {
@@ -34,6 +36,8 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     //numerek gry wybranej przez użytkownika
     private int chosenGame;
 
+    //lista gier
+    private List<GameData> gamesList = null;
     @FXML
     public void initialize() {
         chosenGame = -1;
@@ -62,7 +66,33 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
             lobbyList[i] = l;
             gridPanelLobby.add(lobbyList[i],0,i);
         }
-        //customizeFrame();
+        //ustawiamy kontroler
+        FullController controller = new FullController() {
+            @Override
+            public void error(String message) {
+                System.out.println("Error massage...");
+            }
+
+            @Override
+            public void joinGame(GameData data) {
+                startGameWindow();
+            }
+
+            @Override
+            public void loadActiveGames(List<GameData> games) {
+                gamesList = games;
+                for(int i = 0; i < lobbyMaxNumber; i++)
+                {
+                    if(gamesList.get(i)!=null)
+                    {
+                        lobbyList[i].setText(gamesList.get(i).getUsername()  );
+                    }
+                }
+            }
+
+
+        };
+        service.setFullController(controller);
     }
     private void  chooseGame(int number)
     {
@@ -78,7 +108,7 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
         lobbyList[chosenGame].getStylesheets().remove(getClass().getResource("/css/basicStylesheet.css").toExternalForm());
         lobbyList[number].getStylesheets().add(getClass().getResource("/css/activeLabelStylesheet.css").toExternalForm());
     }
-    private void startGameWindow(ActionEvent e) {
+    private void startGameWindow() {
         Parent root;
         try {
             root = FXMLLoader.load(getClass().getClassLoader().getResource("gameFrame.fxml"));
@@ -93,7 +123,7 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
             stage.setResizable(false);
             stage.show();
 
-            ((Node) (e.getSource())).getScene().getWindow().hide();
+            buttonJoinGame.getScene().getWindow().hide();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -105,9 +135,15 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     }
 
     void joinGame(ActionEvent e) {
-        //service.joinGame(GameData);
-        //TODO: przekazac GameData gry do ktorej chcemy dolaczyc
-        startGameWindow(e);
+        if(chosenGame > 0)
+        {
+            if(gamesList.get(chosenGame)!=null)
+            {
+                GameData gameData = gamesList.get(chosenGame);
+                service.joinGame(gameData);
+            }
+        }
+        startGameWindow();
     }
 
     @Override

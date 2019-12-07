@@ -1,5 +1,6 @@
 package Controllers;
 import Commands.GameCommandType;
+import Domain.GameData;
 import Services.Service;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+
+import java.util.List;
 
 import static java.lang.StrictMath.abs;
 
@@ -71,6 +74,24 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         gridPanelBoard.getStylesheets().add(getClass().getResource("/css/gridPaneStylesheet.css").toExternalForm());
         buttonPass.setOnAction(this);
         buttonSurrender.setOnAction(this);
+
+        //ustawiamy kontroler
+        FullController controller = new FullController() {
+            @Override
+            public void error(String message) {
+                showError();
+            }
+            @Override
+            public void move(int x, int y, boolean me) {
+                placePawn(x,y,me);
+            }
+
+            @Override
+            public void gameAction(GameCommandType actionType, boolean me) {
+                //TODO
+            }
+        };
+        service.setFullController(controller);
     }
     public void showError()
     {
@@ -90,9 +111,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         }
         else
         {
-            //service.gameMove(x,y, GameCommandType typ ruchu(MOVE,SURRENDER etc.))
-            //TODO-tutaj wysyłamy do serwisu zapytanie o postawienie pionka zamiast od razu go postawić
-            placePawn(colNumber, rowNumber);
+            service.gameMove(colNumber,rowNumber, GameCommandType.MOVE);
         }
     }
     /**
@@ -100,13 +119,19 @@ public class GameFrameController implements EventHandler<ActionEvent> {
      * @param colNumber
      * @param rowNumber
      */
-    private void placePawn(int colNumber, int rowNumber)
+    private void placePawn(int colNumber, int rowNumber, boolean me)
     {
         grids[colNumber][rowNumber].gridstate = GRIDSTATE.FULL;
-        grids[colNumber][rowNumber].setImage(imagePlayerPawn);
+        if(me)
+        {
+            grids[colNumber][rowNumber].setImage(imagePlayerPawn);
+        }
+        else
+        {
+            grids[colNumber][rowNumber].setImage(imageEnemyPawn);
+        }
 
-        //na potrzeby prezentacji dodaje to tutaj
-        //service.gameMove(colNumber,rowNumber, GameCommandType.MOVE);
+
     }
     @Override
     public void handle(ActionEvent e) {

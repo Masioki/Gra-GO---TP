@@ -28,29 +28,31 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
         buttonSignUp.setOnAction(this);
         service = Service.getInstance();
 
-        /* PRZYKLAD */
-        /*
+
         FullController controller = new FullController() {
             @Override
             public void error(String message) {
-
+                System.out.println("Nie udało się zalogować spróbuj ponownie");
             }
 
             @Override
             public void logIn(boolean success){
-
+                if(success)
+                {
+                    startLobbyWindow();
+                }
+                else
+                {
+                    System.out.println("Nie udało się zalogować");
+                }
             }
         };
         service.setFullController(controller);
-        */
+
     }
 
-    //for now its just an empty method
-    boolean signUpToServer(String login, String password) {
-        return true;
-    }
 
-    void startLobbyWindow(ActionEvent e) {
+    void startLobbyWindow() {
         Parent root;
         try {
             root = FXMLLoader.load(getClass().getClassLoader().getResource("lobbyFrame.fxml"));
@@ -65,7 +67,7 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
             stage.setResizable(false);
             stage.show();
 
-            ((Node) (e.getSource())).getScene().getWindow().hide();
+            buttonSignUp.getScene().getWindow().hide();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -77,10 +79,8 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
         String password = textFieldPassword.getText();
         if (!login.equals("") && !password.equals("")) {
             service.signUp(login, password);
-            //signUp wysyla request do serwera, kiedy dostaniemy odpowiedz serwis powinien wywolac metode w kontrolerze
-            // typu loginResult(boolean)
-            //TODO: poprawa logowania
-            startLobbyWindow(e);
+            //TODO: trzeba usunąć startLobbyWindow, powinno być wywoływanie przez server, na razie zostawiłem je do testów
+            startLobbyWindow();
         } else {
 
         }
