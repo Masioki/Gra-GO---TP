@@ -1,6 +1,7 @@
 package Services;
 
 import Commands.Command;
+import Commands.CommandType;
 import DTO.LoginData;
 import Domain.Game;
 
@@ -26,7 +27,10 @@ public class ClientService implements InvokableService {
     public Command execute(Command request) {
         //TODO:command executing
         System.out.println("Otrzymano : " + request.getType());
-        return new Command();
+        Command c = new Command();
+        c.setUuid(request.getUuid());
+        c.setType(CommandType.SUCCESS);
+        return c;
     }
 
     private boolean logIn(LoginData data) {

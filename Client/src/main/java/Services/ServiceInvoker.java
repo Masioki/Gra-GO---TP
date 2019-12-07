@@ -30,13 +30,13 @@ public class ServiceInvoker {
         sended.add(command);
     }
 
-    public void signalEnd(){
+    public void signalEnd() {
         for (CommandListener l : listeners) l.endListening();
     }
 
-    public void execute(Command command) {
+    public synchronized void execute(Command command) {
         received.add(command);
-        boolean repeat;
+        /*boolean repeat;
         do {
             repeat = false;
             Iterator<Command> i = received.iterator();
@@ -51,7 +51,25 @@ public class ServiceInvoker {
                 }
             }
 
-        } while (repeat);
+        } while (repeat);*/
+
+        Iterator<Command> rec = received.iterator();
+        while (rec.hasNext()) {
+            Command c = rec.next();
+            boolean found = false;
+            for (Command s : sended) {
+                if (s.getUuid().equals(c.getUuid())) {
+                    service.execute(s, c);
+                    sended.remove(s);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                service.execute(null, c);
+                rec.remove();
+            }
+        }
     }
 
 }

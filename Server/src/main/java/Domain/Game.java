@@ -22,10 +22,11 @@ public class Game {
         this.ownerUsername = ownerUsername;
     }
 
-public boolean addPlayer(Client client){
+    public boolean addPlayer(Client client) {
         return false;
-}
+    }
 
+    //TODO: logic
 
     /* Getters Setters */
 

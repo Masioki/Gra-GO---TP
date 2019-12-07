@@ -19,7 +19,7 @@ public class Main {
                     outStream.flush();
                     ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
                     ClientServiceInvoker invoker = new ClientServiceInvoker(new ClientService());
-                    ClientConnection clientConnection = new ClientConnection(invoker,socket,inStream, outStream);
+                    ClientConnection clientConnection = new ClientConnection(invoker, socket, inStream, outStream);
                     invoker.addListener(clientConnection);
                     clientConnection.start();
                     System.out.println("Nowe polaczenie nr: " + clientConnection.getId());

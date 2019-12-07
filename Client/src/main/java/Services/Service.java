@@ -6,6 +6,8 @@ import Controllers.FullController;
 import Domain.GameData;
 import Domain.LoginData;
 
+import java.util.List;
+
 //Class Service should be singleton
 public class Service implements InvokableService {
 
@@ -21,7 +23,6 @@ public class Service implements InvokableService {
         parser = new CommandParser();
     }
 
-
     public static Service getInstance() {
         if (service == null) {
             service = new Service();
@@ -29,6 +30,9 @@ public class Service implements InvokableService {
         return service;
     }
 
+    /*
+    SETTERS
+     */
     public void setServiceInvoker(ServiceInvoker invoker) {
         this.invoker = invoker;
     }
@@ -37,8 +41,15 @@ public class Service implements InvokableService {
         this.fullController = controller;
     }
 
+
+    /*
+    COMMAND EXECUTION
+     */
     @Override
     public void execute(Command request, Command response) {
+        if (request != null) System.out.println(request.getType() + " : " + response.getType());
+        else System.out.println("Przeciwnik : " + response.getType());
+
         if (response.getType() == CommandType.SUCCESS) {
             executeOwn(request, response);
         } else if (response.getType() == CommandType.ERROR) {
@@ -48,7 +59,7 @@ public class Service implements InvokableService {
                 errorHandler("Blad komendy oraz blad wewnetrzny");
             }
         } else if (request == null) {
-            executeIncoming(response);
+            executeIncomingRequest(response);
         }
     }
 
@@ -60,29 +71,28 @@ public class Service implements InvokableService {
         }
     }
 
-
-    /*
-    KAZDY KONTROLER
-     */
-    private void errorHandler(String errorMessage) {
-        //TODO: error handling
-    }
-
     private void executeOwn(Command request, Command response) {
         try {
             switch (request.getType()) {
                 case ACTIVE_GAMES: {
-                    //TODO: wywolania zachowan w kontrolerze
+                    List<GameData> data = parser.parseActiveGamesCommand(response.getBody());
+                    fullController.loadActiveGames(data);
+                    break;
                 }
                 case JOIN: {
-
+                    fullController.joinGame(parser.parseGameData(request.getBody()));
+                    break;
                 }
                 case LOGIN: {
-
+                    fullController.logIn(true);
+                    break;
                 }
                 case GAME: {
-                    // GameCommand game = parser.parseGameCommand(out);
-
+                    GameCommand gameCommand = parser.parseGameCommand(request.getBody());
+                    if (gameCommand.getCommandType() == GameCommandType.MOVE)
+                        fullController.move(gameCommand.getX(), gameCommand.getY(), true);
+                    else fullController.gameAction(gameCommand.getCommandType(), true);
+                    break;
                 }
             }
         } catch (Exception e) {
@@ -90,12 +100,23 @@ public class Service implements InvokableService {
         }
     }
 
-    private void executeIncoming(Command command) {
-
+    private void executeIncomingRequest(Command command) {
+        if (command.getType() == CommandType.END_CONNECTION) end();
+        else if (command.getType() == CommandType.GAME) {
+            try {
+                GameCommand gameCommand = parser.parseGameCommand(command.getBody());
+                if (gameCommand.getCommandType() == GameCommandType.MOVE)
+                    fullController.move(gameCommand.getX(), gameCommand.getY(), false);
+                else fullController.gameAction(gameCommand.getCommandType(), false);
+            } catch (Exception e) {
+                errorHandler("Blad wewnetrzny");
+            }
+        }
     }
 
+
     /*
-    KAZDY KONTROLER
+    EVERY CONTROLLER
      */
     public void end() {
         Command c = CommandBuilderProvider
@@ -104,13 +125,15 @@ public class Service implements InvokableService {
                 .withHeader(CommandType.END_CONNECTION)
                 .build();
         sendCommand(c);
-
-
         invoker.signalEnd();
     }
 
+    private void errorHandler(String errorMessage) {
+        if (fullController != null) fullController.error(errorMessage);
+    }
+
     /*
-    KONTROLER LOGOWANIA
+    LOGIN CONTROLLER
      */
     public void signUp(String login, String password) {
         if (login == null || password == null || login.length() == 0 || password.length() == 0) {
@@ -136,7 +159,7 @@ public class Service implements InvokableService {
     }
 
     /*
-    LOBBY
+    LOBBY CONTROLLER
      */
     public void loadActiveGames() {
         Command c = CommandBuilderProvider
@@ -158,11 +181,10 @@ public class Service implements InvokableService {
         } catch (Exception e) {
             errorHandler("Blad wewnetrzny");
         }
-
     }
 
     /*
-    GRA
+    GAME CONTROLLER
      */
     /*
      Przyjmuje koordynaty przy komendzie MOVE.
@@ -173,7 +195,7 @@ public class Service implements InvokableService {
             Command c = CommandBuilderProvider
                     .newGameCommandBuilder()
                     .newCommand()
-                    .withHeader(GameCommandType.MOVE)
+                    .withHeader(type)
                     .withPosition(x, y)
                     .build();
             sendCommand(c);
