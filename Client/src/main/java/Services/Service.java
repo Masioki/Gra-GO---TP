@@ -79,7 +79,8 @@ public class Service implements InvokableService {
                     fullController.loadActiveGames(data);
                     break;
                 }
-                case JOIN: {
+                case JOIN:
+                case NEW: {
                     fullController.joinGame(parser.parseGameData(request.getBody()));
                     break;
                 }
@@ -176,6 +177,18 @@ public class Service implements InvokableService {
                     .newSimpleCommandBuilder()
                     .withHeader(CommandType.JOIN)
                     .withBody(gameData)
+                    .build();
+            sendCommand(c);
+        } catch (Exception e) {
+            errorHandler("Blad wewnetrzny");
+        }
+    }
+
+    public void newGame() {
+        try {
+            Command c = CommandBuilderProvider
+                    .newSimpleCommandBuilder()
+                    .withHeader(CommandType.NEW)
                     .build();
             sendCommand(c);
         } catch (Exception e) {

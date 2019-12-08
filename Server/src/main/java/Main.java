@@ -18,7 +18,9 @@ public class Main {
                     ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
                     outStream.flush();
                     ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
-                    ClientServiceInvoker invoker = new ClientServiceInvoker(new ClientService());
+                    ClientService service = new ClientService();
+                    ClientServiceInvoker invoker = new ClientServiceInvoker(service);
+                    service.setClientServiceInvoker(invoker);
                     ClientConnection clientConnection = new ClientConnection(invoker, socket, inStream, outStream);
                     invoker.addListener(clientConnection);
                     clientConnection.start();
