@@ -79,7 +79,7 @@ public class Service implements InvokableService {
                     fullController.loadActiveGames(data);
                     break;
                 }
-                case JOIN:{
+                case JOIN: {
                     fullController.joinGame(parser.parseGameData(request.getBody()));
                     break;
                 }
@@ -101,6 +101,7 @@ public class Service implements InvokableService {
             }
         } catch (Exception e) {
             errorHandler("Sprobuj ponownie");
+            e.printStackTrace();
         }
     }
 
@@ -114,6 +115,7 @@ public class Service implements InvokableService {
                 else fullController.gameAction(gameCommand.getCommandType(), false);
             } catch (Exception e) {
                 errorHandler("Blad wewnetrzny");
+                e.printStackTrace();
             }
         }
     }
