@@ -57,13 +57,15 @@ public class ServiceInvoker {
         while (rec.hasNext()) {
             Command c = rec.next();
             boolean found = false;
-            for (Command s : sended) {
-                if (s.getUuid().equals(c.getUuid())) {
-                    service.execute(s, c);
-                    sended.remove(s);
-                    rec.remove();
-                    found = true;
-                    break;
+            if (!sended.isEmpty()) {
+                for (Command s : sended) {
+                    if (s.getUuid().equals(c.getUuid())) {
+                        service.execute(s, c);
+                        sended.remove(s);
+                        rec.remove();
+                        found = true;
+                        break;
+                    }
                 }
             }
             if (!found) {
