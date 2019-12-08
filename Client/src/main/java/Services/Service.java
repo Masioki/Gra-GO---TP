@@ -79,9 +79,12 @@ public class Service implements InvokableService {
                     fullController.loadActiveGames(data);
                     break;
                 }
-                case JOIN:
-                case NEW: {
+                case JOIN:{
                     fullController.joinGame(parser.parseGameData(request.getBody()));
+                    break;
+                }
+                case NEW: {
+                    fullController.joinGame(parser.parseGameData(response.getBody()));
                     break;
                 }
                 case LOGIN: {
