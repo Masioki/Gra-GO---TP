@@ -2,6 +2,7 @@ package Controllers;
 
 import Domain.GameData;
 import Services.Service;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -95,6 +96,7 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
 
             @Override
             public void joinGame(GameData data) {
+                System.out.println("dd");
                 startGameWindow();
             }
 
@@ -131,24 +133,29 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
         lobbyList[number].getStylesheets().add(getClass().getResource("/css/activeLabelStylesheet.css").toExternalForm());
     }
     private void startGameWindow() {
-        Parent root;
-        try {
-            root = FXMLLoader.load(getClass().getClassLoader().getResource("gameFrame.fxml"));
-            Stage stage = new Stage();
-            stage.setTitle("Game Board");
-            //dodajemy stylesheer
-            Scene s = new Scene(root);
-            s.getStylesheets().add(getClass().getResource("/css/basicStylesheet.css").toExternalForm());
-            stage.setScene(s);
-            stage.setWidth(850);
-            stage.setHeight(700);
-            stage.setResizable(false);
-            stage.show();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Parent root;
+                try {
+                    root = FXMLLoader.load(getClass().getClassLoader().getResource("gameFrame.fxml"));
+                    Stage stage = new Stage();
+                    stage.setTitle("Game Board");
+                    //dodajemy stylesheer
+                    Scene s = new Scene(root);
+                    s.getStylesheets().add(getClass().getResource("/css/basicStylesheet.css").toExternalForm());
+                    stage.setScene(s);
+                    stage.setWidth(850);
+                    stage.setHeight(700);
+                    stage.setResizable(false);
+                    stage.show();
 
-            buttonJoinGame.getScene().getWindow().hide();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+                    buttonJoinGame.getScene().getWindow().hide();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     void loadGames() {
@@ -169,6 +176,7 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     }
     void createLobby()
     {
+        System.out.println("dd");
         service.newGame();
     }
     @Override
