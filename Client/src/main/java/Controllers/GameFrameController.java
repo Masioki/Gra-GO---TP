@@ -5,6 +5,7 @@ import Services.Service;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -79,7 +80,11 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         FullController controller = new FullController() {
             @Override
             public void error(String message) {
-                showError();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("Sadly error occurred cannot do anything about it...");
+                alert.setContentText(message);
+                alert.showAndWait();
             }
             @Override
             public void move(int x, int y, boolean me) {

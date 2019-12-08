@@ -9,15 +9,20 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class LobbyFrameController implements EventHandler<ActionEvent> {
@@ -37,12 +42,14 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     private int chosenGame;
 
     //lista gier
-    private List<GameData> gamesList = null;
+    private List<GameData> gamesList;
     @FXML
     public void initialize() {
+        gamesList = new ArrayList<GameData>();
         chosenGame = -1;
         buttonJoinGame.setOnAction(this);
         buttonRefreshLobbies.setOnAction(this);
+        buttonCreateLobby.setOnAction(this);
         service = Service.getInstance();
         for(int i = 0; i < lobbyMaxNumber; i++)
         {
@@ -70,7 +77,20 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
         FullController controller = new FullController() {
             @Override
             public void error(String message) {
-                System.out.println("Error massage...");
+                try
+                {
+                    //TODO - ten alert wyrzuca błąd
+                    /*Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("ERROR");
+                    alert.setHeaderText("Sadly error occurred cannot do anything about it...");
+                    alert.setContentText(message);
+                    alert.showAndWait();*/
+                    System.out.println(message);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -80,8 +100,12 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
 
             @Override
             public void loadActiveGames(List<GameData> games) {
+                if(games==null)
+                {
+                    System.out.println("ww");
+                }
                 gamesList = games;
-                for(int i = 0; i < lobbyMaxNumber; i++)
+                for(int i = 0; i < gamesList.size(); i++)
                 {
                     if(gamesList.get(i)!=null)
                     {
@@ -89,8 +113,6 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
                     }
                 }
             }
-
-
         };
         service.setFullController(controller);
     }
@@ -99,11 +121,11 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
         //resetujemy poprzednią grę
         if(chosenGame != -1)
         {
-            lobbyList[chosenGame].setText("Game is ded...");
+            //lobbyList[chosenGame].setText("Game is ded...");
             lobbyList[chosenGame].getStylesheets().remove(getClass().getResource("/css/activeLabelStylesheet.css").toExternalForm());
             lobbyList[chosenGame].getStylesheets().add(getClass().getResource("/css/basicStylesheet.css").toExternalForm());
         }
-        lobbyList[number].setText("Active Game");
+        //lobbyList[number].setText("Active Game");
         chosenGame = number;
         lobbyList[chosenGame].getStylesheets().remove(getClass().getResource("/css/basicStylesheet.css").toExternalForm());
         lobbyList[number].getStylesheets().add(getClass().getResource("/css/activeLabelStylesheet.css").toExternalForm());
@@ -130,11 +152,11 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     }
 
     void loadGames() {
-        service.loadActiveGames();//returns GameData
-        //TODO: wyswietlic zwrocone List<GameData>
+        service.loadActiveGames();
     }
 
     void joinGame(ActionEvent e) {
+        //TODO - trzeba usunąć start game windows
         if(chosenGame > 0)
         {
             if(gamesList.get(chosenGame)!=null)
@@ -145,7 +167,24 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
         }
         startGameWindow();
     }
-
+    void createLobby()
+    {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Create lobby");
+        dialog.setHeaderText("Id will be chosen randomly");
+        dialog.setContentText("Please enter lobby name:");
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            String lobbyName = result.get();
+            //generate random number
+            int id = ThreadLocalRandom.current().nextInt(10000, 100000 + 1);
+            GameData gameData = new GameData();
+            gameData.setGameID(id);
+            gameData.setUsername(lobbyName);
+            //TODO - tutaj wydaje mi się że powinniśmy przesłać grę do serwisu, chyba że to on powinnien ją tworzyć
+            //service.newGame();
+        }
+    }
     @Override
     public void handle(ActionEvent e) {
         if (e.getSource().equals(buttonJoinGame)) {
@@ -153,6 +192,10 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
         }
         if (e.getSource().equals(buttonRefreshLobbies)) {
             loadGames();
+        }
+        if(e.getSource().equals(buttonCreateLobby))
+        {
+            createLobby();
         }
     }
 }
