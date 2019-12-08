@@ -169,21 +169,7 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     }
     void createLobby()
     {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Create lobby");
-        dialog.setHeaderText("Id will be chosen randomly");
-        dialog.setContentText("Please enter lobby name:");
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
-            String lobbyName = result.get();
-            //generate random number
-            int id = ThreadLocalRandom.current().nextInt(10000, 100000 + 1);
-            GameData gameData = new GameData();
-            gameData.setGameID(id);
-            gameData.setUsername(lobbyName);
-            //TODO - tutaj wydaje mi się że powinniśmy przesłać grę do serwisu, chyba że to on powinnien ją tworzyć
-            service.newGame();
-        }
+        service.newGame();
     }
     @Override
     public void handle(ActionEvent e) {
