@@ -182,7 +182,7 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
             gameData.setGameID(id);
             gameData.setUsername(lobbyName);
             //TODO - tutaj wydaje mi się że powinniśmy przesłać grę do serwisu, chyba że to on powinnien ją tworzyć
-            //service.newGame();
+            service.newGame();
         }
     }
     @Override
