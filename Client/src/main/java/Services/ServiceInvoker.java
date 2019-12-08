@@ -25,7 +25,7 @@ public class ServiceInvoker {
         listeners.add(listener);
     }
 
-    public void send(Command command) throws Exception {
+    public synchronized void send(Command command) throws Exception {
         for (CommandListener l : listeners) l.execute(command);
         sended.add(command);
     }
