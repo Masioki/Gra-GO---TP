@@ -195,7 +195,6 @@ public class Service implements InvokableService {
                     .newSimpleCommandBuilder()
                     .newCommand()
                     .withHeader(CommandType.NEW)
-                    .withBody("")
                     .build();
             sendCommand(c);
         } catch (Exception e) {
