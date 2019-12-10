@@ -43,9 +43,13 @@ public class GameCommandBuilder {
     }
 
 
-    public Command build() throws Exception {
+    public Command build() {
         if (command != null) {
-            command.setBody(objectMapper.writeValueAsString(gameCommand));
+            try {
+                command.setBody(objectMapper.writeValueAsString(gameCommand));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return command;
     }

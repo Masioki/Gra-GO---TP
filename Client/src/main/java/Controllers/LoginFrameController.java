@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -16,7 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
+//TODO: przechwytywanie zamkniecia i wywolanie wtedy end z service
 public class LoginFrameController implements EventHandler<ActionEvent> {
     public Label labelLogin;
     public TextField textFieldLogin;

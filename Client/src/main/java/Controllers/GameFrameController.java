@@ -1,6 +1,6 @@
 package Controllers;
+
 import Commands.GameCommandType;
-import Domain.GameData;
 import Services.Service;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,11 +9,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.*;
-
-import java.util.List;
-
-import static java.lang.StrictMath.abs;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 
 public class GameFrameController implements EventHandler<ActionEvent> {
 

@@ -93,6 +93,7 @@ public class Service implements InvokableService {
                 }
                 case GAME: {
                     GameCommand gameCommand = parser.parseGameCommand(request.getBody());
+                    System.out.print(" : "+ gameCommand.getCommandType() +"\n");
                     if (gameCommand.getCommandType() == GameCommandType.MOVE)
                         fullController.move(gameCommand.getX(), gameCommand.getY(), true);
                     else fullController.gameAction(gameCommand.getCommandType(), true);
@@ -110,6 +111,7 @@ public class Service implements InvokableService {
         else if (command.getType() == CommandType.GAME) {
             try {
                 GameCommand gameCommand = parser.parseGameCommand(command.getBody());
+                System.out.print(" : "+ gameCommand.getCommandType() +"\n");
                 if (gameCommand.getCommandType() == GameCommandType.MOVE)
                     fullController.move(gameCommand.getX(), gameCommand.getY(), false);
                 else fullController.gameAction(gameCommand.getCommandType(), false);
