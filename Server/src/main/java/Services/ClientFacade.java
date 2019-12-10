@@ -3,9 +3,12 @@ package Services;
 import Domain.Client;
 import Domain.Game;
 import DTO.LoginData;
-import Domain.WrongMoveException;
 
-// wzorzec Facade
+/*
+
+ Moze sie okazac ze ta klasa jest niepotrzebna, ale to zalezy jak wyjdzie logika
+
+ */
 
 /**
  * Obiekt pomocniczy do obslugi klienta

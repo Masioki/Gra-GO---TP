@@ -5,14 +5,14 @@ import Commands.Builder.CommandBuilderProvider;
 import DTO.GameData;
 import DTO.LoginData;
 import Domain.Game;
+import Domain.GameObserver;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
  * Klasa obslugujaca otrzymane komendy
  */
-public class ClientService implements InvokableService {
+public class ClientService implements InvokableService, GameObserver {
 
     private ClientServiceInvoker invoker;
     private GameService gameService;
@@ -27,6 +27,18 @@ public class ClientService implements InvokableService {
 
     public void setClientServiceInvoker(ClientServiceInvoker invoker) {
         this.invoker = invoker;
+    }
+
+    @Override
+    public void action(int x, int y, String username, GameCommandType type) {
+        if (username.equals(clientFacade.getClient().getUsername())) return;
+        Command c = CommandBuilderProvider
+                .newGameCommandBuilder()
+                .newCommand()
+                .withPosition(x, y)
+                .withHeader(type)
+                .build();
+        invoker.send(c);
     }
 
     @Override
@@ -55,6 +67,7 @@ public class ClientService implements InvokableService {
                     return success(gameService.activeGames(), request.getUuid());
                 case GAME: {
                     GameCommand gameCommand = parser.parseGameCommand(request.getBody());
+                    System.out.print(" : " + gameCommand.getCommandType() + "\n");
                     return gameAction(gameCommand.getX(), gameCommand.getY(), gameCommand.getCommandType(), request.getUuid());
                 }
             }
@@ -87,7 +100,10 @@ public class ClientService implements InvokableService {
     private boolean joinGame(GameData data) {
         Game g = gameService.joinGame(data, clientFacade.getClient());
         if (g == null) return false;
-        else clientFacade.getClient().setGame(g);
+        else {
+            clientFacade.getClient().setGame(g);
+            g.addObserver(this);
+        }
         return true;
     }
 
@@ -100,9 +116,10 @@ public class ClientService implements InvokableService {
     }
 
     private GameData createGame() {
-        Game g = gameService.newGame();
+        Game g = gameService.newGame(19);
         g.setOwnerUsername(clientFacade.getClient().getUsername());
         clientFacade.setGame(g);
+        g.addObserver(this);
         GameData data = new GameData();
         data.setGameID(g.getGameID());
         data.setUsername(g.getOwnerUsername());
@@ -136,4 +153,5 @@ public class ClientService implements InvokableService {
         }
         return error("Blad wewnetrzny", uuid);
     }
+
 }

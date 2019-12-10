@@ -33,8 +33,8 @@ public class GameService {
         return gameService;
     }
 
-    public synchronized Game newGame() {
-        Game g = new Game();
+    public synchronized Game newGame(int boardSize) {
+        Game g = new Game(boardSize);
         games.add(g);
         return g;
     }
@@ -66,5 +66,7 @@ public class GameService {
         //usun gre z listy
         //ewentualnie jakos usunac referencje do gry od przeciwnika
         //ale i tak jesli zacznie nowa gre albo sie rozlaczy to Garbage Collector usunie
+        game.surrender(client);
+        games.remove(game);
     }
 }

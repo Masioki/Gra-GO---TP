@@ -1,14 +1,13 @@
 package Domain;
 
 
+import java.util.Objects;
+
 public class Client {
 
     // private ClientState state;
     private Game game;
     private String username;
-
-    public Client() {
-    }
 
 
 
@@ -29,5 +28,18 @@ public class Client {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Client)) return false;
+        Client client = (Client) o;
+        return username.equals(client.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
     }
 }
