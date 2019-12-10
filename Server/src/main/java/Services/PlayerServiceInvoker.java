@@ -7,14 +7,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ClientServiceInvoker {
+public class PlayerServiceInvoker {
 
     private InvokableService service;
     private LinkedList<Command> requests;
     private LinkedList<Command> responses;
     private List<CommandListener> listeners;
 
-    public ClientServiceInvoker(InvokableService service) {
+    public PlayerServiceInvoker(InvokableService service) {
         this.service = service;
         requests = new LinkedList<>();
         responses = new LinkedList<>();

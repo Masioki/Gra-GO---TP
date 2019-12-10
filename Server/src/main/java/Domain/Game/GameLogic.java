@@ -1,21 +1,11 @@
-package Domain;
+package Domain.Game;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameLogic {
+class GameLogic {
     private int size;
-    //private Grid[][] grids;
-    /*
-    Zamiast Grid ktory ma tylko GridState lepiej zrobic mape GridState.
-    Daje to kilka opcji typu .replace(klucz,wartosc) .put(k,w) .get(klucz)
-
-    Przyklad  gridStateMap.get(new Point(x,y)) daje nam odrazu stan na danej pozycji
-
-    Obiekt java.awt.Point jest lekki, ale jak chcesz mozna zrobic swoj jeszcze lzejszy
-    Wtedy zeby ta mapa dzialala trzeba tylko nadpisac metode equals()
-     */
     private int whitPoints;
     private int blackPoints;
 
@@ -25,6 +15,7 @@ public class GameLogic {
     private Map<Point, GameGrid> group;
     //mapa zawierająca stan planszy z poprzedniego ruchu
     private Map<Point, GridState> previousGridStateMap;
+
     public GameLogic(int size) {
         this.size = size;
         //grids = new Grid[size][size];
@@ -53,27 +44,22 @@ public class GameLogic {
         whitPoints = 0;
         blackPoints = 0;
     }
+
     //x pierwsza współrzędna, y druga
-    boolean placePawn(int x, int y, boolean white)
-    {
+    boolean placePawn(int x, int y, boolean white) {
         //upewniamy się że pole puste
-        if( !gridStateMap.get(new Point(x,y)).equals(GridState.EMPTY) )
-        {
+        if (!gridStateMap.get(new Point(x, y)).equals(GridState.EMPTY)) {
             return false;
         }
         //żeby uniknąć rozpatrywania przypadków
         GridState gridState;
-        if(white)
-        {
+        if (white) {
             gridState = GridState.WHITE;
-        }
-        else
-        {
+        } else {
             gridState = GridState.BLACK;
         }
         //sprawdzamy czy ruch jest niedozwolonym samobujstwem
-        if(checkSuicide(x, y, white))
-        {
+        if (checkSuicide(x, y, white)) {
             return false;
         }
         //wykonujemy ruch
@@ -85,12 +71,11 @@ public class GameLogic {
             }
         }
         //zmieniamy nasze jedno pole
-        newGridStateMap.replace(new Point(x,y), gridState);
+        newGridStateMap.replace(new Point(x, y), gridState);
         //updatujemy naszą mapę po wyonaniu ruchu
-        updateMap(x,y,newGridStateMap);
+        updateMap(x, y, newGridStateMap);
         //sprawdzamy Komi
-        if(checkKomi(newGridStateMap))
-        {
+        if (checkKomi(newGridStateMap)) {
             return false;
         }
         //zatwierdzamy zmianę mapy
@@ -103,59 +88,45 @@ public class GameLogic {
         return true;
 
 
-
     }
+
     //metoda zwraca true kiedy nie można postawić pionka
-    boolean checkSuicide(int x, int y, boolean white)
-    {
-        if(checkNormalSuicide(x,y,white))
-        {
-            if(checkSpecialSuicide(x,y,white))
-            {
+    boolean checkSuicide(int x, int y, boolean white) {
+        if (checkNormalSuicide(x, y, white)) {
+            if (checkSpecialSuicide(x, y, white)) {
                 return false;
-            }
-            else
-            {
+            } else {
                 return true;
             }
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    boolean checkNormalSuicide (int x, int y, boolean white)
-    {
+    boolean checkNormalSuicide(int x, int y, boolean white) {
         GridState gridState;
-        if(white)
-        {
+        if (white) {
             gridState = GridState.WHITE;
-        }
-        else
-        {
+        } else {
             gridState = GridState.BLACK;
         }
 
         return true;
     }
 
-    boolean checkSpecialSuicide (int x, int y, boolean white)
-    {
+    boolean checkSpecialSuicide(int x, int y, boolean white) {
         return true;
     }
 
     //updatujemy mapę po wykonanym ruchu
-    private Map<Point, GridState> updateMap(int x, int y, Map<Point, GridState> map)
-    {
-        GridState gridState = map.get(new Point(x,y));
+    private Map<Point, GridState> updateMap(int x, int y, Map<Point, GridState> map) {
+        GridState gridState = map.get(new Point(x, y));
         //TODO - cały kod
-        return  map;
+        return map;
     }
 
     //funkcja zwraca true, jeśli zachodzi komi tzn. nie możemy wykonać ruchu
-    private boolean checkKomi(Map<Point, GridState> map)
-    {
+    private boolean checkKomi(Map<Point, GridState> map) {
         //TODO - wystarczy porównać mapę z mapą z poprzedniego ruchu, jeśli są takie same zwracamy true
         return true;
     }

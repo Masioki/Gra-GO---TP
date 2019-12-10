@@ -1,7 +1,7 @@
 package Services;
 
-import Domain.Client;
-import Domain.Game;
+import Domain.Player;
+import Domain.Game.Game;
 import DTO.GameData;
 
 import java.util.ArrayList;
@@ -39,10 +39,10 @@ public class GameService {
         return g;
     }
 
-    public synchronized Game joinGame(GameData gameData, Client client) {
+    public synchronized Game joinGame(GameData gameData, Player player) {
         for (Game g : games) {
             if (g.getOwnerUsername().equals(gameData.getUsername()) && g.getGameID() == gameData.getGameID()) {
-                if (g.addPlayer(client)) return g;
+                if (g.addPlayer(player)) return g;
                 return null;
             }
         }
@@ -60,13 +60,13 @@ public class GameService {
         return list;
     }
 
-    public void endGame(Game game, Client client) {
+    public void endGame(Game game, Player player) {
         //skoncz gre jako poddanie osoby konczacej
         //wykonaj jakas robote typu staty do bazy
         //usun gre z listy
         //ewentualnie jakos usunac referencje do gry od przeciwnika
         //ale i tak jesli zacznie nowa gre albo sie rozlaczy to Garbage Collector usunie
-        game.surrender(client);
+        game.surrender(player);
         games.remove(game);
     }
 }

@@ -1,15 +1,28 @@
 package Domain;
 
 
+import Domain.Game.Game;
+
 import java.util.Objects;
 
-public class Client {
+public class Player {
 
     // private ClientState state;
     private Game game;
     private String username;
 
 
+    public boolean move(int x, int y) {
+        return true;
+    }
+
+    public boolean pass() {
+        return true;
+    }
+
+    public boolean continueGame() {
+        return true;
+    }
 
 
     /* getters setters */
@@ -33,9 +46,9 @@ public class Client {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Client)) return false;
-        Client client = (Client) o;
-        return username.equals(client.username);
+        if (!(o instanceof Player)) return false;
+        Player player = (Player) o;
+        return username.equals(player.username);
     }
 
     @Override

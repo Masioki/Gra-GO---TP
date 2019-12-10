@@ -1,6 +1,6 @@
-package Domain;
+package Domain.Game;
 
-public class GameGrid {
+class GameGrid {
     //TODO - angielska nazwa..
     private int breathsNumber;
     private boolean checked;
@@ -21,8 +21,7 @@ public class GameGrid {
         this.checked = checked;
     }
 
-    GameGrid()
-    {
+    GameGrid() {
         breathsNumber = 0;
         checked = false;
     }

@@ -1,9 +1,8 @@
+package Commands;
+
 import Commands.Builder.CommandBuilderProvider;
 import Commands.Builder.GameCommandBuilder;
 import Commands.Builder.SimpleCommandBuilder;
-import Commands.Command;
-import Commands.CommandParser;
-import Commands.CommandType;
 import DTO.LoginData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

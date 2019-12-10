@@ -1,6 +1,6 @@
 import Connection.ClientConnection;
-import Services.ClientService;
-import Services.ClientServiceInvoker;
+import Services.PlayerService;
+import Services.PlayerServiceInvoker;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,8 +18,8 @@ public class Main {
                     ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
                     outStream.flush();
                     ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
-                    ClientService service = new ClientService();
-                    ClientServiceInvoker invoker = new ClientServiceInvoker(service);
+                    PlayerService service = new PlayerService();
+                    PlayerServiceInvoker invoker = new PlayerServiceInvoker(service);
                     service.setClientServiceInvoker(invoker);
                     ClientConnection clientConnection = new ClientConnection(invoker, socket, inStream, outStream);
                     invoker.addListener(clientConnection);

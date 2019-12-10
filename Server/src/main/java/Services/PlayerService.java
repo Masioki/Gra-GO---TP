@@ -4,34 +4,35 @@ import Commands.*;
 import Commands.Builder.CommandBuilderProvider;
 import DTO.GameData;
 import DTO.LoginData;
-import Domain.Game;
-import Domain.GameObserver;
+import Domain.Game.Game;
+import Domain.Game.GameObserver;
+import Domain.Player;
 
 import java.util.UUID;
 
 /**
  * Klasa obslugujaca otrzymane komendy
  */
-public class ClientService implements InvokableService, GameObserver {
+public class PlayerService implements InvokableService, GameObserver {
 
-    private ClientServiceInvoker invoker;
+    private PlayerServiceInvoker invoker;
     private GameService gameService;
-    private ClientFacade clientFacade;
+    private Player player;
     private CommandParser parser;
 
-    public ClientService() {
+    public PlayerService() {
         gameService = GameService.getInstance();
-        clientFacade = new ClientFacade(this);
+        player = new Player();
         parser = new CommandParser();
     }
 
-    public void setClientServiceInvoker(ClientServiceInvoker invoker) {
+    public void setClientServiceInvoker(PlayerServiceInvoker invoker) {
         this.invoker = invoker;
     }
 
     @Override
     public void action(int x, int y, String username, GameCommandType type) {
-        if (username.equals(clientFacade.getClient().getUsername())) return;
+        if (username.equals(player.getUsername())) return;
         Command c = CommandBuilderProvider
                 .newGameCommandBuilder()
                 .newCommand()
@@ -98,10 +99,10 @@ public class ClientService implements InvokableService, GameObserver {
     }
 
     private boolean joinGame(GameData data) {
-        Game g = gameService.joinGame(data, clientFacade.getClient());
+        Game g = gameService.joinGame(data, player);
         if (g == null) return false;
         else {
-            clientFacade.getClient().setGame(g);
+            player.setGame(g);
             g.addObserver(this);
         }
         return true;
@@ -109,7 +110,7 @@ public class ClientService implements InvokableService, GameObserver {
 
     private boolean logIn(LoginData data) {
         if (Authenticator.authenticate(data)) {
-            clientFacade.logIn(data);
+            player.setUsername(data.getUsername());
             return true;
         }
         return false;
@@ -117,8 +118,8 @@ public class ClientService implements InvokableService, GameObserver {
 
     private GameData createGame() {
         Game g = gameService.newGame(19);
-        g.setOwnerUsername(clientFacade.getClient().getUsername());
-        clientFacade.setGame(g);
+        g.setOwnerUsername(player.getUsername());
+        player.setGame(g);
         g.addObserver(this);
         GameData data = new GameData();
         data.setGameID(g.getGameID());
@@ -127,14 +128,14 @@ public class ClientService implements InvokableService, GameObserver {
     }
 
     private void surrender() {
-        gameService.endGame(clientFacade.getGame(), clientFacade.getClient());
+        gameService.endGame(player.getGame(), player);
         invoker.signalEnd();
     }
 
     private Command gameAction(int x, int y, GameCommandType type, UUID uuid) {
         switch (type) {
             case MOVE: {
-                if (!clientFacade.move(x, y))
+                if (!player.move(x, y))
                     return error("Nie mozesz teraz", uuid);
                 else return success("", uuid);
             }
@@ -143,11 +144,11 @@ public class ClientService implements InvokableService, GameObserver {
                 return success("", uuid);
             }
             case CONTINUE: {
-                if (!clientFacade.continueGame()) return error("Nie mozesz teraz", uuid);
+                if (!player.continueGame()) return error("Nie mozesz teraz", uuid);
                 else return success("", uuid);
             }
             case PASS: {
-                if (!clientFacade.pass()) return error("Nie mozesz teraz", uuid);
+                if (!player.pass()) return error("Nie mozesz teraz", uuid);
                 else return success("", uuid);
             }
         }

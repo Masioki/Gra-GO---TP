@@ -1,7 +1,7 @@
 package Connection;
 
 import Commands.Command;
-import Services.ClientServiceInvoker;
+import Services.PlayerServiceInvoker;
 import Services.CommandListener;
 
 import java.io.IOException;
@@ -18,10 +18,10 @@ public class ClientConnection extends Thread implements CommandListener {
     private ObjectInputStream inStream;
     private ObjectOutputStream outStream;
     private Socket socket;
-    private ClientServiceInvoker invoker;
+    private PlayerServiceInvoker invoker;
     private boolean end;
 
-    public ClientConnection(ClientServiceInvoker invoker, Socket socket, ObjectInputStream inStream, ObjectOutputStream outStream) {
+    public ClientConnection(PlayerServiceInvoker invoker, Socket socket, ObjectInputStream inStream, ObjectOutputStream outStream) {
         this.inStream = inStream;
         this.outStream = outStream;
         this.socket = socket;

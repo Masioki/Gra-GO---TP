@@ -1,7 +1,8 @@
-package Domain;
+package Domain.Game;
 
 
 import Commands.GameCommandType;
+import Domain.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ public class Game {
     private int gameID;
     private String ownerUsername;
     private List<GameObserver> observers;
-    private List<Client> players;
+    private List<Player> players;
     private GameLogic gameLogic;
 
 
@@ -34,9 +35,9 @@ public class Game {
         gameLogic = new GameLogic(boardSize);
     }
 
-    public boolean addPlayer(Client client) {
-        if (!players.contains(client) && players.size() < 2) {
-            players.add(client);
+    public boolean addPlayer(Player player) {
+        if (!players.contains(player) && players.size() < 2) {
+            players.add(player);
             return true;
         }
         return false;
@@ -57,10 +58,10 @@ public class Game {
     //TODO: logic
 
 
-    public void surrender(Client client) {
-        if (players.contains(client)) {
+    public void surrender(Player player) {
+        if (players.contains(player)) {
             // gameLogic.surrender(client.getUsername());
-            signalObservers(0, 0, client.getUsername(), GameCommandType.SURRENDER);
+            signalObservers(0, 0, player.getUsername(), GameCommandType.SURRENDER);
         }
     }
 

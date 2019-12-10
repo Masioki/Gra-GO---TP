@@ -36,23 +36,6 @@ public class ServiceInvoker {
 
     public synchronized void execute(Command command) {
         received.add(command);
-        /*boolean repeat;
-        do {
-            repeat = false;
-            Iterator<Command> i = received.iterator();
-            while (i.hasNext()) {
-                Command c = i.next();
-                if (sended.size() != 0 && c.getUuid() == sended.get(0).getUuid()) {
-                    service.execute(sended.get(0), c);
-                    sended.remove(0);
-                    i.remove();
-                    repeat = true;
-                    break;
-                }
-            }
-
-        } while (repeat);*/
-
         Iterator<Command> rec = received.iterator();
         while (rec.hasNext()) {
             Command c = rec.next();

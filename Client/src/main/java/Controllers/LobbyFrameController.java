@@ -91,7 +91,6 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
 
             @Override
             public void joinGame(GameData data) {
-                System.out.println("dd");
                 startGameWindow();
             }
 
@@ -171,7 +170,6 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     }
     void createLobby()
     {
-        System.out.println("dd");
         service.newGame();
     }
     @Override
