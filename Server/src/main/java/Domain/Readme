@@ -1,0 +1,26 @@
+Zasady GO
+
+I Ruch)
+    Ruch jest możliwy gdy:
+        -Pole jest puste i ruch nie jest samobujstwem
+        -Ruche jest samobujstwem ale zbija także pionki przeciwnika
+        *nie wiem czy można postawić kamień jeśli odbiera ostatni oddech grupie ale sam dokłada nowy
+        *jeżeli można to wystarczy sprawdzać samobójstwa
+
+II Terytorium)
+    Jeśli dobrze rozumiem to do terytorium liczą się jedynie pionki otoczone bezpośrednio przez gracza
+    Ale lepiej się upewnić bo w innym wypadku musimy jescze sprawdzać czy grupa jest żywa
+    Wtedy martwe grupy nie mają wpływu na terytorium
+
+III Czy grupa jest żywa)
+    Ogulnie grupa jest żywa jeśli nie może zostać zbita przez przeciwnika nawet jeśli tamten gra jako pierwszy
+    Ale sprawdzanie tego byłoby okropne musielibyśmy stworzyć graf rozpatrujący wszystkie możliwości
+
+    Bardziej praktycznie: Grupa jest żywa jeśli ma dwoje oczu tzn. dwa pola otoczone przez swoje pionki
+    gdzie przeciwnik nie może zagrać bo popełniłby samobójstwo
+
+IV Komi
+    Komi czyli wykonanie ruchów przez obu graczy które doprowadzają do tej samej sytuacji na planszy
+    jest zbanowane
+V  Wynik)
+    Wynik gracza to terytorium + zbite pionki
