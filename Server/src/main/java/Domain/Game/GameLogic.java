@@ -13,7 +13,7 @@ class GameLogic {
 
     private Map<Point, GridState> gridStateMap;
     //mapa do wyznaczenia grupy pionków
-    private Map<Point, GameGrid> group;
+    //private Map<Point, GameGrid> group;
     //mapa zawierająca stan planszy z poprzedniego ruchu
     private Map<Point, GridState> previousGridStateMap;
 
@@ -28,12 +28,13 @@ class GameLogic {
             }
         }
         //deklaracja mapy do tworzenia grup
+        /*
         group = new HashMap<>(size * size);
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 group.put(new Point(i, j), new GameGrid());
             }
-        }
+        }*/
         //deklaracja mapy przechowującej poprzedni ruch
         previousGridStateMap = new HashMap<>(size * size);
         for (int i = 0; i < size; i++) {
@@ -95,8 +96,24 @@ class GameLogic {
 
     //metoda zwraca true kiedy nie można postawić pionka
     boolean checkSuicide(int x, int y, boolean white) {
-        if (checkNormalSuicide(x, y, white)) {
-            if (checkSpecialSuicide(x, y, white)) {
+        GridState gridState;
+        if (white) {
+            gridState = GridState.WHITE;
+        } else {
+            gridState = GridState.BLACK;
+        }
+        //tworzymy mapę którą przekazujemy do sprawdzania samobujstwa
+        Map<Point, GridState> newMap = new HashMap<>(size * size);
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                newMap.put(new Point(i, j), gridStateMap.get(new Point(i, j)));
+            }
+        }
+        //dodajemy pionek postawiony przez gracza
+        newMap.replace(new Point(x,y), gridState);
+
+        if (checkNormalSuicide(x, y, newMap)) {
+            if (checkSpecialSuicide(x, y, newMap)) {
                 return false;
             } else {
                 return true;
@@ -105,19 +122,108 @@ class GameLogic {
             return false;
         }
     }
-
-    boolean checkNormalSuicide(int x, int y, boolean white) {
-        GridState gridState;
-        if (white) {
-            gridState = GridState.WHITE;
-        } else {
-            gridState = GridState.BLACK;
+    //zwraca true kiedy popełniliśmy samobujstwo
+    boolean checkNormalSuicide(int x, int y, Map<Point, GridState> map) {
+        //TODO - można zrobić szybviej, wystarczy sprawdzić sąsiadów pionka ale kod byłby dłuższy
+        //pobieramy grupę pionka i sprawdzamy czy jej nie zabiliśmy
+        Map<Point, GameGrid> group = findGroup(x,y,map);
+        int breaths = countGroupBreaths(group);
+        //jeśli grupa ma zero oddechów, popełniliśmy samobójstwo
+        if(breaths == 0)
+        {
+            return true;
         }
-        return true;
+        return false;
     }
 
-    boolean checkSpecialSuicide(int x, int y, boolean white) {
-        return true;
+    //zwraca true kiedy popełniliśmy specjalne samobujstwo
+    boolean checkSpecialSuicide(int x, int y, Map<Point, GridState> map) {
+        //kolor naszego pionka
+        GridState gridState = map.get(new Point(x,y));
+        //dla każdego sąsiada jeśli jest innego koloru niż nasz pionek
+        //generujemy grupę i sprawdzamy czy ma zero oddechów
+        int x1, y1;
+        //sprawdzamy pierwszego sąsiada
+        x1 = x + 1;
+        y1 = y + 1;
+        if(checkIfPointInsideBoard(x1,y1))
+        {
+            GridState checkedGridState = map.get(new Point(x1, y1));
+            if( ! checkedGridState.equals(GridState.EMPTY) )
+            {
+                if( ! checkedGridState.equals(gridState))
+                {
+                    Map<Point, GameGrid> group = findGroup(x1,y1,map);
+                    int breaths = countGroupBreaths(group);
+                    if(breaths == 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        //sprawdzamy drugiego sąsiada
+        x1 = x - 1;
+        y1 = y + 1;
+        if(checkIfPointInsideBoard(x1,y1))
+        {
+            GridState checkedGridState = map.get(new Point(x1, y1));
+            if( ! checkedGridState.equals(GridState.EMPTY) )
+            {
+                if( ! checkedGridState.equals(gridState))
+                {
+                    Map<Point, GameGrid> group = findGroup(x1,y1,map);
+                    int breaths = countGroupBreaths(group);
+                    if(breaths == 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        //sprawdzamy trzeciego sąsiada
+        x1 = x + 1;
+        y1 = y - 1;
+        if(checkIfPointInsideBoard(x1,y1))
+        {
+            GridState checkedGridState = map.get(new Point(x1, y1));
+            if( ! checkedGridState.equals(GridState.EMPTY) )
+            {
+                if( ! checkedGridState.equals(gridState))
+                {
+                    Map<Point, GameGrid> group = findGroup(x1,y1,map);
+                    int breaths = countGroupBreaths(group);
+                    if(breaths == 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        //sprawdzamy czwartego sąsiada
+        x1 = x - 1;
+        y1 = y - 1;
+        if(checkIfPointInsideBoard(x1,y1))
+        {
+            GridState checkedGridState = map.get(new Point(x1, y1));
+            if( ! checkedGridState.equals(GridState.EMPTY) )
+            {
+                if( ! checkedGridState.equals(gridState))
+                {
+                    Map<Point, GameGrid> group = findGroup(x1,y1,map);
+                    int breaths = countGroupBreaths(group);
+                    if(breaths == 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     //updatujemy mapę po wykonanym ruchu
@@ -313,5 +419,16 @@ class GameLogic {
             return true;
         }
         return false;
+    }
+
+    //funkcja zwraca nam ile oddechów ma grupa
+    int countGroupBreaths(Map<Point, GameGrid> map)
+    {
+        int outcome = 0;
+        for(GameGrid gameGrid : map.values())
+        {
+            outcome = outcome + gameGrid.getBreathsNumber();
+        }
+        return outcome;
     }
 }
