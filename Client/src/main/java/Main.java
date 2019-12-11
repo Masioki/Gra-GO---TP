@@ -25,6 +25,9 @@ public class Main extends Application {
         primaryStage.setScene(s);
         primaryStage.setResizable(false);
         primaryStage.show();
+        primaryStage.setOnCloseRequest(windowEvent -> {
+            System.exit(1);
+        });
     }
 
     public static void main(String[] args) {

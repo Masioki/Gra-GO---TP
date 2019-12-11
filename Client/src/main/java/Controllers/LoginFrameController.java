@@ -15,6 +15,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+
+import static javafx.application.Platform.exit;
+
 //TODO: przechwytywanie zamkniecia i wywolanie wtedy end z service
 public class LoginFrameController implements EventHandler<ActionEvent> {
     public Label labelLogin;
@@ -75,6 +78,10 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
                     stage.setHeight(650);
                     stage.setResizable(false);
                     stage.show();
+                    //ustawiamy zamknięcie aplikacji
+                    stage.setOnCloseRequest(windowEvent -> {
+                        System.exit(1);
+                    });
 
                     buttonSignUp.getScene().getWindow().hide();
                 } catch (IOException ex) {
@@ -96,7 +103,6 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
 
         }
     }
-
 
     @Override
     public void handle(ActionEvent e) {

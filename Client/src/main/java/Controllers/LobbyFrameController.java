@@ -143,6 +143,10 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
                     stage.setHeight(700);
                     stage.setResizable(false);
                     stage.show();
+                    //ustawiamy zamnknięcie aplikacji
+                    stage.setOnCloseRequest(windowEvent -> {
+                        System.exit(1);
+                    });
 
                     buttonJoinGame.getScene().getWindow().hide();
                 } catch (IOException ex) {
