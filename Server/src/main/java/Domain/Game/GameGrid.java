@@ -3,7 +3,6 @@ package Domain.Game;
 class GameGrid {
     //TODO - angielska nazwa..
     private int breathsNumber;
-    private boolean checked;
 
     public int getBreathsNumber() {
         return breathsNumber;
@@ -13,16 +12,8 @@ class GameGrid {
         this.breathsNumber = breathsNumber;
     }
 
-    public boolean isChecked() {
-        return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
 
     GameGrid() {
         breathsNumber = 0;
-        checked = false;
     }
 }
