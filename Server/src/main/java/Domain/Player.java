@@ -13,15 +13,19 @@ public class Player {
 
 
     public boolean move(int x, int y) {
-        return true;
+        return game.move(x, y, this);
     }
 
     public boolean pass() {
-        return true;
+        return game.pass(this);
     }
 
     public boolean continueGame() {
-        return true;
+        return game.continueGame(this);
+    }
+
+    public void surrender() {
+        game.surrender(this);
     }
 
 

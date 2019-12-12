@@ -129,6 +129,7 @@ public class PlayerService implements InvokableService, GameObserver {
 
     private void surrender() {
         gameService.endGame(player.getGame(), player);
+        player.surrender();
         invoker.signalEnd();
     }
 
