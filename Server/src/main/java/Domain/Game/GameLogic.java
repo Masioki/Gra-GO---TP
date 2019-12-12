@@ -1,9 +1,7 @@
 package Domain.Game;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class GameLogic {
     private int size;
@@ -52,177 +50,86 @@ class GameLogic {
     //prawdę w przeciwnym wypadku
     boolean placePawn(int x, int y, boolean white) {
         //upewniamy się że pole puste
-        if (!gridStateMap.get(new Point(x, y)).equals(GridState.EMPTY)) {
-            return false;
-        }
+        if (!gridStateMap.get(new Point(x, y)).equals(GridState.EMPTY)) return false;
+
         //żeby uniknąć rozpatrywania przypadków
         GridState gridState;
-        if (white) {
-            gridState = GridState.WHITE;
-        } else {
-            gridState = GridState.BLACK;
-        }
+        if (white) gridState = GridState.WHITE;
+        else gridState = GridState.BLACK;
+
         //sprawdzamy czy ruch jest niedozwolonym samobujstwem
-        if (checkSuicide(x, y, white)) {
-            return false;
-        }
+        if (checkSuicide(x, y, white)) return false;
+
         //wykonujemy ruch
-        Map<Point, GridState> newGridStateMap;
-        newGridStateMap = new HashMap<>(size * size);
-        for (int i = 0; i < size; i++) {                       // nie jest taka czasochlonna
-            for (int j = 0; j < size; j++) {
-                gridStateMap.put(new Point(i, j), gridStateMap.get(new Point(i, j)));
-            }
-        }
+        Map<Point, GridState> newGridStateMap = new HashMap<>(gridStateMap);
+
         //zmieniamy nasze jedno pole
         newGridStateMap.replace(new Point(x, y), gridState);
         //updatujemy naszą mapę po wyonaniu ruchu
         updateMap(x, y, newGridStateMap);
         //sprawdzamy Komi
-        if (checkKomi(newGridStateMap)) {
-            return false;
-        }
+        if (checkKomi(newGridStateMap)) return false;
+
         //zatwierdzamy zmianę mapy
-        for (int i = 0; i < size; i++) {
+        /*for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 gridStateMap.replace(new Point(i, j), newGridStateMap.get(new Point(i, j)));
             }
-        }
+        }*/
+        gridStateMap = newGridStateMap; // po prostu
+
         //TODO - trzeba nadpisać mapę z poprzedniego ruchu
         return true;
-
-
     }
 
     //metoda zwraca true kiedy nie można postawić pionka
     boolean checkSuicide(int x, int y, boolean white) {
         GridState gridState;
-        if (white) {
-            gridState = GridState.WHITE;
-        } else {
-            gridState = GridState.BLACK;
-        }
-        //tworzymy mapę którą przekazujemy do sprawdzania samobujstwa
-        Map<Point, GridState> newMap = new HashMap<>(size * size);
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                newMap.put(new Point(i, j), gridStateMap.get(new Point(i, j)));
-            }
-        }
-        //dodajemy pionek postawiony przez gracza
-        newMap.replace(new Point(x,y), gridState);
+        if (white) gridState = GridState.WHITE;
+        else gridState = GridState.BLACK;
 
-        if (checkNormalSuicide(x, y, newMap)) {
-            if (checkSpecialSuicide(x, y, newMap)) {
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
+        //tworzymy mapę którą przekazujemy do sprawdzania samobujstwa
+        Map<Point, GridState> newMap = new HashMap<>(gridStateMap);
+
+        //dodajemy pionek postawiony przez gracza
+        newMap.replace(new Point(x, y), gridState);
+
+        if (checkNormalSuicide(x, y, newMap)) return !checkSpecialSuicide(x, y, newMap);
+        else return false;
     }
+
     //zwraca true kiedy popełniliśmy samobujstwo
     boolean checkNormalSuicide(int x, int y, Map<Point, GridState> map) {
         //TODO - można zrobić szybviej, wystarczy sprawdzić sąsiadów pionka ale kod byłby dłuższy
         //pobieramy grupę pionka i sprawdzamy czy jej nie zabiliśmy
-        Map<Point, GameGrid> group = findGroup(x,y,map);
-        int breaths = countGroupBreaths(group);
+        Map<Point, GameGrid> group = findGroup(x, y, map);
+
         //jeśli grupa ma zero oddechów, popełniliśmy samobójstwo
-        if(breaths == 0)
-        {
-            return true;
-        }
-        return false;
+        return countGroupBreaths(group) == 0;
     }
 
     //zwraca true kiedy popełniliśmy specjalne samobujstwo
     boolean checkSpecialSuicide(int x, int y, Map<Point, GridState> map) {
         //kolor naszego pionka
-        GridState gridState = map.get(new Point(x,y));
+        GridState gridState = map.get(new Point(x, y));
+
         //dla każdego sąsiada jeśli jest innego koloru niż nasz pionek
         //generujemy grupę i sprawdzamy czy ma zero oddechów
         int x1, y1;
-        //sprawdzamy pierwszego sąsiada
-        x1 = x + 1;
-        y1 = y + 1;
-        if(checkIfPointInsideBoard(x1,y1))
-        {
-            GridState checkedGridState = map.get(new Point(x1, y1));
-            if( ! checkedGridState.equals(GridState.EMPTY) )
-            {
-                if( ! checkedGridState.equals(gridState))
-                {
-                    Map<Point, GameGrid> group = findGroup(x1,y1,map);
-                    int breaths = countGroupBreaths(group);
-                    if(breaths == 0)
-                    {
-                        return true;
+        for (int i = 0; i < 3; i += 2) {
+            for (int j = 0; j < 3; j += 2) {
+                x1 = x - 1 + i;
+                y1 = y - 1 + j;
+                if (checkIfPointInsideBoard(x1, y1)) {
+                    GridState checkedGridState = map.get(new Point(x1, y1));
+                    if (!checkedGridState.equals(GridState.EMPTY) && !checkedGridState.equals(gridState)) {
+                        Map<Point, GameGrid> group = findGroup(x1, y1, map);
+                        int breaths = countGroupBreaths(group);
+                        if (breaths == 0) return true;
                     }
                 }
             }
         }
-
-        //sprawdzamy drugiego sąsiada
-        x1 = x - 1;
-        y1 = y + 1;
-        if(checkIfPointInsideBoard(x1,y1))
-        {
-            GridState checkedGridState = map.get(new Point(x1, y1));
-            if( ! checkedGridState.equals(GridState.EMPTY) )
-            {
-                if( ! checkedGridState.equals(gridState))
-                {
-                    Map<Point, GameGrid> group = findGroup(x1,y1,map);
-                    int breaths = countGroupBreaths(group);
-                    if(breaths == 0)
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        //sprawdzamy trzeciego sąsiada
-        x1 = x + 1;
-        y1 = y - 1;
-        if(checkIfPointInsideBoard(x1,y1))
-        {
-            GridState checkedGridState = map.get(new Point(x1, y1));
-            if( ! checkedGridState.equals(GridState.EMPTY) )
-            {
-                if( ! checkedGridState.equals(gridState))
-                {
-                    Map<Point, GameGrid> group = findGroup(x1,y1,map);
-                    int breaths = countGroupBreaths(group);
-                    if(breaths == 0)
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        //sprawdzamy czwartego sąsiada
-        x1 = x - 1;
-        y1 = y - 1;
-        if(checkIfPointInsideBoard(x1,y1))
-        {
-            GridState checkedGridState = map.get(new Point(x1, y1));
-            if( ! checkedGridState.equals(GridState.EMPTY) )
-            {
-                if( ! checkedGridState.equals(gridState))
-                {
-                    Map<Point, GameGrid> group = findGroup(x1,y1,map);
-                    int breaths = countGroupBreaths(group);
-                    if(breaths == 0)
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-
         return false;
     }
 
@@ -235,55 +142,40 @@ class GameLogic {
 
     //funkcja zwraca true, jeśli zachodzi komi tzn. nie możemy wykonać ruchu
     private boolean checkKomi(Map<Point, GridState> map) {
-        for(int i = 0; i < size; i++)
-        {
-            for(int j = 0; j < size; j++)
-            {
-                //sprawdzamy czy rużnią się chociaż na jednym polu
-                if(! map.get(new Point(i,j)).equals(previousGridStateMap.get( new Point(i,j) ) ) )
-                {
+        //sprawdzamy czy rużnią się chociaż na jednym polu
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
+                if (!map.get(new Point(i, j)).equals(previousGridStateMap.get(new Point(i, j))))
                     return false;
-                }
-            }
-        }
+
         return true;
     }
 
     //funkcja zwraca grupę pionka
-    private Map<Point, GameGrid> findGroup(int x, int y, Map<Point, GridState> map)
-    {
+    private Map<Point, GameGrid> findGroup(int x, int y, Map<Point, GridState> map) {
         //zwracana mapa
         Map<Point, GameGrid> outcomeMap = new HashMap<>();
-        GridState gridState = map.get(new Point(x,y));
-        if(gridState.equals(GridState.EMPTY))
-        {
-            return null;
-        }
+        GridState gridState = map.get(new Point(x, y));
+        if (gridState.equals(GridState.EMPTY)) return null;
+
         //tabelka booleanów sprawdzających czy pole było odwiedzone
         //true - nieodwiedzone
-        boolean [][]visited;
-        visited = new boolean[size][size];
-        //ustawiamy każde pole jako nieodwiedzone
-        for(int i = 0; i < size; i++)
-        {
-            for(int j = 0; j < size; j++)
-            {
-                visited[i][j] = true;
-            }
-        }
+        boolean[][] visited = new boolean[size][size];
+        for (boolean[] b : visited) Arrays.fill(b, true);
+
         //kolejka pól którym sprawdzamy sąsiadów
-        ArrayList<Point> queue = new ArrayList<Point>();
-        queue.add(new Point(x,y));
+        LinkedList<Point> queue = new LinkedList<>();
+        queue.add(new Point(x, y));
+
         //uznajemy nasze pierwsze pole za odwiedzone
-        visited[x][y]=false;
+        visited[x][y] = false;
         //dodajemy je do wyniku
-        outcomeMap.put(new Point(x,y), new GameGrid());
+        outcomeMap.put(new Point(x, y), new GameGrid());
+
         //algorytm DFS
-        while (queue.size()>0)
-        {
-            Point point = queue.get(0);
+        while (queue.size() > 0) {
             //pozbywamy się sprawdzonego pola z kolejki
-            queue.remove(0);
+            Point point = queue.pollFirst();
             //zapisujemy współrzędne pobranego punktu
             x = point.x;
             y = point.y;
@@ -291,144 +183,48 @@ class GameLogic {
             int x1, y1;
             //liczba oddechów pionka
             int breaths = 4;
-            //sprawdzamy pierwszy punkt
-            x1 = x + 1;
-            y1 = y + 1;
-            if(checkIfPointInsideBoard(x1,y1) )
-            {
-                //jeśli jego sąsiad nie jest pusty zmniejszamy size
-                if(!map.get(new Point(x1,y1)).equals(GridState.EMPTY))
-                {
-                    breaths--;
-                }
 
-                if(visited[x1][y1])
-                {
-                    //zaznaczamy że odwiedziliśmy to pole
-                    visited[x1][y1] = false;
-                    //jeśli jest tego samego typu co nasz startowy punkt to dodajemy do listy
-                    if( map.get(new Point(x1, y1)).equals(gridState) )
-                    {
-                        queue.add(new Point(x1, y1));
-                        //dodajemy punkt do mapy wynikowej
-                        outcomeMap.put(new Point(x1,y1), new GameGrid());
-                    }
+            for (int i = 0; i < 3; i += 2) {
+                for (int j = 0; j < 3; j += 2) {
+                    // 1) x - 1 + 0, y - 1 + 0  == x - 1, y - 1
+                    // 2) x - 1 + 0, y - 1 + 2  == x - 1, y + 1
+                    // 3) x - 1 + 2, y - 1 + 0  == x + 1, y - 1;
+                    // 4) x - 1 + 2, y - 1 + 2  == x + 1, y + 1
+                    x1 = x - 1 + i;
+                    y1 = y - 1 + j;
+                    if (checkIfPointInsideBoard(x1, y1)) {
+                        //jeśli jego sąsiad nie jest pusty zmniejszamy size
+                        if (!map.get(new Point(x1, y1)).equals(GridState.EMPTY)) breaths--;
+                        if (visited[x1][y1]) {
+                            //zaznaczamy że odwiedziliśmy to pole
+                            visited[x1][y1] = false;
+                            //jeśli jest tego samego typu co nasz startowy punkt to dodajemy do listy
+                            if (map.get(new Point(x1, y1)).equals(gridState)) {
+                                queue.add(new Point(x1, y1));
+                                //dodajemy punkt do mapy wynikowej
+                                outcomeMap.put(new Point(x1, y1), new GameGrid());
+                            }
+                        }
+                    } else breaths--;
                 }
-            }
-            else
-            {
-                breaths--;
-            }
-            //sprawdzamy drugi punkt
-            x1 = x - 1;
-            y1 = y + 1;
-            if(checkIfPointInsideBoard(x1,y1) )
-            {
-                //jeśli jego sąsiad nie jest pusty zmniejszamy size
-                if(!map.get(new Point(x1,y1)).equals(GridState.EMPTY))
-                {
-                    breaths--;
-                }
-
-                if(visited[x1][y1])
-                {
-                    //zaznaczamy że odwiedziliśmy to pole
-                    visited[x1][y1] = false;
-                    //jeśli jest tego samego typu co nasz startowy punkt to dodajemy do listy
-                    if( map.get(new Point(x1, y1)).equals(gridState) )
-                    {
-                        queue.add(new Point(x1, y1));
-                        //dodajemy punkt do mapy wynikowej
-                        outcomeMap.put(new Point(x1,y1), new GameGrid());
-                    }
-                }
-            }
-            else
-            {
-                breaths--;
-            }
-
-            //sprawdzamy trzeci punkt
-            x1 = x + 1;
-            y1 = y - 1;
-            if(checkIfPointInsideBoard(x1,y1) )
-            {
-                //jeśli jego sąsiad nie jest pusty zmniejszamy size
-                if(!map.get(new Point(x1,y1)).equals(GridState.EMPTY))
-                {
-                    breaths--;
-                }
-
-                if(visited[x1][y1])
-                {
-                    //zaznaczamy że odwiedziliśmy to pole
-                    visited[x1][y1] = false;
-                    //jeśli jest tego samego typu co nasz startowy punkt to dodajemy do listy
-                    if( map.get(new Point(x1, y1)).equals(gridState) )
-                    {
-                        queue.add(new Point(x1, y1));
-                        //dodajemy punkt do mapy wynikowej
-                        outcomeMap.put(new Point(x1,y1), new GameGrid());
-                    }
-                }
-            }
-            else
-            {
-                breaths--;
-            }
-
-            //sprawdzamy czwarty punkt
-            x1 = x - 1;
-            y1 = y - 1;
-            if(checkIfPointInsideBoard(x1,y1) )
-            {
-                //jeśli jego sąsiad nie jest pusty zmniejszamy size
-                if(!map.get(new Point(x1,y1)).equals(GridState.EMPTY))
-                {
-                    breaths--;
-                }
-
-                if(visited[x1][y1])
-                {
-                    //zaznaczamy że odwiedziliśmy to pole
-                    visited[x1][y1] = false;
-                    //jeśli jest tego samego typu co nasz startowy punkt to dodajemy do listy
-                    if( map.get(new Point(x1, y1)).equals(gridState) )
-                    {
-                        queue.add(new Point(x1, y1));
-                        //dodajemy punkt do mapy wynikowej
-                        outcomeMap.put(new Point(x1,y1), new GameGrid());
-                    }
-                }
-            }
-            else
-            {
-                breaths--;
             }
             //ustawiamy oddechy
-            outcomeMap.get(new Point(x,y)).setBreathsNumber(breaths);
+            outcomeMap.get(new Point(x, y)).setBreathsNumber(breaths);
         }
         return outcomeMap;
     }
+
     //funkcja zwraca true jeśli pionek leży wewnątrz szachownicy
     //w przeciwnym wypadku fałsz
-    boolean checkIfPointInsideBoard(int x, int y)
-    {
-        if(x >= 0 && x < size && y >=0 && y < size)
-        {
-            return true;
-        }
-        return false;
+    boolean checkIfPointInsideBoard(int x, int y) {
+        return x >= 0 && x < size && y >= 0 && y < size;
     }
 
     //funkcja zwraca nam ile oddechów ma grupa
-    int countGroupBreaths(Map<Point, GameGrid> map)
-    {
+    //map - mapa z wyrozniona grupa
+    int countGroupBreaths(Map<Point, GameGrid> map) {
         int outcome = 0;
-        for(GameGrid gameGrid : map.values())
-        {
-            outcome = outcome + gameGrid.getBreathsNumber();
-        }
+        for (GameGrid gameGrid : map.values()) outcome += gameGrid.getBreathsNumber();
         return outcome;
     }
 }

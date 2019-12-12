@@ -4,6 +4,10 @@ class GameGrid {
     //TODO - angielska nazwa..
     private int breathsNumber;
 
+    GameGrid() {
+        breathsNumber = 0;
+    }
+
     public int getBreathsNumber() {
         return breathsNumber;
     }
@@ -13,7 +17,4 @@ class GameGrid {
     }
 
 
-    GameGrid() {
-        breathsNumber = 0;
-    }
 }
