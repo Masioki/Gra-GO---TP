@@ -8,8 +8,8 @@ import java.util.Objects;
 public class Player {
 
     // private ClientState state;
-    private Game game;
-    private String username;
+    protected Game game;
+    protected String username;
 
 
     public boolean move(int x, int y) {

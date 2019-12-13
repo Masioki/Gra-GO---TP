@@ -186,7 +186,8 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     }
     void createLobby()
     {
-        service.newGame();
+        service.newGame(false);
+        //TODO: przycisk do zaczynania gry z botem
     }
     @Override
     public void handle(ActionEvent e) {

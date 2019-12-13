@@ -38,6 +38,7 @@ public class PlayerService implements InvokableService, GameObserver {
                 .withPosition(x, y)
                 .withHeader(type)
                 .withColor(color)
+                .withUsername(username)
                 .build();
         invoker.send(c);
     }
@@ -58,7 +59,9 @@ public class PlayerService implements InvokableService, GameObserver {
                     else return success(data, request.getUuid());
                 }
                 case NEW:
-                    return success(createGame(), request.getUuid());
+                    return success(createGame(false), request.getUuid());
+                case NEW_BOT:
+                    return success(createGame(true), request.getUuid());
                 case LOGIN: {
                     LoginData data = parser.parseLoginCommand(request.getBody());
                     if (!logIn(data)) return error("Niepoprawne dane", request.getUuid());
@@ -112,8 +115,8 @@ public class PlayerService implements InvokableService, GameObserver {
         return false;
     }
 
-    private GameData createGame() {
-        GameData gameData = gameService.newGame(19, player);
+    private GameData createGame(boolean withBot) {
+        GameData gameData = gameService.newGame(19, player, withBot);
         gameService.observe(gameData, this);
         return gameData;
     }

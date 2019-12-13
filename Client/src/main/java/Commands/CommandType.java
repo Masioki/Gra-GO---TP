@@ -8,6 +8,7 @@ public enum CommandType {
     SUCCESS,
     JOIN,
     END_CONNECTION,
-    NEW
+    NEW,
+    NEW_BOT
 }
 

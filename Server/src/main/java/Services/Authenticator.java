@@ -14,6 +14,7 @@ public class Authenticator {
             if (data.getUsername().equals(loginData.getUsername()))
                 return false;
         }
+        if (loginData.getUsername().equals("bot")) return false;
         dataList.add(loginData);
         return true;
     }

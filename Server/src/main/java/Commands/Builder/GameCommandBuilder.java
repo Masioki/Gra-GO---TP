@@ -45,7 +45,12 @@ public class GameCommandBuilder {
         }
         return this;
     }
-
+    public GameCommandBuilder withUsername(String username) {
+        if (command != null && gameCommand != null) {
+            gameCommand.setUsername(username);
+        }
+        return this;
+    }
     public Command build() {
         if (command != null) {
             try {

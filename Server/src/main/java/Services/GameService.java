@@ -1,5 +1,6 @@
 package Services;
 
+import Domain.Bot;
 import Domain.Game.GameObserver;
 import Domain.Player;
 import Domain.Game.Game;
@@ -35,11 +36,17 @@ public class GameService {
     }
 
 
-    public synchronized GameData newGame(int boardSize, Player player) {
+    public synchronized GameData newGame(int boardSize, Player player, boolean withBot) {
         Game g = new Game(player.getUsername(), boardSize);
         games.add(g);
         g.addPlayer(player);
         player.setGame(g);
+        if (withBot) {
+            Bot bot = new Bot();
+            g.addPlayer(bot);
+            bot.setGame(g);
+            g.addObserver(bot);
+        }
         GameData gameData = new GameData();
         gameData.setUsername(g.getOwnerUsername());
         gameData.setGameID(g.getGameID());

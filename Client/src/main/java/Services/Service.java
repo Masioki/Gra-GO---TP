@@ -3,7 +3,6 @@ package Services;
 import Commands.*;
 import Commands.Builder.CommandBuilderProvider;
 import Controllers.FullController;
-import Controllers.GRIDSTATE;
 import Domain.GameData;
 import Domain.LoginData;
 
@@ -17,6 +16,7 @@ public class Service implements InvokableService {
     private CommandParser parser;
     private FullController fullController;
     private PawnColor ownColor;
+    private String username;
 
     /**
      * Private Constructor
@@ -94,6 +94,7 @@ public class Service implements InvokableService {
                 }
                 case LOGIN: {
                     fullController.logIn(true);
+                    username = parser.parseLoginData(request.getBody()).getUsername();
                     break;
                 }
                 case GAME: {
@@ -119,7 +120,8 @@ public class Service implements InvokableService {
                 System.out.print(" : " + gameCommand.getCommandType() + "\n");
                 if (gameCommand.getCommandType() == GameCommandType.MOVE)
                     fullController.move(gameCommand.getX(), gameCommand.getY(), gameCommand.getColor());
-                else fullController.gameAction(gameCommand.getCommandType(), false);
+                else
+                    fullController.gameAction(gameCommand.getCommandType(), username.equals(gameCommand.getUsername()));
             } catch (Exception e) {
                 errorHandler("Blad wewnetrzny");
                 e.printStackTrace();
@@ -198,12 +200,16 @@ public class Service implements InvokableService {
         }
     }
 
-    public void newGame() {
+    public void newGame(boolean withBot) {
+        CommandType type;
+        if(withBot) type = CommandType.NEW_BOT;
+        else type = CommandType.NEW;
+
         try {
             Command c = CommandBuilderProvider
                     .newSimpleCommandBuilder()
                     .newCommand()
-                    .withHeader(CommandType.NEW)
+                    .withHeader(type)
                     .build();
             sendCommand(c);
         } catch (Exception e) {
