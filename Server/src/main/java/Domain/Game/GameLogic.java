@@ -302,4 +302,15 @@ class GameLogic {
             }
         }
     }
+
+    //metoda publiczna zwracająca liczbę punktów
+    public int getPlayerPoints(boolean white)
+    {
+        if(white)
+        {
+            return whitPoints;
+        }
+        return blackPoints;
+    }
+
 }
