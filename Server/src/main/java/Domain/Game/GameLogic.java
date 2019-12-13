@@ -313,4 +313,135 @@ class GameLogic {
         return blackPoints;
     }
 
+    private int getScore(boolean white, Map <Point, GridState> map)
+    {
+        GridState gridState;
+        int output;
+        if(white)
+        {
+            output = whitPoints;
+            gridState = GridState.WHITE;
+        }
+        else
+        {
+            output = blackPoints;
+            gridState = GridState.BLACK;
+        }
+        //TODO - sprawdzamy czy gracz ma przynajmniej jeden pionek, jeśli nie to zwracamy mu od razu output
+        if( checkIfPlayerHasZeroPawns(white, map) )
+        {
+            return output;
+        }
+        //tabelka gdzie sprawdzamy czy jakieś pole już odwiedziliśmy
+        //true oznacza niedowiedzone
+        boolean [][]visited;
+        visited = new boolean[size][size];
+        for(int i = 0; i < size; i++)
+        {
+            for(int j = 0; j < size; j++)
+            {
+                visited[i][j] = true;
+            }
+        }
+        //liczymy sobie wartość  grupy
+        int groupValue;
+        //czy dodajemy ją graczowi
+        boolean shouldAdd;
+        for(int i = 0 ; i < size ; i++)
+        {
+            for(int j = 0; j < size ; j++)
+            {
+                if(visited[i][j])
+                {
+                    //jeśli pionek przeciwnika, pomijamy
+                    if( !map.get(new Point(i,j)).equals(gridState) && !map.get(new Point(i,j)).equals(GridState.EMPTY) )
+                    {
+                        visited[i][j] = false;
+                    }
+                    else
+                    {
+                        //zakładamy że grupa się należy graczowi
+                        shouldAdd = true;
+                        //pobieramy grupe pionka
+                        Map<Point, GameGrid> group = findGroup(i,j,map);
+                        //ustalamy jej wartość
+                        groupValue = group.size();
+                        //ustawiamy pola z tej grupy za odwiedzone
+                        //TODO - czy taka iteracja jest oki
+                        Set< Map.Entry< Point,GameGrid> > st = group.entrySet();
+
+                        for (Map.Entry< Point,GameGrid> me:st)
+                        {
+                            Point p = me.getKey();
+                            int x = p.x;
+                            int y = p.y;
+                            //ustawiamy pole za odwiedzone
+                            visited[x][y] = false;
+                            //jeśli któryś z sąsiadów był przeciwnego koloru stwierdzamy że nie liczymy punktów
+                            int x1, y1;
+                            for (int a = 0; a < 3; a += 2) {
+                                for (int b = 0; b < 3; b += 2) {
+                                    x1 = x - 1 + a;
+                                    y1 = y - 1 + b;
+                                    //sprawdzamy czy pionek leży w planszy
+                                    if(checkIfPointInsideBoard(x1, y1))
+                                    {
+                                        //jeśli pole nie puste i nie ma naszego koloru to nie jest to nasze terytorium
+                                        if( ! map.get(new Point(x1, y1)).equals(GridState.EMPTY) && ! map.get(new Point(x1,y1)).equals(gridState) )
+                                        {
+                                            shouldAdd = false;
+                                        }
+                                    }
+                                }
+                            }
+                            //na koniec jeśli to grupa naszych pionków to ją zawsze liczymy
+                            if( map.get(new Point(i, j)).equals(gridState) )
+                            {
+                                shouldAdd = true;
+                            }
+
+                            if(shouldAdd)
+                            {
+                                output = output + groupValue;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        return output;
+    }
+
+    //metoda pomocnicza sprawdza czy gracz ma zero pionkow
+    private boolean checkIfPlayerHasZeroPawns( boolean white, Map<Point, GridState> map)
+    {
+        GridState gridState;
+        if(white)
+        {
+            gridState = GridState.WHITE;
+        }
+        else
+        {
+            gridState = GridState.BLACK;
+        }
+
+        for( int i = 0; i < size; i++ )
+        {
+            for(int j = 0; j < size; j++)
+            {
+                if( map.get(new Point(i,j)).equals(gridState) )
+                {
+                    return false;
+                }
+            }
+        }
+        //jeśli dotarł aż tutaj to powinien mieć zero
+        return true;
+    }
+    //metoda zwracająca ostateczny wynik gracza
+    public int getFinalScore( boolean white)
+    {
+        return getScore(white, gridStateMap);
+    }
 }
