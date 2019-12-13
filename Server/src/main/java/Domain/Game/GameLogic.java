@@ -439,7 +439,7 @@ class GameLogic {
         //jeśli dotarł aż tutaj to powinien mieć zero
         return true;
     }
-    //metoda zwracająca ostateczny wynik gracza
+    //public metoda zwracająca ostateczny wynik gracza
     public int getFinalScore( boolean white)
     {
         return getScore(white, gridStateMap);
