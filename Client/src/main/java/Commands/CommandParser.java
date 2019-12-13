@@ -38,4 +38,8 @@ public class CommandParser {
     public LoginData parseLoginData(String body) throws Exception {
         return objectMapper.readValue(body, LoginData.class);
     }
+
+    public int parseInt(String body) throws Exception {
+        return objectMapper.readValue(body, Integer.class);
+    }
 }

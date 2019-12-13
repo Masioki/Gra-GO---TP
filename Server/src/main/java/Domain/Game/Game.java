@@ -54,6 +54,11 @@ public class Game {
         observers.add(observer);
     }
 
+    public synchronized int getScore(Player player){
+       if(player.getUsername().equals(ownerUsername)) return gameLogic.getFinalScore(true);
+       return gameLogic.getFinalScore(false);
+    }
+
     /*
     WYKONYWAC PO KAZDEJ UDANEJ AKCJI
      */

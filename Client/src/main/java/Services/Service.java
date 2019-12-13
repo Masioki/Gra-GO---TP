@@ -33,7 +33,7 @@ public class Service implements InvokableService {
     }
 
     /*
-    SETTERS
+    SETTERS GETTERS
      */
     public void setServiceInvoker(ServiceInvoker invoker) {
         this.invoker = invoker;
@@ -100,7 +100,9 @@ public class Service implements InvokableService {
                 case GAME: {
                     GameCommand gameCommand = parser.parseGameCommand(request.getBody());
                     System.out.print(" : " + gameCommand.getCommandType() + "\n");
-                    if (gameCommand.getCommandType() == GameCommandType.MOVE) {
+                    if (gameCommand.getCommandType() == GameCommandType.SCORE) {
+                        fullController.setScore(parser.parseInt(response.getBody()));
+                    } else if (gameCommand.getCommandType() == GameCommandType.MOVE) {
                         fullController.move(gameCommand.getX(), gameCommand.getY(), ownColor);
                     } else fullController.gameAction(gameCommand.getCommandType(), true);
                     break;
@@ -202,7 +204,7 @@ public class Service implements InvokableService {
 
     public void newGame(boolean withBot) {
         CommandType type;
-        if(withBot) type = CommandType.NEW_BOT;
+        if (withBot) type = CommandType.NEW_BOT;
         else type = CommandType.NEW;
 
         try {
@@ -231,6 +233,19 @@ public class Service implements InvokableService {
                     .newCommand()
                     .withHeader(type)
                     .withPosition(x, y)
+                    .build();
+            sendCommand(c);
+        } catch (Exception e) {
+            errorHandler("Blad wewnetrzny");
+        }
+    }
+
+    public void getScore() {
+        try {
+            Command c = CommandBuilderProvider
+                    .newGameCommandBuilder()
+                    .newCommand()
+                    .withHeader(GameCommandType.SCORE)
                     .build();
             sendCommand(c);
         } catch (Exception e) {

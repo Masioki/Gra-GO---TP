@@ -5,5 +5,6 @@ public enum GameCommandType {
     MOVE,
     SURRENDER,
     WIN,
-    LOSE
+    LOSE,
+    SCORE
 }

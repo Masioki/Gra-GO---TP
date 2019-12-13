@@ -20,9 +20,12 @@ public class Player {
         return game.pass(this);
     }
 
-
     public void surrender() {
         game.surrender(this);
+    }
+
+    public int getScore() {
+        return game.getScore(this);
     }
 
 

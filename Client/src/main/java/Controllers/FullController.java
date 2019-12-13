@@ -66,4 +66,7 @@ public abstract class FullController {
 
     }
 
+    public void setScore(int score){
+
+    }
 }
