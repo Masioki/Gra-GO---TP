@@ -38,6 +38,7 @@ public class GameService {
     public synchronized GameData newGame(int boardSize, Player player) {
         Game g = new Game(player.getUsername(), boardSize);
         games.add(g);
+        g.addPlayer(player);
         player.setGame(g);
         GameData gameData = new GameData();
         gameData.setUsername(g.getOwnerUsername());

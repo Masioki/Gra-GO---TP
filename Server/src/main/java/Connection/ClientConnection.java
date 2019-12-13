@@ -38,7 +38,6 @@ public class ClientConnection extends Thread implements CommandListener {
                     if (!socket.getInetAddress().isReachable(2)) end = true;
                     invoker.execute((Command) inStream.readObject());
                 } catch (SocketException e) {
-                    e.printStackTrace();
                     System.out.println("koniec");
                     end = true;
                 } catch (Exception e) {
