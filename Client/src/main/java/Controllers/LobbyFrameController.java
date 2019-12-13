@@ -91,23 +91,29 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
 
             @Override
             public void joinGame(GameData data) {
+                System.out.println("NO!!!");
                 startGameWindow();
             }
 
             @Override
             public void loadActiveGames(List<GameData> games) {
-                if(games==null)
-                {
-                    System.out.println("ww");
-                }
-                gamesList = games;
-                for(int i = 0; i < gamesList.size(); i++)
-                {
-                    if(gamesList.get(i)!=null)
-                    {
-                        lobbyList[i].setText(gamesList.get(i).getUsername()  );
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(games==null)
+                        {
+                            System.out.println("ww");
+                        }
+                        gamesList = games;
+                        for(int i = 0; i < gamesList.size(); i++)
+                        {
+                            if(gamesList.get(i)!=null)
+                            {
+                                lobbyList[i].setText(gamesList.get(i).getUsername()  );
+                            }
+                        }
                     }
-                }
+                });
             }
         };
         service.setFullController(controller);
@@ -161,17 +167,18 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     }
 
     void joinGame(ActionEvent e) {
-        //TODO - trzeba usunąć start game windows
-        //nie dochodzi wogole do service.joinGame
-        if(chosenGame > 0)
+        System.out.println(chosenGame);
+        if(chosenGame >= 0)
         {
+            System.out.println("Step 1");
             if(gamesList.get(chosenGame)!=null)
             {
+                System.out.println("Step 2");
                 GameData gameData = gamesList.get(chosenGame);
+                System.out.println(gameData.getUsername() + "  " + gameData.getGameID());
                 service.joinGame(gameData);
             }
         }
-        startGameWindow();
     }
     void createLobby()
     {
