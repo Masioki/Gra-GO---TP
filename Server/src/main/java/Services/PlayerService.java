@@ -31,7 +31,7 @@ public class PlayerService implements InvokableService, GameObserver {
     }
 
     @Override
-    public void action(int x, int y,String username, PawnColor color, GameCommandType type) {
+    public void action(int x, int y, String username, PawnColor color, GameCommandType type) {
         Command c = CommandBuilderProvider
                 .newGameCommandBuilder()
                 .newCommand()
@@ -99,13 +99,7 @@ public class PlayerService implements InvokableService, GameObserver {
     }
 
     private boolean joinGame(GameData data) {
-        Game g = gameService.joinGame(data, player);
-        if (g == null) return false;
-        else {
-            player.setGame(g);
-            g.addObserver(this);
-        }
-        return true;
+        return gameService.joinGame(data, player);
     }
 
     private boolean logIn(LoginData data) {
@@ -117,14 +111,9 @@ public class PlayerService implements InvokableService, GameObserver {
     }
 
     private GameData createGame() {
-        Game g = gameService.newGame(19);
-        g.setOwnerUsername(player.getUsername());
-        player.setGame(g);
-        g.addObserver(this);
-        GameData data = new GameData();
-        data.setGameID(g.getGameID());
-        data.setUsername(g.getOwnerUsername());
-        return data;
+        GameData gameData = gameService.newGame(19, player);
+        gameService.observe(gameData, this);
+        return gameData;
     }
 
     private void surrender() {

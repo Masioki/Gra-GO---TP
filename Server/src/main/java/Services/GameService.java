@@ -1,5 +1,6 @@
 package Services;
 
+import Domain.Game.GameObserver;
 import Domain.Player;
 import Domain.Game.Game;
 import DTO.GameData;
@@ -10,7 +11,7 @@ import java.util.List;
 //Koniecznie singleton
 
 /**
- * Klasa obslugujaca wszystkie aktywne gry.
+ * Klasa zarzadzajaca aktywnymi grami oraz przygotowujaca nowe rozgrywki
  */
 public class GameService {
     private List<Game> games;
@@ -33,20 +34,36 @@ public class GameService {
         return gameService;
     }
 
-    public synchronized Game newGame(int boardSize) {
-        Game g = new Game(boardSize);
+
+    public synchronized GameData newGame(int boardSize, Player player) {
+        Game g = new Game(player.getUsername(), boardSize);
         games.add(g);
-        return g;
+        player.setGame(g);
+        GameData gameData = new GameData();
+        gameData.setUsername(g.getOwnerUsername());
+        gameData.setGameID(g.getGameID());
+        return gameData;
     }
 
-    public synchronized Game joinGame(GameData gameData, Player player) {
+    public synchronized boolean joinGame(GameData gameData, Player player) {
         for (Game g : games) {
             if (g.getOwnerUsername().equals(gameData.getUsername()) && g.getGameID() == gameData.getGameID()) {
-                if (g.addPlayer(player)) return g;
-                return null;
+                if (g.addPlayer(player)) {
+                    player.setGame(g);
+                    return true;
+                }
+                break;
             }
         }
-        return null;
+        return false;
+    }
+
+    public synchronized void observe(GameData gameData, GameObserver observer) {
+        for (Game g : games) {
+            if (g.getGameID() == gameData.getGameID() && g.getOwnerUsername().equals(gameData.getUsername())) {
+                g.addObserver(observer);
+            }
+        }
     }
 
     public synchronized List<GameData> activeGames() {

@@ -92,6 +92,7 @@ public class Game {
             if (player.getUsername().equals(ownerUsername)) color = PawnColor.WHITE;
             else color = PawnColor.BLACK;
             signalObservers(x, y, player.getUsername(), color, GameCommandType.MOVE);
+            //TODO: sprawdzic czy zmienily sie jakies inne pola i zasygnalizowac
             changeTurn();
         }
         return false;
