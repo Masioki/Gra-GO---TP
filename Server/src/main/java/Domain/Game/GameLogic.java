@@ -250,19 +250,22 @@ class GameLogic {
                 y1 = y - 1 + j;
                 //jeśli sąsiad jest innego koloru niż nasz pionek
                 //sprawdzamy czy nie powinniśmy jego grupy usunąć
-                if( ! map.get(new Point(x1,y1)).equals(GridState.EMPTY) && ! map.get(new Point(x1,y1)).equals(gridState) )
+                if(checkIfPointInsideBoard(x1, y1))
                 {
-                    //tworzymy grupę którą potencjalnie musimy usunąć
-                    group = findGroup(x1,y1,map);
-                    breaths = countGroupBreaths(group);
-                    //jeśli oddechy 0 usuwamy naszą grupę
-                    if(breaths==0)
+                    if( ! map.get(new Point(x1,y1)).equals(GridState.EMPTY) && ! map.get(new Point(x1,y1)).equals(gridState) )
                     {
-                        Set< Map.Entry< Point,GameGrid> > st = group.entrySet();
-                        for (Map.Entry< Point,GameGrid> me:st)
+                        //tworzymy grupę którą potencjalnie musimy usunąć
+                        group = findGroup(x1,y1,map);
+                        breaths = countGroupBreaths(group);
+                        //jeśli oddechy 0 usuwamy naszą grupę
+                        if(breaths==0)
                         {
-                            //usuwamy pionki
-                            map.replace(me.getKey(),GridState.EMPTY);
+                            Set< Map.Entry< Point,GameGrid> > st = group.entrySet();
+                            for (Map.Entry< Point,GameGrid> me:st)
+                            {
+                                //usuwamy pionki
+                                map.replace(me.getKey(),GridState.EMPTY);
+                            }
                         }
                     }
                 }
