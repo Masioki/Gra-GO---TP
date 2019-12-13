@@ -3,6 +3,7 @@ package Controllers;
 import Commands.GameCommandType;
 import Commands.PawnColor;
 import Services.Service;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -78,11 +79,23 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         FullController controller = new FullController() {
             @Override
             public void error(String message) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("ERROR");
-                alert.setHeaderText("Sadly error occurred cannot do anything about it...");
-                alert.setContentText(message);
-                alert.showAndWait();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try
+                        {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("ERROR");
+                            alert.setHeaderText("Sadly error occurred cannot do anything about it...");
+                            alert.setContentText(message);
+                            alert.showAndWait();
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
             @Override
             public void move(int x, int y, PawnColor color) {

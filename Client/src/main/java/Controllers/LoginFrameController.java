@@ -37,11 +37,23 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
             @Override
             public void error(String message) {
 
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("ERROR");
-                alert.setHeaderText("Sadly error occurred cannot do anything about it...");
-                alert.setContentText(message);
-                alert.showAndWait();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try
+                        {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("ERROR");
+                            alert.setHeaderText("Sadly error occurred cannot do anything about it...");
+                            alert.setContentText(message);
+                            alert.showAndWait();
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
 
             @Override

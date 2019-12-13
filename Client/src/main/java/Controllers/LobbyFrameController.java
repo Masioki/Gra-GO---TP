@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -73,20 +74,23 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
         FullController controller = new FullController() {
             @Override
             public void error(String message) {
-                try
-                {
-                    //TODO - ten alert wyrzuca błąd
-                    /*Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("ERROR");
-                    alert.setHeaderText("Sadly error occurred cannot do anything about it...");
-                    alert.setContentText(message);
-                    alert.showAndWait();*/
-                    System.out.println(message);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try
+                        {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("ERROR");
+                            alert.setHeaderText("Sadly error occurred cannot do anything about it...");
+                            alert.setContentText(message);
+                            alert.showAndWait();
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
 
             @Override

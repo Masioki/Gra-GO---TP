@@ -188,6 +188,7 @@ public class Service implements InvokableService {
             System.out.println("join");
             Command c = CommandBuilderProvider
                     .newSimpleCommandBuilder()
+                    .newCommand()
                     .withHeader(CommandType.JOIN)
                     .withBody(gameData)
                     .build();
