@@ -70,15 +70,14 @@ class GameLogic {
         //sprawdzamy Komi
         if (checkKomi(newGridStateMap)) return false;
 
-        //zatwierdzamy zmianę mapy
-        /*for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                gridStateMap.replace(new Point(i, j), newGridStateMap.get(new Point(i, j)));
-            }
-        }*/
-        gridStateMap = newGridStateMap; // po prostu
+        //TODO - nadpisujemy mapę z poprzedniego ruchu
+        previousGridStateMap = gridStateMap;
 
-        //TODO - trzeba nadpisać mapę z poprzedniego ruchu
+        //dodajemy punkty graczom po wykonanym ruchu
+        countPoints( newGridStateMap, gridStateMap, x, y, gridState);
+
+        //zatwierdzamy zmianę mapy
+        gridStateMap = newGridStateMap;
         return true;
     }
 
@@ -131,13 +130,6 @@ class GameLogic {
             }
         }
         return false;
-    }
-
-    //updatujemy mapę po wykonanym ruchu
-    private Map<Point, GridState> updateMap(int x, int y, Map<Point, GridState> map) {
-        GridState gridState = map.get(new Point(x, y));
-        //TODO - cały kod
-        return map;
     }
 
     //funkcja zwraca true, jeśli zachodzi komi tzn. nie możemy wykonać ruchu
@@ -226,5 +218,88 @@ class GameLogic {
         int outcome = 0;
         for (GameGrid gameGrid : map.values()) outcome += gameGrid.getBreathsNumber();
         return outcome;
+    }
+
+    //updatujemy mapę po wykonanym ruchu
+    private Map<Point, GridState> updateMap(int x, int y, Map<Point, GridState> map) {
+        GridState gridState = map.get(new Point(x, y));
+        //ten if nigdy nie powinien mieć miejsca
+        if(gridState.equals(GridState.EMPTY))
+        {
+            return null;
+        }
+        //tworzymy grupę którą potencjalnie musimy usunąć
+        Map<Point, GameGrid> group = findGroup(x,y,map);
+        int breaths = countGroupBreaths(group);
+        //jeśli oddechy 0 usuwamy naszą grupę
+        if(breaths==0)
+        {
+            //TODO-iterujemy po mapie
+            Set< Map.Entry< Point,GameGrid> > st = group.entrySet();
+            for (Map.Entry< Point,GameGrid> me:st)
+            {
+                //usuwamy pionki
+                map.replace(me.getKey(),GridState.EMPTY);
+            }
+        }
+        //sprawdzamy sąsiadów, w razie czego im też kasujemy grupy
+        int x1, y1;
+        for (int i = 0; i < 3; i += 2) {
+            for (int j = 0; j < 3; j += 2) {
+                x1 = x - 1 + i;
+                y1 = y - 1 + j;
+                //jeśli sąsiad jest innego koloru niż nasz pionek
+                //sprawdzamy czy nie powinniśmy jego grupy usunąć
+                if( ! map.get(new Point(x1,y1)).equals(GridState.EMPTY) && ! map.get(new Point(x1,y1)).equals(gridState) )
+                {
+                    //tworzymy grupę którą potencjalnie musimy usunąć
+                    group = findGroup(x1,y1,map);
+                    breaths = countGroupBreaths(group);
+                    //jeśli oddechy 0 usuwamy naszą grupę
+                    if(breaths==0)
+                    {
+                        Set< Map.Entry< Point,GameGrid> > st = group.entrySet();
+                        for (Map.Entry< Point,GameGrid> me:st)
+                        {
+                            //usuwamy pionki
+                            map.replace(me.getKey(),GridState.EMPTY);
+                        }
+                    }
+                }
+            }
+        }
+        //zwracamy naszą wejściową mapę troszkę oczyszczoną
+        return map;
+    }
+
+    //funkcja licząca punkty za zbite pionki
+    private void countPoints( Map<Point, GridState> newMap, Map<Point, GridState> previousMap, int x, int y, GridState gridState)
+    {
+        //bardzo ważne najpierw musimy dołożyć do mapy ten pionek który stawiamy
+        previousMap.replace(new Point(x, y), gridState);
+
+        GridState newGridState;
+        GridState previousGridState;
+        for(int i = 0; i < size; i++)
+        {
+            for(int j = 0; j < size; j++)
+            {
+                newGridState = newMap.get(new Point(i,j));
+                previousGridState = previousMap.get(new Point(i,j));
+                //przydzielamy punkty jeśli pole nie było puste a stało się puste
+                if( ! previousGridState.equals(GridState.EMPTY) && newGridState.equals(GridState.EMPTY))
+                {
+                    //przydzielamy punkty jeśli czarny zbił pionka
+                    if(previousGridState.equals(GridState.WHITE))
+                    {
+                        blackPoints++;
+                    }
+                    else // przeciwny przypadek
+                    {
+                        whitPoints++;
+                    }
+                }
+            }
+        }
     }
 }
