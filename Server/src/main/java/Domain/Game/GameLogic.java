@@ -45,6 +45,7 @@ class GameLogic {
         blackPoints = 0;
     }
 
+    public Map<Point, GridState> getBoard(){ return gridStateMap;}
     //x pierwsza współrzędna, y druga
     //metoda zwraca fałsz gdy nie uda się postawić pionka
     //prawdę w przeciwnym wypadku

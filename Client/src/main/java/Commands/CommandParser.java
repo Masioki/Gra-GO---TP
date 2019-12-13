@@ -5,6 +5,7 @@ import Domain.LoginData;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.awt.*;
 import java.util.List;
 
 public class CommandParser {
@@ -37,5 +38,9 @@ public class CommandParser {
 
     public LoginData parseLoginData(String body) throws Exception {
         return objectMapper.readValue(body, LoginData.class);
+    }
+
+    public Point parsePoint(String body) throws Exception {
+        return objectMapper.readValue(body, Point.class);
     }
 }

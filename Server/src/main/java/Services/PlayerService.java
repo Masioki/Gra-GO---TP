@@ -142,6 +142,9 @@ public class PlayerService implements InvokableService, GameObserver {
                 if (!player.pass()) return error("Nie mozesz teraz", uuid);
                 else return success("", uuid);
             }
+            case SCORE: {
+                return success(player.getScore(), uuid);
+            }
         }
         return error("Blad wewnetrzny", uuid);
     }

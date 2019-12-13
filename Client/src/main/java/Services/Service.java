@@ -6,6 +6,7 @@ import Controllers.FullController;
 import Domain.GameData;
 import Domain.LoginData;
 
+import java.awt.*;
 import java.util.List;
 
 //Class Service should be singleton
@@ -33,7 +34,7 @@ public class Service implements InvokableService {
     }
 
     /*
-    SETTERS
+    SETTERS GETTERS
      */
     public void setServiceInvoker(ServiceInvoker invoker) {
         this.invoker = invoker;
@@ -100,7 +101,10 @@ public class Service implements InvokableService {
                 case GAME: {
                     GameCommand gameCommand = parser.parseGameCommand(request.getBody());
                     System.out.print(" : " + gameCommand.getCommandType() + "\n");
-                    if (gameCommand.getCommandType() == GameCommandType.MOVE) {
+                    if (gameCommand.getCommandType() == GameCommandType.SCORE) {
+                        Point p = parser.parsePoint(response.getBody());
+                        fullController.setScore((int) p.getX(), (int) p.getY());
+                    } else if (gameCommand.getCommandType() == GameCommandType.MOVE) {
                         fullController.move(gameCommand.getX(), gameCommand.getY(), ownColor);
                     } else fullController.gameAction(gameCommand.getCommandType(), true);
                     break;
@@ -124,6 +128,7 @@ public class Service implements InvokableService {
                     fullController.gameAction(gameCommand.getCommandType(), username.equals(gameCommand.getUsername()));
             } catch (Exception e) {
                 errorHandler("Blad wewnetrzny");
+                System.out.println("t");
                 e.printStackTrace();
             }
         }
@@ -202,7 +207,7 @@ public class Service implements InvokableService {
 
     public void newGame(boolean withBot) {
         CommandType type;
-        if(withBot) type = CommandType.NEW_BOT;
+        if (withBot) type = CommandType.NEW_BOT;
         else type = CommandType.NEW;
 
         try {
@@ -231,6 +236,20 @@ public class Service implements InvokableService {
                     .newCommand()
                     .withHeader(type)
                     .withPosition(x, y)
+                    .build();
+            sendCommand(c);
+            getScore();
+        } catch (Exception e) {
+            errorHandler("Blad wewnetrzny");
+        }
+    }
+
+    private void getScore() {
+        try {
+            Command c = CommandBuilderProvider
+                    .newGameCommandBuilder()
+                    .newCommand()
+                    .withHeader(GameCommandType.SCORE)
                     .build();
             sendCommand(c);
         } catch (Exception e) {
