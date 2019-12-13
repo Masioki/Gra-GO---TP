@@ -5,7 +5,8 @@ import Commands.GameCommandType;
 import Commands.PawnColor;
 import Domain.Player;
 
-import java.util.ArrayList;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
 
 
@@ -54,9 +55,14 @@ public class Game {
         observers.add(observer);
     }
 
-    public synchronized int getScore(Player player){
-       if(player.getUsername().equals(ownerUsername)) return gameLogic.getFinalScore(true);
-       return gameLogic.getFinalScore(false);
+    public synchronized int getOwnScore(Player player) {
+        if (player.getUsername().equals(ownerUsername)) return gameLogic.getFinalScore(true);
+        return gameLogic.getFinalScore(false);
+    }
+
+    public synchronized int getOpponentScore(Player player) {
+        if (player.getUsername().equals(ownerUsername)) return gameLogic.getFinalScore(false);
+        return gameLogic.getFinalScore(true);
     }
 
     /*
@@ -85,12 +91,30 @@ public class Game {
 
 
     public synchronized boolean move(int x, int y, Player player) {
+        Map<Point, GridState> previous = gameLogic.getBoard();
         if (!endGame && isPlayerTurn(player) && gameLogic.placePawn(x, y, player.getUsername().equals(ownerUsername))) {
             PawnColor color;
             if (player.getUsername().equals(ownerUsername)) color = PawnColor.WHITE;
             else color = PawnColor.BLACK;
             signalObservers(x, y, player.getUsername(), color, GameCommandType.MOVE);
-            //TODO: sprawdzic czy zmienily sie jakies inne pola i zasygnalizowac
+            Map<Point, GridState> after = gameLogic.getBoard();
+            Map<Point, GridState> changes = new HashMap<>();
+            for (Point point : after.keySet()) {
+                if (previous.get(point) != after.get(point)) changes.put(point, after.get(point));
+            }
+            for (Point p : changes.keySet()) {
+                switch (changes.get(p)) {
+                    case EMPTY:
+                        signalObservers((int) p.getX(), (int) p.getY(), player.getUsername(), PawnColor.EMPTY, GameCommandType.MOVE);
+                        break;
+                    case WHITE:
+                        signalObservers((int) p.getX(), (int) p.getY(), player.getUsername(), PawnColor.WHITE, GameCommandType.MOVE);
+                        break;
+                    case BLACK:
+                        signalObservers((int) p.getX(), (int) p.getY(), player.getUsername(), PawnColor.BLACK, GameCommandType.MOVE);
+                        break;
+                }
+            }
             changeTurn();
             return true;
         }

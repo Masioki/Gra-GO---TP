@@ -3,6 +3,7 @@ package Domain;
 
 import Domain.Game.Game;
 
+import java.awt.*;
 import java.util.Objects;
 
 public class Player {
@@ -24,8 +25,10 @@ public class Player {
         game.surrender(this);
     }
 
-    public int getScore() {
-        return game.getScore(this);
+    public Point getScore() {
+        int own = game.getOwnScore(this);
+        int opponent = game.getOpponentScore(this);
+        return new Point(own,opponent);
     }
 
 

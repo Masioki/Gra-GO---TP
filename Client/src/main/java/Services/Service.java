@@ -6,6 +6,7 @@ import Controllers.FullController;
 import Domain.GameData;
 import Domain.LoginData;
 
+import java.awt.*;
 import java.util.List;
 
 //Class Service should be singleton
@@ -101,7 +102,8 @@ public class Service implements InvokableService {
                     GameCommand gameCommand = parser.parseGameCommand(request.getBody());
                     System.out.print(" : " + gameCommand.getCommandType() + "\n");
                     if (gameCommand.getCommandType() == GameCommandType.SCORE) {
-                        fullController.setScore(parser.parseInt(response.getBody()));
+                        Point p = parser.parsePoint(response.getBody());
+                        fullController.setScore((int) p.getX(), (int) p.getY());
                     } else if (gameCommand.getCommandType() == GameCommandType.MOVE) {
                         fullController.move(gameCommand.getX(), gameCommand.getY(), ownColor);
                     } else fullController.gameAction(gameCommand.getCommandType(), true);
@@ -126,6 +128,7 @@ public class Service implements InvokableService {
                     fullController.gameAction(gameCommand.getCommandType(), username.equals(gameCommand.getUsername()));
             } catch (Exception e) {
                 errorHandler("Blad wewnetrzny");
+                System.out.println("t");
                 e.printStackTrace();
             }
         }
@@ -235,12 +238,13 @@ public class Service implements InvokableService {
                     .withPosition(x, y)
                     .build();
             sendCommand(c);
+            getScore();
         } catch (Exception e) {
             errorHandler("Blad wewnetrzny");
         }
     }
 
-    public void getScore() {
+    private void getScore() {
         try {
             Command c = CommandBuilderProvider
                     .newGameCommandBuilder()
