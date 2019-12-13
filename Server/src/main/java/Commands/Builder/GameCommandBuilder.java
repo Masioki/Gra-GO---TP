@@ -1,9 +1,6 @@
 package Commands.Builder;
 
-import Commands.Command;
-import Commands.CommandType;
-import Commands.GameCommand;
-import Commands.GameCommandType;
+import Commands.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class GameCommandBuilder {
@@ -42,6 +39,12 @@ public class GameCommandBuilder {
         return this;
     }
 
+    public GameCommandBuilder withColor(PawnColor color) {
+        if (command != null && gameCommand != null) {
+            gameCommand.setColor(color);
+        }
+        return this;
+    }
 
     public Command build() {
         if (command != null) {

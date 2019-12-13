@@ -31,13 +31,13 @@ public class PlayerService implements InvokableService, GameObserver {
     }
 
     @Override
-    public void action(int x, int y, String username, GameCommandType type) {
-        if (username.equals(player.getUsername())) return;
+    public void action(int x, int y,String username, PawnColor color, GameCommandType type) {
         Command c = CommandBuilderProvider
                 .newGameCommandBuilder()
                 .newCommand()
                 .withPosition(x, y)
                 .withHeader(type)
+                .withColor(color)
                 .build();
         invoker.send(c);
     }
@@ -143,10 +143,6 @@ public class PlayerService implements InvokableService, GameObserver {
             case SURRENDER: {
                 surrender();
                 return success("", uuid);
-            }
-            case CONTINUE: {
-                if (!player.continueGame()) return error("Nie mozesz teraz", uuid);
-                else return success("", uuid);
             }
             case PASS: {
                 if (!player.pass()) return error("Nie mozesz teraz", uuid);

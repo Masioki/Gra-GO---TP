@@ -5,6 +5,7 @@ public class GameCommand {
     private GameCommandType commandType;
     private int x;
     private int y;
+    private PawnColor color;
 
 
     public GameCommandType getCommandType() {
@@ -29,5 +30,13 @@ public class GameCommand {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public PawnColor getColor() {
+        return color;
+    }
+
+    public void setColor(PawnColor color) {
+        this.color = color;
     }
 }

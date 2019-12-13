@@ -1,6 +1,7 @@
 package Commands;
 
 import Domain.GameData;
+import Domain.LoginData;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -32,5 +33,9 @@ public class CommandParser {
 
     public GameData parseGameData(String body) throws Exception {
         return objectMapper.readValue(body, GameData.class);
+    }
+
+    public LoginData parseLoginData(String body) throws Exception {
+        return objectMapper.readValue(body, LoginData.class);
     }
 }

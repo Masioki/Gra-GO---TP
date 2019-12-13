@@ -3,6 +3,7 @@ package Services;
 import Commands.*;
 import Commands.Builder.CommandBuilderProvider;
 import Controllers.FullController;
+import Controllers.GRIDSTATE;
 import Domain.GameData;
 import Domain.LoginData;
 
@@ -15,6 +16,7 @@ public class Service implements InvokableService {
     private ServiceInvoker invoker;
     private CommandParser parser;
     private FullController fullController;
+    private PawnColor ownColor;
 
     /**
      * Private Constructor
@@ -77,14 +79,17 @@ public class Service implements InvokableService {
                 case ACTIVE_GAMES: {
                     List<GameData> data = parser.parseActiveGamesCommand(response.getBody());
                     fullController.loadActiveGames(data);
+                    System.out.println(data.get(0).getUsername());
                     break;
                 }
                 case JOIN: {
                     fullController.joinGame(parser.parseGameData(request.getBody()));
+                    ownColor = PawnColor.BLACK;
                     break;
                 }
                 case NEW: {
                     fullController.joinGame(parser.parseGameData(response.getBody()));
+                    ownColor = PawnColor.WHITE;
                     break;
                 }
                 case LOGIN: {
@@ -94,9 +99,9 @@ public class Service implements InvokableService {
                 case GAME: {
                     GameCommand gameCommand = parser.parseGameCommand(request.getBody());
                     System.out.print(" : " + gameCommand.getCommandType() + "\n");
-                    if (gameCommand.getCommandType() == GameCommandType.MOVE)
-                        fullController.move(gameCommand.getX(), gameCommand.getY(), true);
-                    else fullController.gameAction(gameCommand.getCommandType(), true);
+                    if (gameCommand.getCommandType() == GameCommandType.MOVE) {
+                        fullController.move(gameCommand.getX(), gameCommand.getY(), ownColor);
+                    } else fullController.gameAction(gameCommand.getCommandType(), true);
                     break;
                 }
             }
@@ -113,7 +118,7 @@ public class Service implements InvokableService {
                 GameCommand gameCommand = parser.parseGameCommand(command.getBody());
                 System.out.print(" : " + gameCommand.getCommandType() + "\n");
                 if (gameCommand.getCommandType() == GameCommandType.MOVE)
-                    fullController.move(gameCommand.getX(), gameCommand.getY(), false);
+                    fullController.move(gameCommand.getX(), gameCommand.getY(), gameCommand.getColor());
                 else fullController.gameAction(gameCommand.getCommandType(), false);
             } catch (Exception e) {
                 errorHandler("Blad wewnetrzny");
@@ -180,6 +185,7 @@ public class Service implements InvokableService {
 
     public void joinGame(GameData gameData) {
         try {
+            System.out.println("join");
             Command c = CommandBuilderProvider
                     .newSimpleCommandBuilder()
                     .withHeader(CommandType.JOIN)

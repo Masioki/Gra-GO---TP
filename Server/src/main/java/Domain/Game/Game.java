@@ -2,6 +2,7 @@ package Domain.Game;
 
 
 import Commands.GameCommandType;
+import Commands.PawnColor;
 import Domain.Player;
 
 import java.util.ArrayList;
@@ -64,8 +65,8 @@ public class Game {
     /*
     WYKONYWAC PO KAZDEJ UDANEJ AKCJI
      */
-    private void signalObservers(int x, int y, String username, GameCommandType type) {
-        observers.forEach(o -> o.action(x, y, username, type));
+    private void signalObservers(int x, int y, String username, PawnColor color, GameCommandType type) {
+        observers.forEach(o -> o.action(x, y, username, color, type));
     }
 
     /*
@@ -87,8 +88,11 @@ public class Game {
 
     public boolean move(int x, int y, Player player) {
         if (!endGame && isPlayerTurn(player) && gameLogic.placePawn(x, y, player.getUsername().equals(ownerUsername))) {
+            PawnColor color;
+            if (player.getUsername().equals(ownerUsername)) color = PawnColor.WHITE;
+            else color = PawnColor.BLACK;
+            signalObservers(x, y, player.getUsername(), color, GameCommandType.MOVE);
             changeTurn();
-            signalObservers(x, y, player.getUsername(), GameCommandType.MOVE);
         }
         return false;
     }
@@ -100,26 +104,15 @@ public class Game {
                 endGame = true;
             }
             pass = true;
-            signalObservers(0, 0, player.getUsername(), GameCommandType.PASS);
+            signalObservers(0, 0, player.getUsername(), PawnColor.BLACK, GameCommandType.PASS);
         }
         return false;
     }
 
-    //TODO: sprawdzic czy metoda wogole konieczna
-    public boolean continueGame(Player player) {
-        if (!endGame && isPlayerTurn(player)) {
-            if (pass) {
-                pass = false;
-                changeTurn();
-                return true;
-            }
-        }
-        return false;
-    }
 
     public void surrender(Player player) {
         if (!endGame && players.contains(player)) {
-            signalObservers(0, 0, player.getUsername(), GameCommandType.SURRENDER);
+            signalObservers(0, 0, player.getUsername(), PawnColor.BLACK, GameCommandType.SURRENDER);
             endGame = true;
         }
     }

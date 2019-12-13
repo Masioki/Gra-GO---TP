@@ -1,6 +1,7 @@
 package Controllers;
 
 import Commands.GameCommandType;
+import Commands.PawnColor;
 import Domain.GameData;
 
 import java.util.List;
@@ -50,7 +51,7 @@ public abstract class FullController {
      * @param y  wspolrzdna y
      * @param me true - ja, false - przeciwnik
      */
-    public void move(int x, int y, boolean me) {
+    public void move(int x, int y, PawnColor color) {
 
     }
 

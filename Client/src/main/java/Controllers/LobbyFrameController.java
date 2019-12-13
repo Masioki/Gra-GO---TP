@@ -162,6 +162,7 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
 
     void joinGame(ActionEvent e) {
         //TODO - trzeba usunąć start game windows
+        //nie dochodzi wogole do service.joinGame
         if(chosenGame > 0)
         {
             if(gamesList.get(chosenGame)!=null)

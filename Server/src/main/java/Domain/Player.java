@@ -20,9 +20,6 @@ public class Player {
         return game.pass(this);
     }
 
-    public boolean continueGame() {
-        return game.continueGame(this);
-    }
 
     public void surrender() {
         game.surrender(this);

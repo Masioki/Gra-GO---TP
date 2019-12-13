@@ -1,6 +1,7 @@
 package Controllers;
 
 import Commands.GameCommandType;
+import Commands.PawnColor;
 import Services.Service;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -84,8 +85,8 @@ public class GameFrameController implements EventHandler<ActionEvent> {
                 alert.showAndWait();
             }
             @Override
-            public void move(int x, int y, boolean me) {
-                placePawn(x,y,me);
+            public void move(int x, int y, PawnColor color) {
+                placePawn(x,y,color);
             }
 
             @Override
@@ -121,20 +122,24 @@ public class GameFrameController implements EventHandler<ActionEvent> {
      * @param colNumber
      * @param rowNumber
      */
-    private void placePawn(int colNumber, int rowNumber, boolean me)
+    private void placePawn(int colNumber, int rowNumber, PawnColor color)
     {
-        grids[colNumber][rowNumber].gridstate = GRIDSTATE.FULL;
-        if(me)
+        if(color == PawnColor.WHITE)
         {
             grids[colNumber][rowNumber].setImage(imagePlayerPawn);
+            grids[colNumber][rowNumber].gridstate = GRIDSTATE.FULL;
         }
-        else
+        else if(color == PawnColor.BLACK)
         {
             grids[colNumber][rowNumber].setImage(imageEnemyPawn);
+            grids[colNumber][rowNumber].gridstate = GRIDSTATE.FULL;
         }
-
-
+        else if(color == PawnColor.EMPTY){
+            grids[colNumber][rowNumber].gridstate = GRIDSTATE.EMPTY;
+            grids[colNumber][rowNumber].setImage(imageEmptyGrid);
+        }
     }
+
     @Override
     public void handle(ActionEvent e) {
         if(e.getSource().equals(buttonPass))
