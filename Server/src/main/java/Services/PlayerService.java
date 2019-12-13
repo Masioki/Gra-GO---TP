@@ -99,7 +99,9 @@ public class PlayerService implements InvokableService, GameObserver {
     }
 
     private boolean joinGame(GameData data) {
-        return gameService.joinGame(data, player);
+        boolean result = gameService.joinGame(data, player);
+        if (result) gameService.observe(data, this);
+        return result;
     }
 
     private boolean logIn(LoginData data) {
@@ -126,7 +128,7 @@ public class PlayerService implements InvokableService, GameObserver {
         switch (type) {
             case MOVE: {
                 if (!player.move(x, y))
-                    return error("Nie mozesz teraz", uuid);
+                    return error("Nie mozesz tutaj lub nie twoj ruch", uuid);
                 else return success("", uuid);
             }
             case SURRENDER: {

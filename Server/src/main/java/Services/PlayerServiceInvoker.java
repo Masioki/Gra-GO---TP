@@ -26,31 +26,32 @@ public class PlayerServiceInvoker {
         listeners.add(listener);
     }
 
-    public void send(Command response) {
+    public synchronized void send(Command response) {
         if (response != null) responses.add(response);
-        boolean repeat;
-        do {
-            repeat = false;
-            Iterator<Command> i = responses.iterator();
-            while (i.hasNext()) {
-                Command c = i.next();
-                if (requests.size() != 0 && c.getUuid() == requests.get(0).getUuid()) {
-                    for (CommandListener l : listeners) l.execute(requests.get(0), c);
-                    requests.removeFirst();
-                    i.remove();
-                    repeat = true;
+        Iterator<Command> res = responses.iterator();
+        while (res.hasNext()) {
+            boolean sended = false;
+            Command tempRes = res.next();
+            Iterator<Command> req = requests.iterator();
+            while (req.hasNext()) {
+                Command tempReq = req.next();
+                if (tempReq.getUuid() == tempRes.getUuid()) {
+                    for (CommandListener l : listeners) l.execute(tempReq, tempRes);
+                    req.remove();
+                    res.remove();
+                    sended = true;
                     break;
                 }
             }
-
-        } while (repeat);
+            if (!sended) for (CommandListener l : listeners) l.execute(null, tempRes);
+        }
     }
 
     public void signalEnd() {
         for (CommandListener l : listeners) l.endListening();
     }
 
-    public void execute(Command command) {
+    public synchronized void execute(Command command) {
         if (command == null) return;
         requests.add(command);
         send(service.execute(command));

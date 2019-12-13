@@ -29,15 +29,6 @@ public class Game {
     private boolean endGame;
 
 
-    public Game(int boardSize) {
-        gameID = (int) (Math.random() * 1000);
-        players = new ArrayList<>();
-        observers = new ArrayList<>();
-        gameLogic = new GameLogic(boardSize);
-        pass = false;
-        endGame = false;
-    }
-
     public Game(String ownerUsername, int boardSize) {
         //TODO: poprawic to zalosne id xd
         gameID = (int) (Math.random() * 1000);
@@ -47,6 +38,7 @@ public class Game {
         gameLogic = new GameLogic(boardSize);
         pass = false;
         endGame = false;
+        turn = ownerUsername;
     }
 
 
@@ -74,19 +66,20 @@ public class Game {
      */
 
     private boolean isPlayerTurn(Player player) {
-        if (turn == null) {
-            turn = ownerUsername;
-            if (turn == null) return false;
-        }
         return player.getUsername().equals(turn);
     }
 
-    private void changeTurn() {
-        for (Player p : players) if (!turn.equals(p.getUsername())) turn = p.getUsername();
+    private synchronized void changeTurn() {
+        for (Player p : players) {
+            if (!turn.equals(p.getUsername())) {
+                turn = p.getUsername();
+                break;
+            }
+        }
     }
 
 
-    public boolean move(int x, int y, Player player) {
+    public synchronized boolean move(int x, int y, Player player) {
         if (!endGame && isPlayerTurn(player) && gameLogic.placePawn(x, y, player.getUsername().equals(ownerUsername))) {
             PawnColor color;
             if (player.getUsername().equals(ownerUsername)) color = PawnColor.WHITE;
@@ -94,11 +87,12 @@ public class Game {
             signalObservers(x, y, player.getUsername(), color, GameCommandType.MOVE);
             //TODO: sprawdzic czy zmienily sie jakies inne pola i zasygnalizowac
             changeTurn();
+            return true;
         }
         return false;
     }
 
-    public boolean pass(Player player) {
+    public synchronized boolean pass(Player player) {
         if (!endGame && isPlayerTurn(player)) {
             if (pass) {
                 //TODO: policzyc pola i zasygnalizowac kto wygral
@@ -111,7 +105,7 @@ public class Game {
     }
 
 
-    public void surrender(Player player) {
+    public synchronized void surrender(Player player) {
         if (!endGame && players.contains(player)) {
             signalObservers(0, 0, player.getUsername(), PawnColor.BLACK, GameCommandType.SURRENDER);
             endGame = true;
