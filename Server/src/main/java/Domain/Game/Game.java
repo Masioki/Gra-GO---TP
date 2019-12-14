@@ -56,13 +56,13 @@ public class Game {
     }
 
     public synchronized int getOwnScore(Player player) {
-        if (player.getUsername().equals(ownerUsername)) return gameLogic.getFinalScore(true);
-        return gameLogic.getFinalScore(false);
+        if (player.getUsername().equals(ownerUsername)) return gameLogic.getPlayerPoints(true);
+        return gameLogic.getPlayerPoints(false);
     }
 
     public synchronized int getOpponentScore(Player player) {
-        if (player.getUsername().equals(ownerUsername)) return gameLogic.getFinalScore(false);
-        return gameLogic.getFinalScore(true);
+        if (player.getUsername().equals(ownerUsername)) return gameLogic.getPlayerPoints(false);
+        return gameLogic.getPlayerPoints(true);
     }
 
     /*
@@ -97,6 +97,7 @@ public class Game {
             if (player.getUsername().equals(ownerUsername)) color = PawnColor.WHITE;
             else color = PawnColor.BLACK;
             signalObservers(x, y, player.getUsername(), color, GameCommandType.MOVE);
+            //TODO: cos nie tak ze zmiana planszy po ruchu
             Map<Point, GridState> after = gameLogic.getBoard();
             Map<Point, GridState> changes = new HashMap<>();
             for (Point point : after.keySet()) {
