@@ -239,6 +239,7 @@ class GameLogic {
             for (Map.Entry< Point,GameGrid> me:st)
             {
                 //usuwamy pionki
+                System.out.println(me.getKey().x + " " + me.getKey().y);
                 map.replace(me.getKey(),GridState.EMPTY);
             }
         }
