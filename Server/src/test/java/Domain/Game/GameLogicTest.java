@@ -45,7 +45,7 @@ public class GameLogicTest {
     @Test
     public void specialSuicide() throws Exception
     {
-        GameLogic gameLogic = new GameLogic(19);
+        GameLogic gameLogic = new GameLogic(5);
         gameLogic.placePawn(1, 0, true);
         gameLogic.placePawn(0, 1, true);
         gameLogic.placePawn(0,2,true);
@@ -58,7 +58,7 @@ public class GameLogicTest {
         gameLogic.placePawn(1,2,false);
         gameLogic.placePawn(2,2,false);
         gameLogic.placePawn(2,0,false);
-        gameLogic.placePawn(1,3,false);
+        gameLogic.placePawn(3,1,false);
 
         boolean outcome = gameLogic.placePawn(2,1,true);
         System.out.println(gameLogic.getBoard().get(new Point(1,1)) );
