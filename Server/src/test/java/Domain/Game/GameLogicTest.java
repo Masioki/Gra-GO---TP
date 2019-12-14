@@ -57,6 +57,8 @@ public class GameLogicTest {
         gameLogic.placePawn(1,1,false);
         gameLogic.placePawn(1,2,false);
         gameLogic.placePawn(2,2,false);
+        gameLogic.placePawn(2,0,false);
+        gameLogic.placePawn(1,3,false);
 
         boolean outcome = gameLogic.placePawn(2,1,true);
         System.out.println(gameLogic.getBoard().get(new Point(1,1)) );
