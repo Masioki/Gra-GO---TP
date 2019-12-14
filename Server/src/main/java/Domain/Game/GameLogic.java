@@ -67,7 +67,7 @@ class GameLogic {
         //zmieniamy nasze jedno pole
         newGridStateMap.replace(new Point(x, y), gridState);
         //updatujemy naszą mapę po wyonaniu ruchu
-        updateMap(x, y, newGridStateMap);
+        newGridStateMap = updateMap(x, y, newGridStateMap);
         //sprawdzamy Komi
         if (checkKomi(newGridStateMap)) return false;
 
@@ -84,6 +84,7 @@ class GameLogic {
 
     //metoda zwraca true kiedy nie można postawić pionka
     boolean checkSuicide(int x, int y, boolean white) {
+        System.out.println("jesteśmy tutaj");
         GridState gridState;
         if (white) gridState = GridState.WHITE;
         else gridState = GridState.BLACK;
@@ -94,22 +95,49 @@ class GameLogic {
         //dodajemy pionek postawiony przez gracza
         newMap.replace(new Point(x, y), gridState);
 
-        if (checkNormalSuicide(x, y, newMap)) return !checkSpecialSuicide(x, y, newMap);
+        //TODO - wypisywanie mapy do wyrzucenia
+        for(int j = 0; j < size; j++)
+        {
+            for(int i = 0; i < size; i++)
+            {
+                if(newMap.get(new Point(i,j)).equals(GridState.EMPTY))
+                {
+                    System.out.print("X");
+                }
+                if(newMap.get(new Point(i,j)).equals(GridState.WHITE))
+                {
+                    System.out.print("W");
+                }
+                if(newMap.get(new Point(i,j)).equals(GridState.BLACK))
+                {
+                    System.out.print("B");
+                }
+            }
+            System.out.println();
+        }
+
+        System.out.println(countGroupBreaths(findGroup(x,y,newMap), newMap) );
+
+        //konczymy usuwanie
+        if (checkNormalSuicide(x, y, newMap))
+        {
+            System.out.println("DDDD");
+            System.out.println(checkSpecialSuicide(x,y,newMap));
+
+            return !checkSpecialSuicide(x, y, newMap);
+        }
         else return false;
     }
 
     //zwraca true kiedy popełniliśmy samobujstwo
     boolean checkNormalSuicide(int x, int y, Map<Point, GridState> map) {
-        //TODO - można zrobić szybviej, wystarczy sprawdzić sąsiadów pionka ale kod byłby dłuższy
-        //pobieramy grupę pionka i sprawdzamy czy jej nie zabiliśmy
         Map<Point, GameGrid> group = findGroup(x, y, map);
-
-        //jeśli grupa ma zero oddechów, popełniliśmy samobójstwo
-        return countGroupBreaths(group) == 0;
+        return countGroupBreaths(group, map) == 0;
     }
 
     //zwraca true kiedy popełniliśmy specjalne samobujstwo
     boolean checkSpecialSuicide(int x, int y, Map<Point, GridState> map) {
+        System.out.println("Sadly suicide was kommited");
         //kolor naszego pionka
         GridState gridState = map.get(new Point(x, y));
 
@@ -124,8 +152,12 @@ class GameLogic {
                     GridState checkedGridState = map.get(new Point(x1, y1));
                     if (!checkedGridState.equals(GridState.EMPTY) && !checkedGridState.equals(gridState)) {
                         Map<Point, GameGrid> group = findGroup(x1, y1, map);
-                        int breaths = countGroupBreaths(group);
-                        if (breaths == 0) return true;
+                        int breaths = countGroupBreaths(group, map);
+                        if (breaths == 0)
+                        {
+                            System.out.println("NNNNNNNNNNNNN");
+                            return true;
+                        }
                     }
                 }
             }
@@ -138,8 +170,11 @@ class GameLogic {
                     GridState checkedGridState = map.get(new Point(x1, y1));
                     if (!checkedGridState.equals(GridState.EMPTY) && !checkedGridState.equals(gridState)) {
                         Map<Point, GameGrid> group = findGroup(x1, y1, map);
-                        int breaths = countGroupBreaths(group);
-                        if (breaths == 0) return true;
+                        int breaths = countGroupBreaths(group, map);
+                        if (breaths == 0)
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -188,7 +223,6 @@ class GameLogic {
             //współrzędne sprawdzanych sąsiadów
             int x1, y1;
             //liczba oddechów pionka
-            int breaths = 4;
 
             for (int i = 0; i < 1; i += 2) {
                 for (int j = 0; j < 3; j += 2) {
@@ -196,7 +230,7 @@ class GameLogic {
                     y1 = y - 1 + j;
                     if (checkIfPointInsideBoard(x1, y1)) {
                         //jeśli jego sąsiad nie jest pusty zmniejszamy size
-                        if (!map.get(new Point(x1, y1)).equals(GridState.EMPTY)) breaths--;
+                        if (!map.get(new Point(x1, y1)).equals(GridState.EMPTY))
                         if (visited[x1][y1]) {
                             //zaznaczamy że odwiedziliśmy to pole
                             visited[x1][y1] = false;
@@ -207,7 +241,7 @@ class GameLogic {
                                 outcomeMap.put(new Point(x1, y1), new GameGrid());
                             }
                         }
-                    } else breaths--;
+                    }
                 }
             }
 
@@ -217,7 +251,7 @@ class GameLogic {
                     y1 = y;
                     if (checkIfPointInsideBoard(x1, y1)) {
                         //jeśli jego sąsiad nie jest pusty zmniejszamy size
-                        if (!map.get(new Point(x1, y1)).equals(GridState.EMPTY)) breaths--;
+                        if (!map.get(new Point(x1, y1)).equals(GridState.EMPTY))
                         if (visited[x1][y1]) {
                             //zaznaczamy że odwiedziliśmy to pole
                             visited[x1][y1] = false;
@@ -228,11 +262,9 @@ class GameLogic {
                                 outcomeMap.put(new Point(x1, y1), new GameGrid());
                             }
                         }
-                    } else breaths--;
+                    }
                 }
             }
-            //ustawiamy oddechy
-            outcomeMap.get(new Point(x, y)).setBreathsNumber(breaths);
         }
         return outcomeMap;
     }
@@ -245,9 +277,40 @@ class GameLogic {
 
     //funkcja zwraca nam ile oddechów ma grupa
     //map - mapa z wyrozniona grupa
-    int countGroupBreaths(Map<Point, GameGrid> map) {
+    int countGroupBreaths(Map<Point, GameGrid> group, Map<Point, GridState> map ) {
         int outcome = 0;
-        for (GameGrid gameGrid : map.values()) outcome += gameGrid.getBreathsNumber();
+        System.out.println();
+        for (Point p : group.keySet())
+        {
+            int x = p.x;
+            int y = p.y;
+            GridState gridState = map.get(new Point(x,y));
+            int x1, y1;
+            for(int i = -1; i < 2; i+=2)
+            {
+                x1 = x;
+                y1 = y + i;
+                if( checkIfPointInsideBoard(x1,y1) )
+                {
+                    if(map.get(new Point(x1,y1)).equals(GridState.EMPTY))
+                    {
+                        outcome++;
+                    }
+                }
+            }
+            for(int i = -1; i < 2; i+=2)
+            {
+                x1 = x + i;
+                y1 = y;
+                if( checkIfPointInsideBoard(x1,y1) )
+                {
+                    if(map.get(new Point(x1,y1)).equals(GridState.EMPTY))
+                    {
+                        outcome++;
+                    }
+                }
+            }
+        }
         return outcome;
     }
 
@@ -261,7 +324,30 @@ class GameLogic {
         }
         //tworzymy grupę którą potencjalnie musimy usunąć
         Map<Point, GameGrid> group = findGroup(x,y,map);
-        int breaths = countGroupBreaths(group);
+        int breaths = countGroupBreaths(group, map);
+        //oddechy pozostałych grup
+        int breaths1, breaths2, breaths3, breaths4;
+        breaths1 = 0;
+        breaths2 = 0;
+        breaths3 = 0;
+        breaths4 = 0;
+
+        if(checkIfPointInsideBoard(x-1,y))
+        {
+            breaths1 = countGroupBreaths( findGroup(x-1,y, map),map);
+        }
+        if(checkIfPointInsideBoard(x+1,y))
+        {
+            breaths2 = countGroupBreaths( findGroup(x+1,y, map),map);
+        }
+        if(checkIfPointInsideBoard(x,y-1))
+        {
+            breaths3 = countGroupBreaths( findGroup(x,y-1, map),map);
+        }
+        if(checkIfPointInsideBoard(x,y+1))
+        {
+            breaths4 = countGroupBreaths( findGroup(x,y+1, map),map);
+        }
         //jeśli oddechy 0 usuwamy naszą grupę
         if(breaths==0)
         {
@@ -288,7 +374,14 @@ class GameLogic {
                     {
                         //tworzymy grupę którą potencjalnie musimy usunąć
                         group = findGroup(x1,y1,map);
-                        breaths = countGroupBreaths(group);
+                        if(y1 == y -1)
+                        {
+                            breaths = breaths3;
+                        }
+                        else
+                        {
+                            breaths = breaths4;
+                        }
                         //jeśli oddechy 0 usuwamy naszą grupę
                         if(breaths==0)
                         {
@@ -316,7 +409,14 @@ class GameLogic {
                     {
                         //tworzymy grupę którą potencjalnie musimy usunąć
                         group = findGroup(x1,y1,map);
-                        breaths = countGroupBreaths(group);
+                        if(x1 == x -1)
+                        {
+                            breaths = breaths1;
+                        }
+                        else
+                        {
+                            breaths = breaths2;
+                        }
                         //jeśli oddechy 0 usuwamy naszą grupę
                         if(breaths==0)
                         {

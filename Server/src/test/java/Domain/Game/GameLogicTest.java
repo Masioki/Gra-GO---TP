@@ -63,7 +63,7 @@ public class GameLogicTest {
         boolean outcome = gameLogic.placePawn(2,1,true);
         System.out.println(gameLogic.getBoard().get(new Point(1,1)) );
         System.out.println(gameLogic.getBoard().get(new Point(2,1)) );
-        assertEquals(outcome, true);
+        assertEquals(true, outcome);
 
     }
 }
