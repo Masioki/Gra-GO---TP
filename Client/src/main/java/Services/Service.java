@@ -128,7 +128,6 @@ public class Service implements InvokableService {
                     fullController.gameAction(gameCommand.getCommandType(), username.equals(gameCommand.getUsername()));
             } catch (Exception e) {
                 errorHandler("Blad wewnetrzny");
-                System.out.println("t");
                 e.printStackTrace();
             }
         }
