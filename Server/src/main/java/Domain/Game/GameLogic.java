@@ -149,7 +149,6 @@ class GameLogic {
         //zwracana mapa
         Map<Point, GameGrid> outcomeMap = new HashMap<>();
         GridState gridState = map.get(new Point(x, y));
-        if (gridState.equals(GridState.EMPTY)) return null;
 
         //tabelka booleanów sprawdzających czy pole było odwiedzone
         //true - nieodwiedzone
