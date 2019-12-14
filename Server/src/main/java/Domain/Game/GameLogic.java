@@ -116,10 +116,24 @@ class GameLogic {
         //dla każdego sąsiada jeśli jest innego koloru niż nasz pionek
         //generujemy grupę i sprawdzamy czy ma zero oddechów
         int x1, y1;
-        for (int i = 0; i < 3; i += 2) {
+        for (int i = 0; i < 1; i += 2) {
             for (int j = 0; j < 3; j += 2) {
-                x1 = x - 1 + i;
-                y1 = y - 1 + j;
+                x1 = x - 1 + j;
+                y1 = y;
+                if (checkIfPointInsideBoard(x1, y1)) {
+                    GridState checkedGridState = map.get(new Point(x1, y1));
+                    if (!checkedGridState.equals(GridState.EMPTY) && !checkedGridState.equals(gridState)) {
+                        Map<Point, GameGrid> group = findGroup(x1, y1, map);
+                        int breaths = countGroupBreaths(group);
+                        if (breaths == 0) return true;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < 1; i += 2) {
+            for (int j = 0; j < 3; j += 2) {
+                x1 = x;
+                y1 = y -1 + j;
                 if (checkIfPointInsideBoard(x1, y1)) {
                     GridState checkedGridState = map.get(new Point(x1, y1));
                     if (!checkedGridState.equals(GridState.EMPTY) && !checkedGridState.equals(gridState)) {
@@ -176,14 +190,31 @@ class GameLogic {
             //liczba oddechów pionka
             int breaths = 4;
 
-            for (int i = 0; i < 3; i += 2) {
+            for (int i = 0; i < 1; i += 2) {
                 for (int j = 0; j < 3; j += 2) {
-                    // 1) x - 1 + 0, y - 1 + 0  == x - 1, y - 1
-                    // 2) x - 1 + 0, y - 1 + 2  == x - 1, y + 1
-                    // 3) x - 1 + 2, y - 1 + 0  == x + 1, y - 1;
-                    // 4) x - 1 + 2, y - 1 + 2  == x + 1, y + 1
-                    x1 = x - 1 + i;
+                    x1 = x;
                     y1 = y - 1 + j;
+                    if (checkIfPointInsideBoard(x1, y1)) {
+                        //jeśli jego sąsiad nie jest pusty zmniejszamy size
+                        if (!map.get(new Point(x1, y1)).equals(GridState.EMPTY)) breaths--;
+                        if (visited[x1][y1]) {
+                            //zaznaczamy że odwiedziliśmy to pole
+                            visited[x1][y1] = false;
+                            //jeśli jest tego samego typu co nasz startowy punkt to dodajemy do listy
+                            if (map.get(new Point(x1, y1)).equals(gridState)) {
+                                queue.add(new Point(x1, y1));
+                                //dodajemy punkt do mapy wynikowej
+                                outcomeMap.put(new Point(x1, y1), new GameGrid());
+                            }
+                        }
+                    } else breaths--;
+                }
+            }
+
+            for (int i = 0; i < 1; i += 2) {
+                for (int j = 0; j < 3; j += 2) {
+                    x1 = x -1 + j;
+                    y1 = y;
                     if (checkIfPointInsideBoard(x1, y1)) {
                         //jeśli jego sąsiad nie jest pusty zmniejszamy size
                         if (!map.get(new Point(x1, y1)).equals(GridState.EMPTY)) breaths--;
@@ -245,10 +276,38 @@ class GameLogic {
         }
         //sprawdzamy sąsiadów, w razie czego im też kasujemy grupy
         int x1, y1;
-        for (int i = 0; i < 3; i += 2) {
+        for (int i = 0; i < 1; i += 2) {
             for (int j = 0; j < 3; j += 2) {
-                x1 = x - 1 + i;
+                x1 = x;
                 y1 = y - 1 + j;
+                //jeśli sąsiad jest innego koloru niż nasz pionek
+                //sprawdzamy czy nie powinniśmy jego grupy usunąć
+                if(checkIfPointInsideBoard(x1, y1))
+                {
+                    if( ! map.get(new Point(x1,y1)).equals(GridState.EMPTY) && ! map.get(new Point(x1,y1)).equals(gridState) )
+                    {
+                        //tworzymy grupę którą potencjalnie musimy usunąć
+                        group = findGroup(x1,y1,map);
+                        breaths = countGroupBreaths(group);
+                        //jeśli oddechy 0 usuwamy naszą grupę
+                        if(breaths==0)
+                        {
+                            Set< Map.Entry< Point,GameGrid> > st = group.entrySet();
+                            for (Map.Entry< Point,GameGrid> me:st)
+                            {
+                                //usuwamy pionki
+                                map.replace(me.getKey(),GridState.EMPTY);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < 1; i += 2) {
+            for (int j = 0; j < 3; j += 2) {
+                x1 = x -1 + j;
+                y1 = y;
                 //jeśli sąsiad jest innego koloru niż nasz pionek
                 //sprawdzamy czy nie powinniśmy jego grupy usunąć
                 if(checkIfPointInsideBoard(x1, y1))
@@ -383,9 +442,9 @@ class GameLogic {
                             visited[x][y] = false;
                             //jeśli któryś z sąsiadów był przeciwnego koloru stwierdzamy że nie liczymy punktów
                             int x1, y1;
-                            for (int a = 0; a < 3; a += 2) {
+                            for (int a = 0; a < 1; a += 2) {
                                 for (int b = 0; b < 3; b += 2) {
-                                    x1 = x - 1 + a;
+                                    x1 = x;
                                     y1 = y - 1 + b;
                                     //sprawdzamy czy pionek leży w planszy
                                     if(checkIfPointInsideBoard(x1, y1))
@@ -398,6 +457,22 @@ class GameLogic {
                                     }
                                 }
                             }
+                            for (int a = 0; a < 1; a += 2) {
+                                for (int b = 0; b < 3; b += 2) {
+                                    x1 = x -1 + b;
+                                    y1 = y;
+                                    //sprawdzamy czy pionek leży w planszy
+                                    if(checkIfPointInsideBoard(x1, y1))
+                                    {
+                                        //jeśli pole nie puste i nie ma naszego koloru to nie jest to nasze terytorium
+                                        if( ! map.get(new Point(x1, y1)).equals(GridState.EMPTY) && ! map.get(new Point(x1,y1)).equals(gridState) )
+                                        {
+                                            shouldAdd = false;
+                                        }
+                                    }
+                                }
+                            }
+
                             //na koniec jeśli to grupa naszych pionków to ją zawsze liczymy
                             if( map.get(new Point(i, j)).equals(gridState) )
                             {
