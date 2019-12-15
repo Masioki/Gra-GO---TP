@@ -282,7 +282,89 @@ class GameLogic {
         }
         return outcome;
     }
-
+    //updatujemy mapę po wykonanym ruchu
+    private Map<Point, GridState> updateMap(int x, int y, Map<Point, GridState> map) {
+        GridState gridState = map.get(new Point(x, y));
+        Map<Point, GameGrid> group;
+        //ten if nigdy nie powinien mieć miejsca
+        if(gridState.equals(GridState.EMPTY))
+        {
+            return null;
+        }
+        //oddechy
+        int breaths;
+        //sąsiedzi
+        int x1;
+        int y1;
+        for(int i = -1; i < 2; i++)
+        {
+            x1 = x + i;
+            y1 = y;
+            //jeśli sąsiad jest innego koloru niż nasz pionek
+            //sprawdzamy czy nie powinniśmy jego grupy usunąć
+            if(checkIfPointInsideBoard(x1, y1))
+            {
+                if( ! map.get(new Point(x1,y1)).equals(GridState.EMPTY) && ! map.get(new Point(x1,y1)).equals(gridState) )
+                {
+                    //tworzymy grupę którą potencjalnie musimy usunąć
+                    group = findGroup(x1,y1,map);
+                    breaths = countGroupBreaths(group, map);
+                    //jeśli oddechy 0 usuwamy naszą grupę
+                    if(breaths==0)
+                    {
+                        Set< Map.Entry< Point,GameGrid> > st = group.entrySet();
+                        for (Map.Entry< Point,GameGrid> me:st)
+                        {
+                            //usuwamy pionki
+                            map.replace(me.getKey(),GridState.EMPTY);
+                        }
+                    }
+                }
+            }
+        }
+        //kolejni sąsiedzi
+        for(int i = -1; i < 2; i++)
+        {
+            x1 = x;
+            y1 = y + i;
+            //jeśli sąsiad jest innego koloru niż nasz pionek
+            //sprawdzamy czy nie powinniśmy jego grupy usunąć
+            if(checkIfPointInsideBoard(x1, y1))
+            {
+                if( ! map.get(new Point(x1,y1)).equals(GridState.EMPTY) && ! map.get(new Point(x1,y1)).equals(gridState) )
+                {
+                    //tworzymy grupę którą potencjalnie musimy usunąć
+                    group = findGroup(x1,y1,map);
+                    breaths = countGroupBreaths(group, map);
+                    //jeśli oddechy 0 usuwamy naszą grupę
+                    if(breaths==0)
+                    {
+                        Set< Map.Entry< Point,GameGrid> > st = group.entrySet();
+                        for (Map.Entry< Point,GameGrid> me:st)
+                        {
+                            //usuwamy pionki
+                            map.replace(me.getKey(),GridState.EMPTY);
+                        }
+                    }
+                }
+            }
+        }
+        //teraz kolej na naszego pionka
+        group = findGroup(x,y,map);
+        breaths = countGroupBreaths(group, map);
+        //jeśli oddechy zero usuwamy
+        if(breaths==0)
+        {
+            Set< Map.Entry< Point,GameGrid> > st = group.entrySet();
+            for (Map.Entry< Point,GameGrid> me:st)
+            {
+                map.replace(me.getKey(),GridState.EMPTY);
+            }
+        }
+        //zwracamy naszą wejściową mapę troszkę oczyszczoną
+        return map;
+    }
+    /*
     //updatujemy mapę po wykonanym ruchu
     private Map<Point, GridState> updateMap(int x, int y, Map<Point, GridState> map) {
         GridState gridState = map.get(new Point(x, y));
@@ -401,7 +483,7 @@ class GameLogic {
         //zwracamy naszą wejściową mapę troszkę oczyszczoną
         return map;
     }
-
+    */
     //funkcja licząca punkty za zbite pionki
     private void countPoints( Map<Point, GridState> newMap, Map<Point, GridState> previousMap, int x, int y, GridState gridState)
     {
@@ -457,7 +539,6 @@ class GameLogic {
             output = blackPoints;
             gridState = GridState.BLACK;
         }
-        //TODO - sprawdzamy czy gracz ma przynajmniej jeden pionek, jeśli nie to zwracamy mu od razu output
         if( checkIfPlayerHasZeroPawns(white, map) )
         {
             return output;
