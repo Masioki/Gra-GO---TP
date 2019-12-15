@@ -26,8 +26,8 @@ public class Player {
     }
 
     public Point getScore() {
-        int own = game.getOwnScore(this);
-        int opponent = game.getOpponentScore(this);
+        int own = game.getOwnScore(username);
+        int opponent = game.getOpponentScore(username);
         return new Point(own, opponent);
     }
 

@@ -1,6 +1,6 @@
 package Domain.Game;
 
-enum GridState {
+public enum GridState {
     EMPTY,
     WHITE,
     BLACK

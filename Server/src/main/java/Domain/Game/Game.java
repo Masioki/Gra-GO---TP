@@ -55,21 +55,25 @@ public class Game {
         observers.add(observer);
     }
 
-    public synchronized int getOwnScore(Player player) {
-        if (player.getUsername().equals(ownerUsername)) return gameLogic.getPlayerPoints(true);
+    public synchronized int getOwnScore(String username) {
+        if (username.equals(ownerUsername)) return gameLogic.getPlayerPoints(true);
         return gameLogic.getPlayerPoints(false);
     }
 
-    public synchronized int getOpponentScore(Player player) {
-        if (player.getUsername().equals(ownerUsername)) return gameLogic.getPlayerPoints(false);
+    public synchronized int getOpponentScore(String username) {
+        if (username.equals(ownerUsername)) return gameLogic.getPlayerPoints(false);
         return gameLogic.getPlayerPoints(true);
+    }
+
+    public String getTurn() {
+        return turn;
     }
 
     /*
     WYKONYWAC PO KAZDEJ UDANEJ AKCJI
      */
     private void signalObservers(int x, int y, String username, PawnColor color, GameCommandType type) {
-        observers.forEach(o -> o.action(x, y, username, color, type));
+        if (!endGame) observers.forEach(o -> o.action(x, y, username, color, type));
     }
 
     /*
