@@ -84,7 +84,6 @@ class GameLogic {
 
     //metoda zwraca true kiedy nie można postawić pionka
     boolean checkSuicide(int x, int y, boolean white) {
-        System.out.println("jesteśmy tutaj");
         GridState gridState;
         if (white) gridState = GridState.WHITE;
         else gridState = GridState.BLACK;
@@ -95,35 +94,8 @@ class GameLogic {
         //dodajemy pionek postawiony przez gracza
         newMap.replace(new Point(x, y), gridState);
 
-        //TODO - wypisywanie mapy do wyrzucenia
-        for(int j = 0; j < size; j++)
-        {
-            for(int i = 0; i < size; i++)
-            {
-                if(newMap.get(new Point(i,j)).equals(GridState.EMPTY))
-                {
-                    System.out.print("X");
-                }
-                if(newMap.get(new Point(i,j)).equals(GridState.WHITE))
-                {
-                    System.out.print("W");
-                }
-                if(newMap.get(new Point(i,j)).equals(GridState.BLACK))
-                {
-                    System.out.print("B");
-                }
-            }
-            System.out.println();
-        }
-
-        System.out.println(countGroupBreaths(findGroup(x,y,newMap), newMap) );
-
-        //konczymy usuwanie
         if (checkNormalSuicide(x, y, newMap))
         {
-            System.out.println("DDDD");
-            System.out.println(checkSpecialSuicide(x,y,newMap));
-
             return !checkSpecialSuicide(x, y, newMap);
         }
         else return false;
@@ -137,7 +109,6 @@ class GameLogic {
 
     //zwraca true kiedy popełniliśmy specjalne samobujstwo
     boolean checkSpecialSuicide(int x, int y, Map<Point, GridState> map) {
-        System.out.println("Sadly suicide was kommited");
         //kolor naszego pionka
         GridState gridState = map.get(new Point(x, y));
 
@@ -155,7 +126,6 @@ class GameLogic {
                         int breaths = countGroupBreaths(group, map);
                         if (breaths == 0)
                         {
-                            System.out.println("NNNNNNNNNNNNN");
                             return true;
                         }
                     }
@@ -279,7 +249,6 @@ class GameLogic {
     //map - mapa z wyrozniona grupa
     int countGroupBreaths(Map<Point, GameGrid> group, Map<Point, GridState> map ) {
         int outcome = 0;
-        System.out.println();
         for (Point p : group.keySet())
         {
             int x = p.x;
@@ -355,8 +324,6 @@ class GameLogic {
             Set< Map.Entry< Point,GameGrid> > st = group.entrySet();
             for (Map.Entry< Point,GameGrid> me:st)
             {
-                //usuwamy pionki
-                System.out.println(me.getKey().x + " " + me.getKey().y);
                 map.replace(me.getKey(),GridState.EMPTY);
             }
         }
