@@ -103,19 +103,123 @@ public class GameFrameController implements EventHandler<ActionEvent> {
             }
 
             @Override
+            public void setScore(int your, int opponent) {
+                //TODO - to dołożyliśmy
+                showScore(your, opponent);
+            }
+
+            @Override
             public void gameAction(GameCommandType actionType, boolean me) {
-                //TODO
+                //TODO - to dołożyliśmy
+                switch (actionType){
+                    case WIN:
+                        if(me)
+                        {
+
+                        }
+                        break;
+                    case LOSE:
+                        if(me)
+                        {
+
+                        }
+                        break;
+                    case PASS:
+                        pass(me);
+                        break;
+                }
             }
         };
         service.setFullController(controller);
     }
-    public void showError()
+
+    /**
+     * Metoda ustawia aktualny wynik (zbite pionki) obu graczy
+     * @param mine - wynik gracza
+     * @param opponent - wynik przeciwnika
+     */
+    private void showScore(int mine, int opponent)
     {
-        labelError.setVisible(true);
+        labelCapturedPawnsScore.setText(Integer.toString(mine));
+        labelCapturedPawnsEnemyScore.setText(Integer.toString(opponent));
     }
 
     /**
-     * Metoda sprawdza czy pole jest puste i jeśli tak wysyła zappytanie do serwisu
+     * Metoda wyświetla komunikat o spasowaniu przez odpowiedniego gracza
+     * @param me - true, oznacza że gracz spasował, fałsz, że przeciwnik
+     */
+    private void pass(boolean me)
+    {
+        String ms;
+        if(me)
+        {
+            ms = "Wykonano PASS, oczekiwanie na decyzję przeciwnika";
+        }
+        else
+        {
+            ms = "Przeciwnik wykonał PASS";
+        }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try
+                {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("PASS");
+                    alert.setHeaderText(ms);
+                    alert.showAndWait();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void victory()
+    {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try
+                {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("VICTORY");
+                    alert.setHeaderText("Zwyciężyełeś :) ");
+                    alert.showAndWait();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+        System.exit(1);
+    }
+
+    private void defeat()
+    {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try
+                {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("PASS");
+                    alert.setHeaderText("Przegrałeś. Niestety... :/");
+                    alert.showAndWait();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+        System.exit(1);
+    }
+    /**
+     * Metoda sprawdza czy pole jest puste i jeśli tak wysyła zapytanie do serwisu
      * @param colNumber
      * @param rowNumber
      */
@@ -157,14 +261,14 @@ public class GameFrameController implements EventHandler<ActionEvent> {
     public void handle(ActionEvent e) {
         if(e.getSource().equals(buttonPass))
         {
-            /*TODO-tutaj powinniśmy wywoływać metodę z servera*/
-            System.out.println("Pass");
+            /*TODO-to dołożyliśmy*/
+            service.gameMove(0,0, GameCommandType.PASS);
             //service.gameMove(x,y, GameCommandType typ ruchu(MOVE,SURRENDER etc.))
         }
         if(e.getSource().equals(buttonSurrender))
         {
-            /*TODO-tutaj powinniśmy wywoływać metodę z servera*/
-            System.out.println("Give up!");
+            /*TODO-to dołożyliśmy*/
+            service.gameMove(0,0, GameCommandType.SURRENDER);
         }
     }
 }
