@@ -91,7 +91,7 @@ public class Game {
 
 
     public synchronized boolean move(int x, int y, Player player) {
-        Map<Point, GridState> previous = gameLogic.getBoard();
+        Map<Point, GridState> previous = new HashMap<>(gameLogic.getBoard());
         if (!endGame && isPlayerTurn(player) && gameLogic.placePawn(x, y, player.getUsername().equals(ownerUsername))) {
             PawnColor color;
             if (player.getUsername().equals(ownerUsername)) color = PawnColor.WHITE;
@@ -106,13 +106,13 @@ public class Game {
             for (Point p : changes.keySet()) {
                 switch (changes.get(p)) {
                     case EMPTY:
-                        signalObservers((int) p.getX(), (int) p.getY(), player.getUsername(), PawnColor.EMPTY, GameCommandType.MOVE);
+                        signalObservers((int) p.getX(), (int) p.getY(), null, PawnColor.EMPTY, GameCommandType.MOVE);
                         break;
                     case WHITE:
-                        signalObservers((int) p.getX(), (int) p.getY(), player.getUsername(), PawnColor.WHITE, GameCommandType.MOVE);
+                        signalObservers((int) p.getX(), (int) p.getY(), null, PawnColor.WHITE, GameCommandType.MOVE);
                         break;
                     case BLACK:
-                        signalObservers((int) p.getX(), (int) p.getY(), player.getUsername(), PawnColor.BLACK, GameCommandType.MOVE);
+                        signalObservers((int) p.getX(), (int) p.getY(), null, PawnColor.BLACK, GameCommandType.MOVE);
                         break;
                 }
             }

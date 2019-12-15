@@ -43,7 +43,10 @@ public class PlayerServiceInvoker {
                     break;
                 }
             }
-            if (!sended) for (CommandListener l : listeners) l.execute(null, tempRes);
+            if (!sended) for (CommandListener l : listeners) {
+                l.execute(null, tempRes);
+                res.remove();
+            }
         }
     }
 

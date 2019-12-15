@@ -32,6 +32,7 @@ public class PlayerService implements InvokableService, GameObserver {
 
     @Override
     public void action(int x, int y, String username, PawnColor color, GameCommandType type) {
+        if(username != null && username.equals(player.getUsername()) && type == GameCommandType.MOVE) return;
         Command c = CommandBuilderProvider
                 .newGameCommandBuilder()
                 .newCommand()
