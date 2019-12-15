@@ -66,4 +66,10 @@ public class GameLogicTest {
         assertEquals(true, outcome);
 
     }
+
+    @Test
+    public void groupTest()
+    {
+
+    }
 }
