@@ -30,6 +30,7 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     public Label labelLoggedAs;
     public Label labelPlayerLogin;
     public Label labelGameTurn;
+    public Button buttonCreateBotGame;
 
 
     private MyLabel[] lobbyList;
@@ -44,9 +45,11 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
     public void initialize() {
         gamesList = new ArrayList<GameData>();
         chosenGame = -1;
+        //ustawiamy przyciskom przechwytywanie akcji
         buttonJoinGame.setOnAction(this);
         buttonRefreshLobbies.setOnAction(this);
         buttonCreateLobby.setOnAction(this);
+        buttonCreateBotGame.setOnAction(this);
         service = Service.getInstance();
         for(int i = 0; i < lobbyMaxNumber; i++)
         {
@@ -184,7 +187,11 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
             }
         }
     }
-    void createLobby()
+    private void playWithBot(){
+        //nie chcemy grać z ludźmi...
+        service.newGame(true);
+    }
+    private void createLobby()
     {
         service.newGame(false);
         //TODO: przycisk do zaczynania gry z botem
@@ -200,6 +207,10 @@ public class LobbyFrameController implements EventHandler<ActionEvent> {
         if(e.getSource().equals(buttonCreateLobby))
         {
             createLobby();
+        }
+        if(e.getSource().equals(buttonCreateBotGame))
+        {
+            playWithBot();
         }
     }
 }
