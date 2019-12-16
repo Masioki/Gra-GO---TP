@@ -26,7 +26,6 @@ public class GameFrameController implements EventHandler<ActionEvent> {
     public Label labelTurn;
     public Label labelCapturedPawnsEnemyScore;
     public Label labelCapturedPawnsScore;
-    public Label labelError;
     private MyImageView[][] grids;
 
     private Service service = null;
@@ -70,7 +69,6 @@ public class GameFrameController implements EventHandler<ActionEvent> {
             }
         }
         service = Service.getInstance();
-        labelError.setVisible(false);
         gridPanelBoard.getStylesheets().add(getClass().getResource("/css/gridPaneStylesheet.css").toExternalForm());
         buttonPass.setOnAction(this);
         buttonSurrender.setOnAction(this);
