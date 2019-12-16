@@ -116,7 +116,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
 
                         }
                         break;
-                    case LOSE:
+                    case DRAW:
                         if(me)
                         {
 
@@ -125,6 +125,9 @@ public class GameFrameController implements EventHandler<ActionEvent> {
                     case PASS:
                         pass(me);
                         break;
+                    case SURRENDER:{
+
+                    }
                 }
             }
         };

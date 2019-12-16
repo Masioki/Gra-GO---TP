@@ -32,7 +32,8 @@ public class PlayerService implements InvokableService, GameObserver {
 
     @Override
     public void action(int x, int y, String username, PawnColor color, GameCommandType type) {
-        if(username != null && username.equals(player.getUsername()) && type == GameCommandType.MOVE) return;
+        //if (username != null && username.equals(player.getUsername()) && (type == GameCommandType.PASS || type == GameCommandType.MOVE))
+        if (username != null && username.equals(player.getUsername()) && type != GameCommandType.WIN) return;
         Command c = CommandBuilderProvider
                 .newGameCommandBuilder()
                 .newCommand()
@@ -125,7 +126,6 @@ public class PlayerService implements InvokableService, GameObserver {
     private void surrender() {
         gameService.endGame(player.getGame(), player);
         player.surrender();
-        invoker.signalEnd();
     }
 
     private Command gameAction(int x, int y, GameCommandType type, UUID uuid) {

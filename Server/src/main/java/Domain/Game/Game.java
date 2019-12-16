@@ -128,6 +128,7 @@ public class Game {
                 }
             }
             changeTurn();
+            pass = false;
             return true;
         }
         return false;
@@ -137,10 +138,24 @@ public class Game {
         if (!endGame && isPlayerTurn(player)) {
             if (pass) {
                 //TODO: policzyc pola i zasygnalizowac kto wygral
-                //endGame = true;
+                int white = getOwnScore(ownerUsername);
+                int black = getOpponentScore(ownerUsername);
+                if (white == black) signalObservers(0, 0, null, PawnColor.BLACK, GameCommandType.DRAW);
+                else if (white > black) signalObservers(0, 0, ownerUsername, PawnColor.WHITE, GameCommandType.WIN);
+                else {
+                    for (Player p : players) {
+                        if (!ownerUsername.equals(p.getUsername())) {
+                            signalObservers(0, 0, p.getUsername(), PawnColor.BLACK, GameCommandType.WIN);
+                            break;
+                        }
+                    }
+                }
+                endGame = true;
             }
             pass = true;
             signalObservers(0, 0, player.getUsername(), PawnColor.BLACK, GameCommandType.PASS);
+            changeTurn();
+            return true;
         }
         return false;
     }
