@@ -21,7 +21,7 @@ public class Game {
     private int boardSize;
 
     //nazwa uzytkownika ktorego jest teraz kolej
-    private String turn;
+    private String lastMoved;
 
     // czy w poprzednim ruchu uzytkownik zrobil pass
     private boolean pass;
@@ -40,7 +40,7 @@ public class Game {
         gameLogic = new GameLogic(boardSize);
         pass = false;
         endGame = false;
-        turn = ownerUsername;
+        lastMoved = "";
     }
 
 
@@ -54,6 +54,7 @@ public class Game {
 
     public void addObserver(GameObserver observer) {
         observers.add(observer);
+        refreshWholeGame();
     }
 
     public int getOwnScore(String username) {
@@ -81,22 +82,39 @@ public class Game {
         observers.forEach(o -> o.action(x, y, username, color, type));
     }
 
+    private void refreshWholeGame() {
+        Map<Point, GridState> board = gameLogic.getBoard();
+        for (Point p : board.keySet()) {
+            switch (board.get(p)) {
+                case EMPTY:
+                    signalObservers((int) p.getX(), (int) p.getY(), null, PawnColor.EMPTY, GameCommandType.MOVE);
+                    break;
+                case BLACK:
+                    signalObservers((int) p.getX(), (int) p.getY(), null, PawnColor.BLACK, GameCommandType.MOVE);
+                    break;
+                case WHITE:
+                    signalObservers((int) p.getX(), (int) p.getY(), null, PawnColor.WHITE, GameCommandType.MOVE);
+                    break;
+            }
+        }
+    }
+
     /*
     LOGIKA
      */
 
     public boolean isPlayerTurn(Player player) {
-        System.out.println(player.getUsername() + " " + turn);
-        return player.getUsername().equals(turn);
+        System.out.println(player.getUsername() + " " + lastMoved);
+        return !player.getUsername().equals(lastMoved);
     }
 
     private void changeTurn() {
-        for (int i = 0; i < players.size(); i++) {
-            if (!turn.equals(players.get(i).getUsername())) {
-                turn = players.get(i).getUsername();
+      /*  for (int i = 0; i < players.size(); i++) {
+            if (!lastMoved.equals(players.get(i).getUsername())) {
+                lastMoved = players.get(i).getUsername();
                 break;
             }
-        }
+        }*/
     }
 
 
@@ -125,7 +143,8 @@ public class Game {
                         break;
                 }
             }
-            changeTurn();
+            //changeTurn();
+            lastMoved = player.getUsername();
             pass = false;
             return true;
         }
@@ -151,7 +170,8 @@ public class Game {
             }
             pass = true;
             signalObservers(0, 0, player.getUsername(), PawnColor.BLACK, GameCommandType.PASS);
-            changeTurn();
+            //changeTurn();
+            lastMoved = player.getUsername();
             return true;
         }
         return false;
@@ -169,6 +189,7 @@ public class Game {
     public int getGameID() {
         return gameID;
     }
+
     public void setGameID(int gameID) {
         this.gameID = gameID;
     }
@@ -176,6 +197,7 @@ public class Game {
     public String getOwnerUsername() {
         return ownerUsername;
     }
+
     public void setOwnerUsername(String ownerUsername) {
         this.ownerUsername = ownerUsername;
     }

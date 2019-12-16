@@ -123,8 +123,8 @@ public class PlayerService implements InvokableService, GameObserver {
     }
 
     private void surrender() {
-        gameService.endGame(player.getGame(), player);
         player.surrender();
+        gameService.endGame(player.getGame(), player);
     }
 
     private Command gameAction(int x, int y, GameCommandType type, UUID uuid) {
