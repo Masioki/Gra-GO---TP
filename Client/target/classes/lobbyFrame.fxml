@@ -12,8 +12,8 @@
       <GridPane fx:id="gridPanelLobby" layoutX="237.0" layoutY="19.0" prefHeight="550.0" prefWidth="345.0">
       </GridPane>
       <Button fx:id="buttonCreateLobby" layoutX="14.0" layoutY="208.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="201.0" text="CREATE LOBBY" />
-      <Label fx:id="labelLoggedAs" alignment="CENTER" layoutX="14.0" layoutY="55.0" prefHeight="53.0" prefWidth="201.0" text="LOGGED AS:" />
-      <Label fx:id="labelPlayerLogin" alignment="CENTER" layoutX="14.0" layoutY="131.0" prefHeight="53.0" prefWidth="201.0" text="Client Login" />
+      <Label fx:id="labelLoggedAs" alignment="CENTER" layoutX="14.0" layoutY="55.0" prefHeight="53.0" prefWidth="201.0" text="GRA GO" />
+      <Label fx:id="labelPlayerLogin" alignment="CENTER" layoutX="14.0" layoutY="131.0" prefHeight="53.0" prefWidth="201.0" text="POCZEKALNIA" />
       <Button fx:id="buttonCreateBotGame" layoutX="14.0" layoutY="483.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="201.0" text="PLAY WITH CP" />
    </children>
 </AnchorPane>

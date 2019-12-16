@@ -17,6 +17,11 @@ public class Service implements InvokableService {
     private CommandParser parser;
     private FullController fullController;
     private PawnColor ownColor;
+
+    public String getUsername() {
+        return username;
+    }
+
     private String username;
 
     /**
@@ -44,9 +49,6 @@ public class Service implements InvokableService {
         this.fullController = controller;
     }
 
-    public String getUsername() {
-        return username;
-    }
 
     /*
     COMMAND EXECUTION
