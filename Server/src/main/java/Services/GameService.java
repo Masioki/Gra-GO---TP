@@ -38,18 +38,18 @@ public class GameService {
 
     public synchronized GameData newGame(int boardSize, Player player, boolean withBot) {
         Game g = new Game(player.getUsername(), boardSize);
-        games.add(g);
         g.addPlayer(player);
         player.setGame(g);
-        if (withBot) {
-            Bot bot = new Bot();
-            g.addPlayer(bot);
-            bot.setGame(g);
-            g.addObserver(bot);
-        }
         GameData gameData = new GameData();
         gameData.setUsername(g.getOwnerUsername());
         gameData.setGameID(g.getGameID());
+        if (withBot) {
+            Bot bot = new Bot(g.getSize(),g);
+            g.addPlayer(bot);
+            g.addObserver(bot);
+        }
+        games.add(g);
+
         return gameData;
     }
 
@@ -70,6 +70,7 @@ public class GameService {
         for (Game g : games) {
             if (g.getGameID() == gameData.getGameID() && g.getOwnerUsername().equals(gameData.getUsername())) {
                 g.addObserver(observer);
+                System.out.println("zaobserwowano");
             }
         }
     }

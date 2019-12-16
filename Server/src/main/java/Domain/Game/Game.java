@@ -18,6 +18,7 @@ public class Game {
     private List<GameObserver> observers;
     private List<Player> players;
     private GameLogic gameLogic;
+    private int boardSize;
 
     //nazwa uzytkownika ktorego jest teraz kolej
     private String turn;
@@ -34,6 +35,7 @@ public class Game {
         //TODO: poprawic to zalosne id xd
         gameID = (int) (Math.random() * 1000);
         this.ownerUsername = ownerUsername;
+        this.boardSize = boardSize;
         observers = new ArrayList<>();
         players = new ArrayList<>();
         gameLogic = new GameLogic(boardSize);
@@ -55,25 +57,33 @@ public class Game {
         observers.add(observer);
     }
 
-    public synchronized int getOwnScore(String username) {
+    public int getOwnScore(String username) {
         if (username.equals(ownerUsername)) return gameLogic.getPlayerPoints(true);
         return gameLogic.getPlayerPoints(false);
     }
 
-    public synchronized int getOpponentScore(String username) {
+    public int getOpponentScore(String username) {
         if (username.equals(ownerUsername)) return gameLogic.getPlayerPoints(false);
         return gameLogic.getPlayerPoints(true);
+    }
+
+    public int getSize() {
+        return boardSize;
     }
 
     public String getTurn() {
         return turn;
     }
 
+    public boolean inProgress() {
+        return !endGame;
+    }
+
     /*
     WYKONYWAC PO KAZDEJ UDANEJ AKCJI
      */
     private void signalObservers(int x, int y, String username, PawnColor color, GameCommandType type) {
-        if (!endGame) observers.forEach(o -> o.action(x, y, username, color, type));
+        observers.forEach(o -> o.action(x, y, username, color, type));
     }
 
     /*
@@ -84,10 +94,10 @@ public class Game {
         return player.getUsername().equals(turn);
     }
 
-    private synchronized void changeTurn() {
-        for (Player p : players) {
-            if (!turn.equals(p.getUsername())) {
-                turn = p.getUsername();
+    private void changeTurn() {
+        for (int i = 0; i < players.size(); i++) {
+            if (!turn.equals(players.get(i).getUsername())) {
+                turn = players.get(i).getUsername();
                 break;
             }
         }
@@ -101,7 +111,6 @@ public class Game {
             if (player.getUsername().equals(ownerUsername)) color = PawnColor.WHITE;
             else color = PawnColor.BLACK;
             signalObservers(x, y, player.getUsername(), color, GameCommandType.MOVE);
-            //TODO: cos nie tak ze zmiana planszy po ruchu
             Map<Point, GridState> after = gameLogic.getBoard();
             Map<Point, GridState> changes = new HashMap<>();
             for (Point point : after.keySet()) {
@@ -130,7 +139,7 @@ public class Game {
         if (!endGame && isPlayerTurn(player)) {
             if (pass) {
                 //TODO: policzyc pola i zasygnalizowac kto wygral
-                endGame = true;
+                //endGame = true;
             }
             pass = true;
             signalObservers(0, 0, player.getUsername(), PawnColor.BLACK, GameCommandType.PASS);
