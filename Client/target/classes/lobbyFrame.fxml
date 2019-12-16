@@ -7,13 +7,13 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.LobbyFrameController">
    <children>
-      <Button fx:id="buttonJoinGame" layoutX="14.0" layoutY="386.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="145.0" text="JOIN GAME" />
-      <Button fx:id="buttonRefreshLobbies" layoutX="14.0" layoutY="300.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="145.0" text="REFRESH" />
-      <GridPane fx:id="gridPanelLobby" layoutX="176.0" layoutY="19.0" prefHeight="550.0" prefWidth="406.0">
+      <Button fx:id="buttonJoinGame" layoutX="14.0" layoutY="386.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="201.0" text="JOIN GAME" />
+      <Button fx:id="buttonRefreshLobbies" layoutX="14.0" layoutY="300.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="201.0" text="REFRESH" />
+      <GridPane fx:id="gridPanelLobby" layoutX="237.0" layoutY="19.0" prefHeight="550.0" prefWidth="345.0">
       </GridPane>
-      <Button fx:id="buttonCreateLobby" layoutX="14.0" layoutY="208.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="145.0" text="CREATE LOBBY" />
-      <Label fx:id="labelLoggedAs" alignment="CENTER" layoutX="14.0" layoutY="65.0" prefHeight="53.0" prefWidth="145.0" text="LOGGED AS:" />
-      <Label fx:id="labelPlayerLogin" alignment="CENTER" layoutX="14.0" layoutY="131.0" prefHeight="53.0" prefWidth="145.0" text="Client Login" />
-      <Button fx:id="buttonCreateBotGame" layoutX="14.0" layoutY="483.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="145.0" text="PLAY WITH CP" />
+      <Button fx:id="buttonCreateLobby" layoutX="14.0" layoutY="208.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="201.0" text="CREATE LOBBY" />
+      <Label fx:id="labelLoggedAs" alignment="CENTER" layoutX="14.0" layoutY="55.0" prefHeight="53.0" prefWidth="201.0" text="LOGGED AS:" />
+      <Label fx:id="labelPlayerLogin" alignment="CENTER" layoutX="14.0" layoutY="131.0" prefHeight="53.0" prefWidth="201.0" text="Client Login" />
+      <Button fx:id="buttonCreateBotGame" layoutX="14.0" layoutY="483.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="201.0" text="PLAY WITH CP" />
    </children>
 </AnchorPane>

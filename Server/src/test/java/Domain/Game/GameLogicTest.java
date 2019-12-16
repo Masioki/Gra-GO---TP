@@ -3,6 +3,7 @@ package Domain.Game;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -18,7 +19,7 @@ public class GameLogicTest {
     }
 
     @Test
-    public void killingPawnInCenter() throws Exception
+    public void killingPawnsInCenter() throws Exception
     {
         GameLogic gameLogic = new GameLogic(5);
         gameLogic.placePawn(2,2, true);
@@ -26,7 +27,11 @@ public class GameLogicTest {
         gameLogic.placePawn(2,1, false);
         gameLogic.placePawn(1,2, false);
         gameLogic.placePawn(3,2, false);
-        assertEquals(gameLogic.getBoard().get(new Point(2,2)),GridState.EMPTY);
+        assertEquals(GridState.EMPTY,gameLogic.getBoard().get(new Point(2,2)));
+        gameLogic.placePawn(2,4,true);
+        gameLogic.placePawn(3,4,false);
+        gameLogic.placePawn(1,4,false);
+        assertEquals(GridState.EMPTY,gameLogic.getBoard().get(new Point(2,4)));
     }
 
     @Test
@@ -65,5 +70,64 @@ public class GameLogicTest {
         System.out.println(gameLogic.getBoard().get(new Point(2,1)) );
         assertEquals(true, outcome);
 
+    }
+
+    @Test
+    public void scoreTest()
+    {
+        GameLogic gameLogic = new GameLogic(6);
+        assertEquals(0, gameLogic.getFinalScore(false));
+        //białe
+        gameLogic.placePawn(3,3,true);
+        gameLogic.placePawn(4,3,true);
+        gameLogic.placePawn(5,3,true);
+        gameLogic.placePawn(4,4,true);
+        gameLogic.placePawn(4,5, true);
+        gameLogic.placePawn(3,5, true);
+        //czarne
+        gameLogic.placePawn(3,4, false);
+
+        assertEquals(8, gameLogic.getFinalScore(true));
+    }
+
+    @Test
+    public void colorTest()
+    {
+        GameLogic gameLogic = new GameLogic(6);
+        gameLogic.placePawn(3,3,true);
+        gameLogic.placePawn(3,3,false);
+        assertEquals(GridState.WHITE, gameLogic.getBoard().get(new Point(3,3)));
+    }
+
+    @Test
+    public void poindInsideBoardTest()
+    {
+        GameLogic gameLogic = new GameLogic(6);
+        assertEquals(true, gameLogic.checkIfPointInsideBoard(5,5));
+        assertEquals(false, gameLogic.checkIfPointInsideBoard(5,6));
+        assertEquals(false, gameLogic.checkIfPointInsideBoard(-1,3));
+    }
+
+    @Test
+    public void getPlayerTemporaryScore()
+    {
+        GameLogic gameLogic = new GameLogic(6);
+        gameLogic.placePawn(3,3,true);
+
+        gameLogic.placePawn(3,4,false);
+        gameLogic.placePawn(3,2,false);
+        gameLogic.placePawn(2,3,false);
+        gameLogic.placePawn(4,3,false);
+
+        assertEquals(1,gameLogic.getPlayerPoints(false));
+        assertEquals(0,gameLogic.getPlayerPoints(true));
+    }
+
+    @Test
+    public void breathsSimpleTest()
+    {
+        GameGrid gameGrid = new GameGrid();
+        gameGrid.setBreathsNumber(3);
+        assertEquals(3,gameGrid.getBreathsNumber());
     }
 }

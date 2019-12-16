@@ -25,6 +25,7 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
     public Label labelPassword;
     public TextField textFieldPassword;
     public Button buttonSignUp;
+    private String login;
 
     private Service service;
     @FXML
@@ -105,13 +106,10 @@ public class LoginFrameController implements EventHandler<ActionEvent> {
 
     @FXML
     void signUp(ActionEvent e) {
-        String login = textFieldLogin.getText();
+        login = textFieldLogin.getText();
         String password = textFieldPassword.getText();
         if (!login.equals("") && !password.equals("")) {
             service.signUp(login, password);
-            //TODO: trzeba usunąć startLobbyWindow, powinno być wywoływanie przez server, na razie zostawiłem je do testów
-            //startLobbyWindow();
-        } else {
 
         }
     }
