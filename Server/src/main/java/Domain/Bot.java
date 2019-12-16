@@ -27,7 +27,7 @@ public class Bot extends Player implements GameObserver {
         }
         Runnable r = () -> {
             while (game.inProgress()) {
-                doMove();
+                if (game.isPlayerTurn(this)) doMove();
             }
         };
         Thread t = new Thread(r);

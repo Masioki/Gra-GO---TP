@@ -71,9 +71,6 @@ public class Game {
         return boardSize;
     }
 
-    public String getTurn() {
-        return turn;
-    }
 
     public boolean inProgress() {
         return !endGame;
@@ -90,7 +87,7 @@ public class Game {
     LOGIKA
      */
 
-    private boolean isPlayerTurn(Player player) {
+    public boolean isPlayerTurn(Player player) {
         return player.getUsername().equals(turn);
     }
 
