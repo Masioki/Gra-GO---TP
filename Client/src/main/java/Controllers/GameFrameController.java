@@ -113,20 +113,28 @@ public class GameFrameController implements EventHandler<ActionEvent> {
                     case WIN:
                         if(me)
                         {
-
+                            victory();
+                        }
+                        else
+                        {
+                            defeat();
                         }
                         break;
                     case DRAW:
-                        if(me)
-                        {
-
-                        }
+                        draw();
                         break;
                     case PASS:
                         pass(me);
                         break;
                     case SURRENDER:{
-
+                        if(me)
+                        {
+                            defeat();
+                        }
+                        else
+                        {
+                            victory();
+                        }
                     }
                 }
             }
@@ -194,6 +202,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
                     alert.setTitle("VICTORY");
                     alert.setHeaderText("Zwyciężyełeś :) ");
                     alert.showAndWait();
+                    System.exit(1);
                 }
                 catch (Exception e)
                 {
@@ -201,7 +210,6 @@ public class GameFrameController implements EventHandler<ActionEvent> {
                 }
             }
         });
-        System.exit(1);
     }
 
     private void defeat()
@@ -212,9 +220,10 @@ public class GameFrameController implements EventHandler<ActionEvent> {
                 try
                 {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("PASS");
+                    alert.setTitle("LOST");
                     alert.setHeaderText("Przegrałeś. Niestety... :/");
                     alert.showAndWait();
+                    System.exit(1);
                 }
                 catch (Exception e)
                 {
@@ -222,7 +231,27 @@ public class GameFrameController implements EventHandler<ActionEvent> {
                 }
             }
         });
-        System.exit(1);
+    }
+
+    private void draw()
+    {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try
+                {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("DRAW");
+                    alert.setHeaderText("Remis ....");
+                    alert.showAndWait();
+                    System.exit(1);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
     /**
      * Metoda sprawdza czy pole jest puste i jeśli tak wysyła zapytanie do serwisu

@@ -103,6 +103,4 @@ public class Bot extends Player implements GameObserver {
         if (!done) pass();
 
     }
-
-
 }
