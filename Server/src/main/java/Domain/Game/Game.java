@@ -88,6 +88,7 @@ public class Game {
      */
 
     public boolean isPlayerTurn(Player player) {
+        System.out.println(player.getUsername() + " " + turn);
         return player.getUsername().equals(turn);
     }
 
