@@ -200,7 +200,6 @@ class GameLogic {
                     y1 = y - 1 + j;
                     if (checkIfPointInsideBoard(x1, y1)) {
                         //jeśli jego sąsiad nie jest pusty zmniejszamy size
-                        if (!map.get(new Point(x1, y1)).equals(GridState.EMPTY))
                         if (visited[x1][y1]) {
                             //zaznaczamy że odwiedziliśmy to pole
                             visited[x1][y1] = false;
@@ -221,7 +220,6 @@ class GameLogic {
                     y1 = y;
                     if (checkIfPointInsideBoard(x1, y1)) {
                         //jeśli jego sąsiad nie jest pusty zmniejszamy size
-                        if (!map.get(new Point(x1, y1)).equals(GridState.EMPTY))
                         if (visited[x1][y1]) {
                             //zaznaczamy że odwiedziliśmy to pole
                             visited[x1][y1] = false;
@@ -350,140 +348,11 @@ class GameLogic {
             }
         }
         //teraz kolej na naszego pionka
-        group = findGroup(x,y,map);
-        breaths = countGroupBreaths(group, map);
-        //jeśli oddechy zero usuwamy
-        if(breaths==0)
-        {
-            Set< Map.Entry< Point,GameGrid> > st = group.entrySet();
-            for (Map.Entry< Point,GameGrid> me:st)
-            {
-                map.replace(me.getKey(),GridState.EMPTY);
-            }
-        }
+        //albo i nie bo on nigdy nie powinnien zginąć
         //zwracamy naszą wejściową mapę troszkę oczyszczoną
         return map;
     }
-    /*
-    //updatujemy mapę po wykonanym ruchu
-    private Map<Point, GridState> updateMap(int x, int y, Map<Point, GridState> map) {
-        GridState gridState = map.get(new Point(x, y));
-        //ten if nigdy nie powinien mieć miejsca
-        if(gridState.equals(GridState.EMPTY))
-        {
-            return null;
-        }
-        //tworzymy grupę którą potencjalnie musimy usunąć
-        Map<Point, GameGrid> group = findGroup(x,y,map);
-        int breaths = countGroupBreaths(group, map);
-        //oddechy pozostałych grup
-        int breaths1, breaths2, breaths3, breaths4;
-        breaths1 = 0;
-        breaths2 = 0;
-        breaths3 = 0;
-        breaths4 = 0;
 
-        if(checkIfPointInsideBoard(x-1,y))
-        {
-            breaths1 = countGroupBreaths( findGroup(x-1,y, map),map);
-        }
-        if(checkIfPointInsideBoard(x+1,y))
-        {
-            breaths2 = countGroupBreaths( findGroup(x+1,y, map),map);
-        }
-        if(checkIfPointInsideBoard(x,y-1))
-        {
-            breaths3 = countGroupBreaths( findGroup(x,y-1, map),map);
-        }
-        if(checkIfPointInsideBoard(x,y+1))
-        {
-            breaths4 = countGroupBreaths( findGroup(x,y+1, map),map);
-        }
-        //jeśli oddechy 0 usuwamy naszą grupę
-        if(breaths==0)
-        {
-            //TODO-iterujemy po mapie
-            Set< Map.Entry< Point,GameGrid> > st = group.entrySet();
-            for (Map.Entry< Point,GameGrid> me:st)
-            {
-                map.replace(me.getKey(),GridState.EMPTY);
-            }
-        }
-        //sprawdzamy sąsiadów, w razie czego im też kasujemy grupy
-        int x1, y1;
-        for (int i = 0; i < 1; i += 2) {
-            for (int j = 0; j < 3; j += 2) {
-                x1 = x;
-                y1 = y - 1 + j;
-                //jeśli sąsiad jest innego koloru niż nasz pionek
-                //sprawdzamy czy nie powinniśmy jego grupy usunąć
-                if(checkIfPointInsideBoard(x1, y1))
-                {
-                    if( ! map.get(new Point(x1,y1)).equals(GridState.EMPTY) && ! map.get(new Point(x1,y1)).equals(gridState) )
-                    {
-                        //tworzymy grupę którą potencjalnie musimy usunąć
-                        group = findGroup(x1,y1,map);
-                        if(y1 == y -1)
-                        {
-                            breaths = breaths3;
-                        }
-                        else
-                        {
-                            breaths = breaths4;
-                        }
-                        //jeśli oddechy 0 usuwamy naszą grupę
-                        if(breaths==0)
-                        {
-                            Set< Map.Entry< Point,GameGrid> > st = group.entrySet();
-                            for (Map.Entry< Point,GameGrid> me:st)
-                            {
-                                //usuwamy pionki
-                                map.replace(me.getKey(),GridState.EMPTY);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        for (int i = 0; i < 1; i += 2) {
-            for (int j = 0; j < 3; j += 2) {
-                x1 = x -1 + j;
-                y1 = y;
-                //jeśli sąsiad jest innego koloru niż nasz pionek
-                //sprawdzamy czy nie powinniśmy jego grupy usunąć
-                if(checkIfPointInsideBoard(x1, y1))
-                {
-                    if( ! map.get(new Point(x1,y1)).equals(GridState.EMPTY) && ! map.get(new Point(x1,y1)).equals(gridState) )
-                    {
-                        //tworzymy grupę którą potencjalnie musimy usunąć
-                        group = findGroup(x1,y1,map);
-                        if(x1 == x -1)
-                        {
-                            breaths = breaths1;
-                        }
-                        else
-                        {
-                            breaths = breaths2;
-                        }
-                        //jeśli oddechy 0 usuwamy naszą grupę
-                        if(breaths==0)
-                        {
-                            Set< Map.Entry< Point,GameGrid> > st = group.entrySet();
-                            for (Map.Entry< Point,GameGrid> me:st)
-                            {
-                                //usuwamy pionki
-                                map.replace(me.getKey(),GridState.EMPTY);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        //zwracamy naszą wejściową mapę troszkę oczyszczoną
-        return map;
-    }
-    */
     //funkcja licząca punkty za zbite pionki
     private void countPoints( Map<Point, GridState> newMap, Map<Point, GridState> previousMap, int x, int y, GridState gridState)
     {
@@ -627,10 +496,11 @@ class GameLogic {
                                 shouldAdd = true;
                             }
 
-                            if(shouldAdd)
-                            {
-                                output = output + groupValue;
-                            }
+                        }
+
+                        if(shouldAdd)
+                        {
+                            output = output + groupValue;
                         }
                     }
 
