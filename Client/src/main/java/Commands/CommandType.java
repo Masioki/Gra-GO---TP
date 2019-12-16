@@ -9,6 +9,7 @@ public enum CommandType {
     JOIN,
     END_CONNECTION,
     NEW,
-    NEW_BOT
+    NEW_BOT,
+    REFRESH
 }
 

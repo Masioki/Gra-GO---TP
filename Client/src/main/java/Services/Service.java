@@ -89,6 +89,7 @@ public class Service implements InvokableService {
                 case JOIN: {
                     fullController.joinGame(parser.parseGameData(request.getBody()));
                     ownColor = PawnColor.BLACK;
+                    refresh();
                     break;
                 }
                 case NEW_BOT:
@@ -137,6 +138,14 @@ public class Service implements InvokableService {
         }
     }
 
+    private void refresh() {
+        Command c = CommandBuilderProvider
+                .newSimpleCommandBuilder()
+                .newCommand()
+                .withHeader(CommandType.REFRESH)
+                .build();
+        sendCommand(c);
+    }
 
     /*
     EVERY CONTROLLER

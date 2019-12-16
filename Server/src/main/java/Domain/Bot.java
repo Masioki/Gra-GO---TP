@@ -36,12 +36,12 @@ public class Bot extends Player implements GameObserver {
         if (type == GameCommandType.MOVE) board.replace(new Point(x, y), color);
     }
 
-    private synchronized void doMove() {
-        int max = Integer.MIN_VALUE;
+    private void doMove() {
+        int max = 1;
         Point bestPoint = new Point(0, 0);
 
         for (Point p : board.keySet()) {
-            if (board.get(p) == PawnColor.EMPTY) {
+            if (board.get(p) == PawnColor.EMPTY && countPointBreaths(board, p) >= 2) {
                 List<Point> list = new ArrayList<>();
                 list.add(p);
                 int temp = countGroupSize(p, list);
@@ -58,12 +58,24 @@ public class Bot extends Player implements GameObserver {
 
         int x = (int) Math.round(bestPoint.getX());
         int y = (int) Math.round(bestPoint.getY());
-        System.out.println(x + " " + y);
         boolean result = move(x, y);
-        System.out.println(result);
         if (!result) {
             moveToRandom();
         }
+    }
+
+    private int countPointBreaths(Map<Point, PawnColor> map, Point point) {
+        int breaths = 4;
+        int x = (int) point.getX();
+        int y = (int) point.getY();
+
+        for (int i = 0; i < 3; i += 2)
+            if (map.get(new Point(x, y - 1 + i)) != PawnColor.EMPTY) breaths--;
+
+        for (int j = 0; j < 3; j += 2)
+            if (map.get(new Point(x - 1 + j, y)) != PawnColor.EMPTY) breaths--;
+
+        return breaths;
     }
 
     //obliczamy rozmiar grupy rekurencyjnie

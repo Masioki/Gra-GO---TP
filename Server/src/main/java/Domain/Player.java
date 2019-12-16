@@ -1,9 +1,12 @@
 package Domain;
 
 
+import Commands.PawnColor;
 import Domain.Game.Game;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Player {
@@ -31,6 +34,10 @@ public class Player {
         return new Point(own, opponent);
     }
 
+    public Map<Point, PawnColor> getCurrentGameBoard() {
+        if (game == null) return new HashMap<>();
+        return game.getBoard();
+    }
 
     /* getters setters */
 

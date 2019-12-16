@@ -8,6 +8,7 @@ import Domain.Player;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class Game {
@@ -40,7 +41,7 @@ public class Game {
         gameLogic = new GameLogic(boardSize);
         pass = false;
         endGame = false;
-        lastMoved = "";
+        lastMoved = "bot";
     }
 
 
@@ -54,7 +55,6 @@ public class Game {
 
     public void addObserver(GameObserver observer) {
         observers.add(observer);
-        refreshWholeGame();
     }
 
     public int getOwnScore(String username) {
@@ -75,6 +75,28 @@ public class Game {
         return !endGame;
     }
 
+    public Map<Point, PawnColor> getBoard() {
+        Map<Point, GridState> board = gameLogic.getBoard();
+        Map<Point, PawnColor> newBoard = new HashMap<>(boardSize * boardSize);
+        for (Point p : board.keySet()) {
+            switch (board.get(p)) {
+                case WHITE: {
+                    newBoard.put(p, PawnColor.WHITE);
+                    break;
+                }
+                case BLACK: {
+                    newBoard.put(p, PawnColor.BLACK);
+                    break;
+                }
+                case EMPTY: {
+                    newBoard.put(p, PawnColor.EMPTY);
+                    break;
+                }
+            }
+        }
+        return newBoard;
+    }
+
     /*
     WYKONYWAC PO KAZDEJ UDANEJ AKCJI
      */
@@ -82,39 +104,18 @@ public class Game {
         observers.forEach(o -> o.action(x, y, username, color, type));
     }
 
-    private void refreshWholeGame() {
-        Map<Point, GridState> board = gameLogic.getBoard();
-        for (Point p : board.keySet()) {
-            switch (board.get(p)) {
-                case EMPTY:
-                    signalObservers((int) p.getX(), (int) p.getY(), null, PawnColor.EMPTY, GameCommandType.MOVE);
-                    break;
-                case BLACK:
-                    signalObservers((int) p.getX(), (int) p.getY(), null, PawnColor.BLACK, GameCommandType.MOVE);
-                    break;
-                case WHITE:
-                    signalObservers((int) p.getX(), (int) p.getY(), null, PawnColor.WHITE, GameCommandType.MOVE);
-                    break;
-            }
-        }
-    }
-
     /*
     LOGIKA
      */
 
     public boolean isPlayerTurn(Player player) {
-        System.out.println(player.getUsername() + " " + lastMoved);
+        //System.out.println(player.getUsername() + " " + lastMoved);
+        try {
+            TimeUnit.MILLISECONDS.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return !player.getUsername().equals(lastMoved);
-    }
-
-    private void changeTurn() {
-      /*  for (int i = 0; i < players.size(); i++) {
-            if (!lastMoved.equals(players.get(i).getUsername())) {
-                lastMoved = players.get(i).getUsername();
-                break;
-            }
-        }*/
     }
 
 
@@ -143,7 +144,6 @@ public class Game {
                         break;
                 }
             }
-            //changeTurn();
             lastMoved = player.getUsername();
             pass = false;
             return true;
@@ -170,7 +170,6 @@ public class Game {
             }
             pass = true;
             signalObservers(0, 0, player.getUsername(), PawnColor.BLACK, GameCommandType.PASS);
-            //changeTurn();
             lastMoved = player.getUsername();
             return true;
         }
@@ -190,15 +189,7 @@ public class Game {
         return gameID;
     }
 
-    public void setGameID(int gameID) {
-        this.gameID = gameID;
-    }
-
     public String getOwnerUsername() {
         return ownerUsername;
-    }
-
-    public void setOwnerUsername(String ownerUsername) {
-        this.ownerUsername = ownerUsername;
     }
 }

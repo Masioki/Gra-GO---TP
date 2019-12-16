@@ -7,6 +7,8 @@ import DTO.LoginData;
 import Domain.Game.GameObserver;
 import Domain.Player;
 
+import java.awt.*;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -70,6 +72,9 @@ public class PlayerService implements InvokableService, GameObserver {
                 }
                 case ACTIVE_GAMES:
                     return success(gameService.activeGames(), request.getUuid());
+                case REFRESH:
+                    refresh();
+                    return success("", request.getUuid());
                 case GAME: {
                     GameCommand gameCommand = parser.parseGameCommand(request.getBody());
                     System.out.print(" : " + gameCommand.getCommandType() + "\n");
@@ -100,6 +105,21 @@ public class PlayerService implements InvokableService, GameObserver {
                 .withBody(object)
                 .withUUID(uuid)
                 .build();
+    }
+
+    private void refresh() {
+        Map<Point, PawnColor> map = player.getCurrentGameBoard();
+        for (Point p : map.keySet()) {
+            Command c = CommandBuilderProvider
+                    .newGameCommandBuilder()
+                    .newCommand()
+                    .withHeader(GameCommandType.MOVE)
+                    .withPosition((int) p.getX(), (int) p.getY())
+                    .withColor(map.get(p))
+                    .withUsername(null)
+                    .build();
+            invoker.send(c);
+        }
     }
 
     private boolean joinGame(GameData data) {
