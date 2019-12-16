@@ -138,8 +138,13 @@ public class GameFrameController implements EventHandler<ActionEvent> {
      */
     private void showScore(int mine, int opponent)
     {
-        labelCapturedPawnsScore.setText(Integer.toString(mine));
-        labelCapturedPawnsEnemyScore.setText(Integer.toString(opponent));
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                labelCapturedPawnsScore.setText(Integer.toString(mine));
+                labelCapturedPawnsEnemyScore.setText(Integer.toString(opponent));
+            }
+        });
     }
 
     /**
