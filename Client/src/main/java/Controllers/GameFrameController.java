@@ -72,6 +72,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         gridPanelBoard.getStylesheets().add(getClass().getResource("/css/gridPaneStylesheet.css").toExternalForm());
         buttonPass.setOnAction(this);
         buttonSurrender.setOnAction(this);
+        labelLogin.setText(service.getUsername());
 
         //ustawiamy kontroler
         FullController controller = new FullController() {
