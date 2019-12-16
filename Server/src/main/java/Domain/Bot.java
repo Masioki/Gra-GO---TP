@@ -30,7 +30,9 @@ public class Bot extends Player implements GameObserver {
 
         for (Point p : board.keySet()) {
             if (board.get(p) == PawnColor.EMPTY) {
-                int temp = countGroupSize(p, new ArrayList<>());
+                List<Point> list = new ArrayList<>();
+                list.add(p);
+                int temp = countGroupSize(p, list);
                 if (temp > max) {
                     max = temp;
                     bestPoint = p;
@@ -49,14 +51,14 @@ public class Bot extends Player implements GameObserver {
         for (int i = 0; i < 3; i += 2) {
             Point temp = new Point((int) point.getX(), (int) point.getY() + i - 1);
             if (!checked.contains(temp) && board.get(temp) == PawnColor.BLACK) {
-                checked.add(point);
+                checked.add(temp);
                 sum += countGroupSize(temp, checked);
             }
         }
         for (int i = 0; i < 3; i += 2) {
             Point temp = new Point((int) point.getX() + i - 1, (int) point.getY());
             if (!checked.contains(temp) && board.get(temp) == PawnColor.BLACK) {
-                checked.add(point);
+                checked.add(temp);
                 sum += countGroupSize(temp, checked);
             }
         }
