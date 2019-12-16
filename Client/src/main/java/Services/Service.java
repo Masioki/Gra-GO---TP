@@ -44,6 +44,9 @@ public class Service implements InvokableService {
         this.fullController = controller;
     }
 
+    public String getUsername() {
+        return username;
+    }
 
     /*
     COMMAND EXECUTION
