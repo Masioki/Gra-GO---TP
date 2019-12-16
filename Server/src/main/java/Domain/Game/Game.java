@@ -32,7 +32,6 @@ public class Game {
 
 
     public Game(String ownerUsername, int boardSize) {
-        //TODO: poprawic to zalosne id xd
         gameID = (int) (Math.random() * 1000);
         this.ownerUsername = ownerUsername;
         this.boardSize = boardSize;
@@ -70,7 +69,6 @@ public class Game {
     public int getSize() {
         return boardSize;
     }
-
 
     public boolean inProgress() {
         return !endGame;
@@ -137,7 +135,6 @@ public class Game {
     public synchronized boolean pass(Player player) {
         if (!endGame && isPlayerTurn(player)) {
             if (pass) {
-                //TODO: policzyc pola i zasygnalizowac kto wygral
                 int white = getOwnScore(ownerUsername);
                 int black = getOpponentScore(ownerUsername);
                 if (white == black) signalObservers(0, 0, null, PawnColor.BLACK, GameCommandType.DRAW);
@@ -160,7 +157,6 @@ public class Game {
         return false;
     }
 
-
     public synchronized void surrender(Player player) {
         if (!endGame && players.contains(player)) {
             signalObservers(0, 0, player.getUsername(), PawnColor.BLACK, GameCommandType.SURRENDER);
@@ -173,7 +169,6 @@ public class Game {
     public int getGameID() {
         return gameID;
     }
-
     public void setGameID(int gameID) {
         this.gameID = gameID;
     }
@@ -181,7 +176,6 @@ public class Game {
     public String getOwnerUsername() {
         return ownerUsername;
     }
-
     public void setOwnerUsername(String ownerUsername) {
         this.ownerUsername = ownerUsername;
     }

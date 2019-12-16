@@ -4,7 +4,6 @@ import Commands.*;
 import Commands.Builder.CommandBuilderProvider;
 import DTO.GameData;
 import DTO.LoginData;
-import Domain.Game.Game;
 import Domain.Game.GameObserver;
 import Domain.Player;
 

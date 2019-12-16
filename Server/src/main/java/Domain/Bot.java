@@ -4,13 +4,10 @@ import Commands.GameCommandType;
 import Commands.PawnColor;
 import Domain.Game.Game;
 import Domain.Game.GameObserver;
-import Domain.Game.GridState;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.awt.*;
-import java.util.Map;
+import java.util.List;
 
 public class Bot extends Player implements GameObserver {
 
@@ -54,10 +51,14 @@ public class Bot extends Player implements GameObserver {
                 }
             }
         }
+        if (max == 1) {
+            moveToRandom();
+            return;
+        }
+
         int x = (int) Math.round(bestPoint.getX());
         int y = (int) Math.round(bestPoint.getY());
         System.out.println(x + " " + y);
-        //znajduje najlepsze miejsce ale jakims cudem zwracane jest false przy probie ruszenia tam
         boolean result = move(x, y);
         System.out.println(result);
         if (!result) {
@@ -66,7 +67,6 @@ public class Bot extends Player implements GameObserver {
     }
 
     //obliczamy rozmiar grupy rekurencyjnie
-    //dobrze znajduje
     private int countGroupSize(Point point, List<Point> checked) {
         int sum = 1;
         checked.add(point);
@@ -91,19 +91,17 @@ public class Bot extends Player implements GameObserver {
             if (board.get(p) == PawnColor.EMPTY) emptyPlaceList.add(p);
         }
 
-        if (emptyPlaceList.size() == 0) {
-            pass();
-            return;
-        }
-
         boolean done = false;
-        for (Point p : emptyPlaceList) {
-            if (move((int) p.getX(), (int) p.getY())) {
+        while (emptyPlaceList.size() != 0) {
+            int index = (int) (Math.random() * (emptyPlaceList.size() - 1));
+            if (move((int) emptyPlaceList.get(index).getX(), (int) emptyPlaceList.get(index).getY())) {
                 done = true;
                 break;
             }
+            emptyPlaceList.remove(index);
         }
         if (!done) pass();
+
     }
 
 
