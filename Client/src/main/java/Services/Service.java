@@ -88,6 +88,7 @@ public class Service implements InvokableService {
                     ownColor = PawnColor.BLACK;
                     break;
                 }
+                case NEW_BOT:
                 case NEW: {
                     fullController.joinGame(parser.parseGameData(response.getBody()));
                     ownColor = PawnColor.WHITE;
