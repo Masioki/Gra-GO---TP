@@ -75,7 +75,7 @@ class GameLogic {
         if (checkKomi(newGridStateMap)) return false;
 
         //TODO - nadpisujemy mapę z poprzedniego ruchu
-        previousGridStateMap = gridStateMap;
+        previousGridStateMap = new HashMap<Point, GridState>(gridStateMap);
 
         //dodajemy punkty graczom po wykonanym ruchu
         countPoints(newGridStateMap, gridStateMap, x, y, gridState);

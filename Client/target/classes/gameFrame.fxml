@@ -18,5 +18,6 @@
       <Label fx:id="labelCapturedPawns" alignment="CENTER" layoutX="14.0" layoutY="228.0" prefHeight="53.0" prefWidth="149.0" text="POINTS:" />
       <Label fx:id="labelCapturedPawnsEnemyScore" alignment="CENTER" layoutX="17.0" layoutY="417.0" prefHeight="46.0" prefWidth="149.0" text="0" />
       <Label fx:id="labelCapturedPawnsScore" alignment="CENTER" layoutX="14.0" layoutY="291.0" prefHeight="46.0" prefWidth="149.0" text="0" />
+      <Button fx:id="buttonReturn" layoutX="14.0" layoutY="23.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="155.0" text="RETURN" textFill="#261ad6" />
    </children>
 </AnchorPane>
