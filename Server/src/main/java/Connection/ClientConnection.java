@@ -60,6 +60,10 @@ public class ClientConnection extends Thread implements CommandListener {
     }
 
 
+    public boolean isAvailable() throws Exception {
+        return socket.getInetAddress().isReachable(2) && !end;
+    }
+
     @Override
     public void run() {
         while (!end) {

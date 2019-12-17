@@ -22,14 +22,14 @@ public class Game {
     private int boardSize;
 
     //nazwa uzytkownika ktorego jest teraz kolej
-    private String lastMoved;
+    protected String lastMoved;
 
     // czy w poprzednim ruchu uzytkownik zrobil pass
-    private boolean pass;
+    protected boolean pass;
 
     //czy gra jest zakonczona
     //jesli tak to blokuje wywolywanie czegokolwiek
-    private boolean endGame;
+    protected boolean endGame;
 
 
     public Game(String ownerUsername, int boardSize) {
@@ -117,7 +117,6 @@ public class Game {
         }
         return !player.getUsername().equals(lastMoved);
     }
-
 
     public synchronized boolean move(int x, int y, Player player) {
         Map<Point, GridState> previous = new HashMap<>(gameLogic.getBoard());

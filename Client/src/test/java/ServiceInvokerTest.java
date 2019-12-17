@@ -57,12 +57,12 @@ public class ServiceInvokerTest {
             System.out.println(request.getType());
             System.out.println(response.getType());
             if(i==0){
-                assertEquals(request.getType(),CommandType.LOGIN);
-                assertEquals(response.getType(),CommandType.ERROR);
-                i++;
-            } else {
                 assertEquals(request.getType(),CommandType.JOIN);
                 assertEquals(response.getType(),CommandType.SUCCESS);
+                i++;
+            } else {
+                assertEquals(request.getType(),CommandType.LOGIN);
+                assertEquals(response.getType(),CommandType.ERROR);
             }
         }
     }

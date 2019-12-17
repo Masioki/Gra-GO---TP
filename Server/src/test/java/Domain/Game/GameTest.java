@@ -29,27 +29,24 @@ public class GameTest {
         Player player2 = new Player();
         player2.setUsername("Tester2");
         game.addPlayer(player2);
-        game.addObserver(new GameObserver() {
-            @Override
-            public void action(int x, int y, String username, PawnColor color, GameCommandType type) {
+        game.addObserver((x, y, username, color, type) -> {
 
-            }
         });
-        assertEquals(true, game.isPlayerTurn(player1));
+        assertTrue(game.isPlayerTurn(player1));
         //prubujemy dodać gracza 3
-        assertEquals(false, game.addPlayer(player1));
+        assertFalse(game.addPlayer(player1));
         assertEquals(0, game.getOwnScore("Tester1"));
         assertEquals(0, game.getOpponentScore("Tester2"));
-        assertEquals(true, game.inProgress());
+        assertTrue(game.inProgress());
         game.move(3,3,player1);
-        assertEquals(false, game.isPlayerTurn(player1) );
-        assertEquals(false, game.move(3,3,player1));
-        assertEquals(true, game.move(4,3,player2));
-        assertEquals(true, game.move(3,4,player1));
-        assertEquals(false, game.getBoard().get(new Point(4,3)).equals(GridState.WHITE));
-        assertEquals(false, game.pass(player1));
-        assertEquals(true, game.pass(player2));
-        assertEquals(true, game.pass(player1));
+        assertFalse(game.isPlayerTurn(player1));
+        assertFalse(game.move(3, 3, player1));
+        assertTrue(game.move(4, 3, player2));
+        assertTrue(game.move(3, 4, player1));
+        assertNotEquals(game.getBoard().get(new Point(4, 3)), PawnColor.WHITE);
+        assertFalse(game.pass(player1));
+        assertTrue(game.pass(player2));
+        assertTrue(game.pass(player1));
     }
     @Test
     public void scoreTest()
@@ -61,11 +58,8 @@ public class GameTest {
         Player player2 = new Player();
         player2.setUsername("Tester2");
         game.addPlayer(player2);
-        game.addObserver(new GameObserver() {
-            @Override
-            public void action(int x, int y, String username, PawnColor color, GameCommandType type) {
+        game.addObserver((x, y, username, color, type) -> {
 
-            }
         });
         game.pass(player1);
         game.move(3,4,player2);
@@ -96,6 +90,6 @@ public class GameTest {
             }
         });
         game.surrender(player1);
-        assertEquals(false, game.inProgress() );
+        assertFalse(game.inProgress());
     }
 }

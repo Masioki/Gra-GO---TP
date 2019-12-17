@@ -17,15 +17,18 @@ public class Player {
 
 
     public boolean move(int x, int y) {
+        if (game == null) return false;
         return game.move(x, y, this);
     }
 
     public boolean pass() {
+        if (game == null) return false;
         return game.pass(this);
     }
 
     public void surrender() {
-        game.surrender(this);
+        if (game != null)
+            game.surrender(this);
     }
 
     public Point getScore() {
