@@ -7,12 +7,18 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class GameFrameController implements EventHandler<ActionEvent> {
 
@@ -26,6 +32,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
     public Label labelTurn;
     public Label labelCapturedPawnsEnemyScore;
     public Label labelCapturedPawnsScore;
+    public Button buttonReturn;
     private MyImageView[][] grids;
 
     private Service service = null;
@@ -72,6 +79,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         gridPanelBoard.getStylesheets().add(getClass().getResource("/css/gridPaneStylesheet.css").toExternalForm());
         buttonPass.setOnAction(this);
         buttonSurrender.setOnAction(this);
+        buttonReturn.setOnAction(this);
         labelLogin.setText(service.getUsername());
 
         //ustawiamy kontroler
@@ -203,7 +211,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
                     alert.setTitle("VICTORY");
                     alert.setHeaderText("Zwyciężyełeś :) ");
                     alert.showAndWait();
-                    System.exit(1);
+                   // System.exit(1);
                 }
                 catch (Exception e)
                 {
@@ -224,7 +232,7 @@ public class GameFrameController implements EventHandler<ActionEvent> {
                     alert.setTitle("LOST");
                     alert.setHeaderText("Przegrałeś. Niestety... :/");
                     alert.showAndWait();
-                    System.exit(1);
+                    //System.exit(1);
                 }
                 catch (Exception e)
                 {
@@ -292,6 +300,36 @@ public class GameFrameController implements EventHandler<ActionEvent> {
             grids[colNumber][rowNumber].setImage(imageEmptyGrid);
         }
     }
+    private void goBack()
+    {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Parent root;
+                try {
+                    root = FXMLLoader.load(getClass().getClassLoader().getResource("lobbyFrame.fxml"));
+                    Stage stage = new Stage();
+                    stage.setTitle("Lobby");
+                    //dodajemy stylescheet
+                    Scene s = new Scene(root);
+                    s.getStylesheets().add(getClass().getResource("/css/basicStylesheet.css").toExternalForm());
+                    stage.setScene(s);
+                    stage.setWidth(600);
+                    stage.setHeight(650);
+                    stage.setResizable(false);
+                    stage.show();
+                    //ustawiamy zamknięcie aplikacji
+                    stage.setOnCloseRequest(windowEvent -> {
+                        System.exit(1);
+                    });
+
+                    buttonReturn.getScene().getWindow().hide();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
 
     @Override
     public void handle(ActionEvent e) {
@@ -305,6 +343,11 @@ public class GameFrameController implements EventHandler<ActionEvent> {
         {
             /*TODO-to dołożyliśmy*/
             service.gameMove(0,0, GameCommandType.SURRENDER);
+        }
+        if(e.getSource().equals(buttonReturn))
+        {
+            service.gameMove(0,0, GameCommandType.SURRENDER);
+            goBack();
         }
     }
 }
