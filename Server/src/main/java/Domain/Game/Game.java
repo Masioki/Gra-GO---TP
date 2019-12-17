@@ -57,14 +57,25 @@ public class Game {
         observers.add(observer);
     }
 
+    /*
+        public int getOwnScore(String username) {
+            if (username.equals(ownerUsername)) return gameLogic.getPlayerPoints(true);
+            return gameLogic.getPlayerPoints(false);
+        }
+
+        public int getOpponentScore(String username) {
+            if (username.equals(ownerUsername)) return gameLogic.getPlayerPoints(false);
+            return gameLogic.getPlayerPoints(true);
+        }
+    */
     public int getOwnScore(String username) {
-        if (username.equals(ownerUsername)) return gameLogic.getPlayerPoints(true);
-        return gameLogic.getPlayerPoints(false);
+        if (username.equals(ownerUsername)) return gameLogic.getFinalScore(true);
+        return gameLogic.getFinalScore(false);
     }
 
     public int getOpponentScore(String username) {
-        if (username.equals(ownerUsername)) return gameLogic.getPlayerPoints(false);
-        return gameLogic.getPlayerPoints(true);
+        if (username.equals(ownerUsername)) return gameLogic.getFinalScore(false);
+        return gameLogic.getFinalScore(true);
     }
 
     public int getSize() {
